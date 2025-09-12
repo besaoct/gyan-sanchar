@@ -1,0 +1,33 @@
+import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
+import './globals.css'
+import { Montserrat } from 'next/font/google'
+
+const font = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-mont',
+})
+
+export const metadata: Metadata = {
+  title: 'Gyan Sanchar',
+  description: 'Find college and course information in India',
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en">
+      <head>
+        <link rel="shortcut icon" href="/logo-b.png" type="image/x-icon" />
+      </head>
+      <body className={`${font.className}`}>
+        {children}
+        <Analytics />
+      </body>
+    </html>
+  )
+}

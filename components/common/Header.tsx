@@ -1,0 +1,68 @@
+'use client'
+
+import Image from "next/image"
+import { Phone, Mail, ChevronDown, Menu, User2, Search } from "lucide-react"
+import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa"
+
+export default function Header() {
+  return (
+    <header className="bg-[#044cac] text-white">
+      <div className="container mx-auto px-4">
+        {/* Top bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            <span className="flex items-center gap-1">
+              <Phone className="w-3 h-3" />
+              12345-567-890
+            </span>
+            <span className="flex items-center gap-1">
+              <Mail className="w-3 h-3" />
+              support@gyansanchar.com
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="hidden sm:block">We're on your favourite socials!</span>
+            <div className="flex gap-2">
+              <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
+                <FaFacebookF className="w-3 h-3 text-white" />
+              </div>
+              <div className="w-5 h-5 bg-red-600 rounded flex items-center justify-center">
+                <FaYoutube className="w-3 h-3 text-white" />
+              </div>
+              <div className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center">
+                <FaTwitter className="w-3 h-3 text-white" />
+              </div>
+              <div className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center">
+                <FaInstagram className="w-3 h-3 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main navigation */}
+        <nav className="flex justify-between items-center py-4 h-20">
+          <Image src="/logo-w.png" alt="GyanSanchar Logo" width={150} height={150} className="h-12 w-auto" />
+          <div className="hidden lg:flex items-center gap-8">
+            <div className="flex gap-6">
+              <span className="cursor-pointer hover:text-white/80 transition-colors">Colleges</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors">Courses</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors">Careers</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors">Latest Updates</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors flex items-center gap-1">
+                More <ChevronDown className="w-4 h-4" />
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Search className="w-5 h-5" />
+              <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full"/>
+            </div>
+          </div>
+          <div className="lg:hidden">
+            <Menu className="w-6 h-6" />
+          </div>
+        </nav>
+      </div>
+    </header>
+  )
+}
