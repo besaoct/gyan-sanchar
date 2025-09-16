@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { collegesData } from "@/lib/colleges-data"
-import type { FilterOptions, College } from "@/lib/types"
+import { College, collegesData } from "@/lib/colleges-data"
+import type { FilterOptions} from "@/lib/types"
 import { FilterSidebar } from "@/components/listing/filter-sidebar"
 import { useIsMobile } from "@/hooks/use-mobile"
 import Link from "next/link"
@@ -17,7 +17,7 @@ import Header from "@/components/common/Header"
 import Footer from "@/components/common/Footer"
 
 export default function CollegeListingPage() {
-  const isMobile = useIsMobile()
+  
   const [filters, setFilters] = useState<FilterOptions>({
     search: "",
     states: [],
@@ -107,47 +107,30 @@ export default function CollegeListingPage() {
   }
 
   return (
-   <div className="min-h-screen bg-white">
-    <Header />
-
-      {/* <div className="sticky top-0 z-50 bg-[#044cac] text-white shadow-lg">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-
-
-
- 
-          </div>
-        </div>
-      </div> */}
-
+    <div className="min-h-screen bg-white">
+      <Header isSticky={true} />
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           {/* Desktop Sidebar */}
-          {!isMobile && (
-            <div className="w-80 flex-shrink-0">
-              <FilterSidebar filters={filters} onFiltersChange={setFilters} />
-            </div>
-          )}
+          <div className="w-80 flex-shrink-0 hidden lg:block">
+            <FilterSidebar filters={filters} onFiltersChange={setFilters} />
+          </div>
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Mobile Filter Button */}
-            {isMobile && (
-              <div className="mb-4">
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" className="w-full bg-transparent">
-                      <Filter className="h-4 w-4 mr-2" />
-                      Filters ({Object.values(filters).flat().filter(Boolean).length})
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-80 p-0">
-                    <FilterSidebar filters={filters} onFiltersChange={setFilters} />
-                  </SheetContent>
-                </Sheet>
-              </div>
-            )}
+            <div className="mb-4 lg:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="w-full bg-transparent">
+                    <Filter className="h-4 w-4 mr-2" />
+                    Filters ({Object.values(filters).flat().filter(Boolean).length})
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-80 p-0">
+                  <FilterSidebar filters={filters} onFiltersChange={setFilters} />
+                </SheetContent>
+              </Sheet>
+            </div>
 
             {/* Results Header */}
             <div className="flex items-center justify-between mb-6">
@@ -176,8 +159,7 @@ export default function CollegeListingPage() {
           </div>
         </div>
       </div>
-
-    <Footer/>
+      <Footer />
     </div>
   )
 }
@@ -186,10 +168,15 @@ function CollegeCard({ college }: { college: College }) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-l-primary p-0">
       <CardContent className="p-0">
-        <div className="flex flex-col lg:flex-row flex-wrap ">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap">
           {/* College Image */}
-          <div className=" aspect-square w-96 relative flex-shrink-0">
-            <Image src={`/college/${college.image}` || "/placeholder.svg"} alt={college.name} fill className="object-cover aspect-square" />
+          <div className="relative w-full h-96 sm:max-w-sm sm:h-auto  sm:flex-1 sm:flex-shrink-0">
+            <Image
+              src={`/college/${college.image}` || "/placeholder.svg"}
+              alt={college.name}  
+              fill
+              className="object-cover"
+            />
             <div className="absolute top-2 right-2 flex gap-2">
               <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
                 <Heart className="h-4 w-4" />
@@ -201,13 +188,13 @@ function CollegeCard({ college }: { college: College }) {
           </div>
 
           {/* College Info */}
-          <div className="flex-1 p-6 ">
-            <div className="flex flex-col  w-full lg:items-start lg:justify-between gap-4">
-              <div className="flex-1 w-full">
+          <div className="p-4 sm:p-6 flex-1">
+            <div className="flex flex-col gap-4">
+              <div className="w-full">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <h3 className="text-xl font-bold text-foreground mb-1">{college.name}</h3>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1">{college.name}</h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-2">
                       <div className="flex items-center gap-1">
                         <MapPin className="h-4 w-4" />
                         {college.location.city}, {college.location.state}
@@ -217,7 +204,7 @@ function CollegeCard({ college }: { college: College }) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 mb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3">
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     <span className="font-semibold">{college.rating}</span>
@@ -240,7 +227,7 @@ function CollegeCard({ college }: { college: College }) {
                   ))}
                 </div>
 
-                <div className="flex items-center gap-4 text-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <Users className="h-4 w-4" />
                     <span>{college.campusLife.studentStrength.toLocaleString()} Students</span>
@@ -253,32 +240,34 @@ function CollegeCard({ college }: { college: College }) {
               <div className="flex-shrink-0">
                 <div className="bg-muted rounded-lg px-3 py-2 mb-4 w-fit">
                   <div className="text-center flex items-center gap-1">
-                    <div className="text-2xl font-bold text-primary mb-1">
+                    <div className="text-xl sm:text-2xl font-bold text-primary mb-1">
                       {formatFees(college.fees.min, college.fees.max)}
                     </div>
-                    {/* <div className="text-sm text-muted-foreground">(Total Fees)</div> */}
                   </div>
                 </div>
 
-                <div className="flex gap-2 items-center whitespace-nowrap overflow-x-auto scrollbar-hide mb-4">
-                  <div className="text-sm">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center text-sm mb-4 whitespace-nowrap overflow-x-auto flex-wrap">
+                  <div>
                     <span className="font-semibold">Avg Package:</span> ₹
                     {(college.placement.averagePackage / 100000).toFixed(1)}L
                   </div>
-                  <div className="text-sm">
+                  <div>
                     <span className="font-semibold">Placement Rate:</span> {college.placement.placementRate}%
                   </div>
-                  <div className="text-sm">
-                    <span className="font-semibold">Exams:</span> {college.admissionProcess.exams.slice(0, 2).join(", ")}
+                  <div>
+                    <span className="font-semibold">Exams:</span>{" "}
+                    {college.admissionProcess.exams.slice(0, 2).join(", ")}
                     {college.admissionProcess.exams.length > 2 && "..."}
                   </div>
                 </div>
 
-                <div className="flex gap-4 items-center">
-                  <Link href={`/college/${college.id}`}>
-                    <Button className="w-full bg-[#044cac] hover:bg-[#033a8a] text-white">View Details</Button>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center">
+                  <Link href={`/college/${college.id}`} className="w-full sm:w-auto">
+                    <Button className="w-full sm:w-auto bg-[#044cac] hover:bg-[#033a8a] text-white">
+                      View Details
+                    </Button>
                   </Link>
-                  <Button variant="outline" className="w-fit bg-transparent">
+                  <Button variant="outline" className="w-full sm:w-auto bg-transparent">
                     Download Brochure
                   </Button>
                 </div>

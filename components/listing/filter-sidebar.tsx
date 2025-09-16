@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, ChevronUp, Search, X } from "lucide-react"
+import { ChevronDown, ChevronUp, Search, Undo, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -75,18 +75,19 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
   }
 
   return (
-    <div className="bg-accent/50 border rounded-lg p-4 h-fit sticky top-6">
-      <div className="flex items-center justify-between">
-        <h3 className=" sr-only">Filters</h3>
+    <div className="bg-accent/50 border rounded-lg p-4 h-fit sticky top-36">
+      <div className="flex items-center justify-between mb-8 lg:mb-0">
+        <h3 className=" sr-only ">Filters</h3>
         {getActiveFiltersCount() > 0 && (
-          <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-destructive">
-            Clear All
-          </Button>
+            <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-destructive bg-white border mt-8 -mb-4 lg:mb-4">
+            <Undo className="h-4 w-4 mr-1" />
+            Reset
+            </Button>
         )}
       </div>
 
                   {/* Search Bar */}
-            <div className="mb-4 max-w-xs">
+            <div className="mb-4 max-w-xs lg:mt-0">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input

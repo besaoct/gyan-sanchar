@@ -5,9 +5,9 @@ import Link from "next/link"
 import { Phone, Mail, ChevronDown, Menu, User2, Search } from "lucide-react"
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa"
 
-export default function Header() {
+export default function Header({ isSticky }: { isSticky?: boolean }) {
   return (
-    <header className="bg-[#044cac] text-white">
+    <header className={`bg-[#044cac] text-white ${isSticky && 'lg:sticky lg:top-0 lg:z-50'}`}>
       <div className="container mx-auto px-4">
         {/* Top bar */}
         <div className="flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
@@ -42,11 +42,13 @@ export default function Header() {
 
         {/* Main navigation */}
         <nav className="flex justify-between items-center py-4 h-20">
-          <Image src="/logo-w.png" alt="GyanSanchar Logo" width={150} height={150} className="h-12 w-auto" />
+          <Link href="/" className="block">
+               <Image src="/logo-w.png" alt="GyanSanchar Logo" width={150} height={150} className="h-12 w-auto" />
+          </Link>
           <div className="hidden lg:flex items-center gap-8">
             <div className="flex gap-6">
             <Link href={'/colleges'}  className="cursor-pointer hover:text-white/80 transition-colors">Colleges</Link>
-              <Link href="/streams"><span className="cursor-pointer hover:text-white/80 transition-colors">Streams</span></Link>
+              {/* <Link href="/streams"><span className="cursor-pointer hover:text-white/80 transition-colors">Streams</span></Link> */}
               <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Courses</span>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Careers</span>
