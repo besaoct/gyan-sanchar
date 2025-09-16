@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image"
+import Link from "next/link"
 import { Phone, Mail, ChevronDown, Menu, User2, Search } from "lucide-react"
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa"
 
@@ -44,7 +45,8 @@ export default function Header() {
           <Image src="/logo-w.png" alt="GyanSanchar Logo" width={150} height={150} className="h-12 w-auto" />
           <div className="hidden lg:flex items-center gap-8">
             <div className="flex gap-6">
-              <span className="cursor-pointer hover:text-white/80 transition-colors">Colleges</span>
+            <Link href={'/colleges'}  className="cursor-pointer hover:text-white/80 transition-colors">Colleges</Link>
+              <Link href="/streams"><span className="cursor-pointer hover:text-white/80 transition-colors">Streams</span></Link>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Courses</span>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Careers</span>

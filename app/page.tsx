@@ -6,11 +6,13 @@ import CollegeFinderSection from "@/components/home/CollegeFinderSection";
 import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import HeroSection from "@/components/home/HeroSection";
-import JobReadyDegreesSection from "@/components/home/JobReadyDegreesSection";
 import MediaSection from "@/components/home/MediaSection";
 import OnlineDegreesSection from "@/components/home/OnlineDegreesSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import TrustIndicators from "@/components/home/TrustIndicators";
+import RequestCallbackSection from "@/components/home/RequestCallbackSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
+import TopRankedCollegesSection from "@/components/home/TopRankedCollegesSection";
 
 export default function HomePage() {
   return (
@@ -23,8 +25,10 @@ export default function HomePage() {
       <MediaSection />
       <CareerGuidanceSection />
       <ApplicationFormSection />
-      <JobReadyDegreesSection />
+      <TopRankedCollegesSection />
       <CollegeFinderSection />
+      <TestimonialsSection />
+      <RequestCallbackSection />
       <Footer />
     </div>
   )

@@ -19,14 +19,14 @@ const steps = [
 ];
 
 export default function ServicesSection() {
-  const [activeStep, setActiveStep] = useState(0);
+  // const [activeStep, setActiveStep] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % steps.length); // loop correctly
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setActiveStep((prev) => (prev + 1) % steps.length); // loop correctly
+  //   }, 2000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <section className="py-12 md:py-16 bg-gray-50">
@@ -57,19 +57,17 @@ export default function ServicesSection() {
           </div>
         </div>
 
- 
-{/* steps with animation */}
-<div className="mt-16 mb-12">
+        {/* steps with animation */}
+        {/* <div className="mt-16 mb-12">
   <div className="relative w-full mx-auto">
 
-    {/* Progress line (only show in lg for horizontal) */}
+    
     <div className="hidden lg:block absolute top-6 left-0 w-full h-1 bg-gray-200 rounded-full"></div>
     <div
       className="hidden lg:block absolute top-6 left-0 h-1 bg-green-600/50 rounded-full transition-all duration-700 ease-in-out"
       style={{ width: `${(activeStep / (steps.length - 1)) * 100}%` }}
     ></div>
 
-{/* Steps */}
 <div className="flex flex-col items-center gap-10 lg:grid lg:grid-cols-6 lg:gap-8 lg:items-start relative z-10">
   {steps.map((step, i) => {
     const isLast = i === steps.length - 1;
@@ -81,7 +79,7 @@ export default function ServicesSection() {
         key={i}
         className="flex flex-col items-center lg:flex-col lg:items-center lg:text-center relative"
       >
-        {/* Vertical connector (mobile only) */}
+
         {i !== 0 && (
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-1 h-10 bg-gray-200 lg:hidden"></div>
         )}
@@ -89,7 +87,7 @@ export default function ServicesSection() {
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-1 h-10 bg-green-500 lg:hidden transition-all duration-700"></div>
         )}
 
-        {/* Circle */}
+ 
         <div
           className={`relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-500
             ${isCompleted
@@ -106,7 +104,7 @@ export default function ServicesSection() {
           )}
         </div>
 
- {/* Label inside box */}
+
 <p
   className={`mt-3 px-3 w-60 lg:w-fit gap-4 h-10 flex items-center justify-center py-1 text-sm font-semibold rounded-sm text-center transition-colors duration-500 uppercase
     ${isCompleted
@@ -125,8 +123,9 @@ export default function ServicesSection() {
 </div>
 
   </div>
-</div>
+</div> */}
 
+        {/* steps with animation end */}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="p-6 bg-[#044cac] text-white hover:bg-[#023b86] transition-colors">
@@ -209,74 +208,72 @@ export default function ServicesSection() {
           </Button>
         </div>
       </div>
- 
     </section>
   );
 }
 
+//  <style jsx>{`
+//     .step-item {
+//       animation: fadeIn 0.5s ease-out forwards;
+//       opacity: 0;
+//     }
+//     @keyframes fadeIn {
+//       from {
+//         opacity: 0;
+//         transform: translateY(20px);
+//       }
+//       to {
+//         opacity: 1;
+//         transform: translateY(0);
+//       }
+//     }
+//     .step-item:nth-child(1) {
+//       animation-delay: 0.2s;
+//     }
+//     .step-item:nth-child(2) {
+//       animation-delay: 0.4s;
+//     }
+//     .step-item:nth-child(3) {
+//       animation-delay: 0.6s;
+//     }
+//     .step-item:nth-child(4) {
+//       animation-delay: 0.8s;
+//     }
+//     .step-item:nth-child(5) {
+//       animation-delay: 1s;
+//     }
+//     .step-item:nth-child(6) {
+//       animation-delay: 1.2s;
+//     }
 
-    //  <style jsx>{`
-    //     .step-item {
-    //       animation: fadeIn 0.5s ease-out forwards;
-    //       opacity: 0;
-    //     }
-    //     @keyframes fadeIn {
-    //       from {
-    //         opacity: 0;
-    //         transform: translateY(20px);
-    //       }
-    //       to {
-    //         opacity: 1;
-    //         transform: translateY(0);
-    //       }
-    //     }
-    //     .step-item:nth-child(1) {
-    //       animation-delay: 0.2s;
-    //     }
-    //     .step-item:nth-child(2) {
-    //       animation-delay: 0.4s;
-    //     }
-    //     .step-item:nth-child(3) {
-    //       animation-delay: 0.6s;
-    //     }
-    //     .step-item:nth-child(4) {
-    //       animation-delay: 0.8s;
-    //     }
-    //     .step-item:nth-child(5) {
-    //       animation-delay: 1s;
-    //     }
-    //     .step-item:nth-child(6) {
-    //       animation-delay: 1.2s;
-    //     }
+//     .step-item .step-circle {
+//       animation: tick 0.5s ease-in-out forwards;
+//       animation-play-state: paused;
+//     }
 
-    //     .step-item .step-circle {
-    //       animation: tick 0.5s ease-in-out forwards;
-    //       animation-play-state: paused;
-    //     }
+//     .step-item.completed .step-circle {
+//       background-color: #22c55e; /* green-500 */
+//       border-color: #22c55e; /* green-500 */
+//       animation-play-state: running;
+//     }
 
-    //     .step-item.completed .step-circle {
-    //       background-color: #22c55e; /* green-500 */
-    //       border-color: #22c55e; /* green-500 */
-    //       animation-play-state: running;
-    //     }
+//     .step-item.completed .step-number {
+//       display: none;
+//     }
 
-    //     .step-item.completed .step-number {
-    //       display: none;
-    //     }
+//     .step-item.completed .step-check {
+//       display: block;
+//     }
 
-    //     .step-item.completed .step-check {
-    //       display: block;
-    //     }
-
-    //     @keyframes tick {
-    //       0% {
-    //         transform: scale(1);
-    //       }
-    //       50% {
-    //         transform: scale(1.2);
-    //       }
-    //       100% {
-    //         transform: scale(1);
-    //       }
-    //     }
-    //   `}</style>
+//     @keyframes tick {
+//       0% {
+//         transform: scale(1);
+//       }
+//       50% {
+//         transform: scale(1.2);
+//       }
+//       100% {
+//         transform: scale(1);
+//       }
+//     }
+//   `}</style>

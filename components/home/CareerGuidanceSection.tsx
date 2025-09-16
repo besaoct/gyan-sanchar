@@ -7,7 +7,7 @@ export default function CareerGuidanceSection() {
     <section className="py-16 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between flex-wrap">
-          <div className="flex-1">
+          <div className="md:flex-1 ">
             <h2 className="text-3xl font-bold mb-4">Confused about the best career choice for you?</h2>
             <p className="text-gray-600 mb-6 max-w-lg">
               Discover your path with Career Compass, our personalized career recommendation tool. Get insights on
