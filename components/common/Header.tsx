@@ -4,6 +4,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { Phone, Mail, ChevronDown, Menu, User2, Search } from "lucide-react"
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa"
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 
 export default function Header({ isSticky }: { isSticky?: boolean }) {
   return (
@@ -63,7 +69,28 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
             </div>
           </div>
           <div className="lg:hidden">
-            <Menu className="w-6 h-6" />
+            <Sheet>
+              <SheetTrigger asChild>
+                <Menu className="w-6 h-6" />
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px] bg-[#044cac] text-white p-0">
+                <SheetHeader className="p-4 border-b border-white/30">
+                  <Link href="/" className="block">
+                    <Image src="/logo-w.png" alt="GyanSanchar Logo" width={150} height={150} className="h-12 w-auto" />
+                  </Link>
+                </SheetHeader>
+                <div className="flex flex-col gap-4 p-4">
+                  <Link href={'/colleges'} className="cursor-pointer hover:text-white/80 transition-colors">Colleges</Link>
+                  <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
+                  <span className="cursor-pointer hover:text-white/80 transition-colors">Courses</span>
+                  <span className="cursor-pointer hover:text-white/80 transition-colors">Careers</span>
+                  <span className="cursor-pointer hover:text-white/80 transition-colors">Latest Updates</span>
+                  <span className="cursor-pointer hover:text-white/80 transition-colors flex items-center gap-1">
+                    More <ChevronDown className="w-4 h-4" />
+                  </span>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </nav>
       </div>
