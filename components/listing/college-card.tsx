@@ -20,7 +20,7 @@ export function CollegeCard({ college }: { college: College }) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-none shadow-none transition-shadow duration-300 border-l-4 border-l-orange-500 py-0">
+    <Card className="overflow-hidden hover:shadow-none shadow-none transition-shadow duration-300 border-l-4 border-l-primary py-0">
       <CardContent className="p-3 sm:p-4 lg:p-6">
         <div className="flex flex-col gap-3 sm:gap-4">
           {/* Row 1: Image and Basic Info */}
@@ -103,7 +103,7 @@ export function CollegeCard({ college }: { college: College }) {
          
             </div>
             <div className="bg-muted rounded-lg px-2 py-1 sm:px-3 sm:py-2 w-fit">
-              <div className="text-base sm:text-lg lg:text-xl font-bold text-orange-500">
+              <div className="text-base sm:text-lg lg:text-xl font-bold text-primary">
                 {formatFees(college.fees.min, college.fees.max)}
               </div>
             </div>
@@ -124,7 +124,7 @@ export function CollegeCard({ college }: { college: College }) {
             </div>
             <div className="flex flex-wrap gap-2 sm:gap-4">
               <Link href={`/college/${college.id}`}>
-                <Button className="bg-orange-500 hover:bg-orange-400 text-white text-xs sm:text-sm lg:text-base">
+                <Button className="bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm lg:text-base">
                   View Details
                 </Button>
               </Link>
