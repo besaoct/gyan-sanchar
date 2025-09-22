@@ -156,7 +156,7 @@ export default function CollegeListingPage() {
                     {Object.values(filters).flat().filter(Boolean).length})
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-80 p-0">
+                <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide">
                   <FilterSidebar
                     filters={filters}
                     onFiltersChange={setFilters}
