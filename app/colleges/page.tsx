@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { College, collegesData } from "@/lib/colleges-data";
 import type { FilterOptions } from "@/lib/types";
-import { FilterSidebar } from "@/components/listing/filter-sidebar";
+import { FilterSidebar } from "@/components/college/filter-sidebar";
 
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { Filter } from "lucide-react";
-import { CollegeCard } from "@/components/listing/college-card";
+import { CollegeCard } from "@/components/college/college-card";
 
 export default function CollegeListingPage() {
   const [filters, setFilters] = useState<FilterOptions>({

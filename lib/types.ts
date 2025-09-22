@@ -1,11 +1,23 @@
 
 export interface Course {
-  id: string
-  name: string
-  duration: string
-  fees: number
-  eligibility: string
-  seats: number
+  id: string;
+  title: string;
+  description: string;
+  duration: number; // in years
+  fees: {
+    min: number;
+    max: number;
+  };
+  mode: (
+    | "Regular"
+    | "Distance"
+    | "Part-time"
+    | "Regular / Distance / Part-time"
+    | "Regular/ Distance"
+    | "Regular/part-time"
+  )[];
+  level: "Bachelors" | "Masters" | "Phd";
+  image: string;
 }
 
 export interface Review {

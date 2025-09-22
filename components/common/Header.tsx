@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Phone, Mail, ChevronDown, Menu, User2, Search } from "lucide-react"
+import { Phone, Mail,  Menu, User2, Search } from "lucide-react"
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa"
 import {
     Sheet,
@@ -55,13 +55,12 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
             <div className="flex gap-6">
             <Link href={'/colleges'}  className="cursor-pointer hover:text-white/80 transition-colors">Colleges</Link>
               {/* <Link href="/streams"><span className="cursor-pointer hover:text-white/80 transition-colors">Streams</span></Link> */}
+                  <Link href={'/courses'} className="cursor-pointer hover:text-white/80 transition-colors">Courses</Link>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
-              <span className="cursor-pointer hover:text-white/80 transition-colors">Courses</span>
-              <span className="cursor-pointer hover:text-white/80 transition-colors">Careers</span>
-              <span className="cursor-pointer hover:text-white/80 transition-colors">Latest Updates</span>
-              <span className="cursor-pointer hover:text-white/80 transition-colors flex items-center gap-1">
-                More <ChevronDown className="w-4 h-4" />
-              </span>
+
+                      <span className="cursor-pointer hover:text-white/80 transition-colors">Admission</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors">News & Articles</span>
+      
             </div>
             <div className="flex items-center gap-2">
               <Search className="w-5 h-5" />
@@ -81,13 +80,13 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                 </SheetHeader>
                 <div className="flex flex-col gap-4 p-4">
                   <Link href={'/colleges'} className="cursor-pointer hover:text-white/80 transition-colors">Colleges</Link>
+                  <Link href={'/courses'} className="cursor-pointer hover:text-white/80 transition-colors">Courses</Link>
                   <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
-                  <span className="cursor-pointer hover:text-white/80 transition-colors">Courses</span>
-                  <span className="cursor-pointer hover:text-white/80 transition-colors">Careers</span>
-                  <span className="cursor-pointer hover:text-white/80 transition-colors">Latest Updates</span>
-                  <span className="cursor-pointer hover:text-white/80 transition-colors flex items-center gap-1">
-                    More <ChevronDown className="w-4 h-4" />
-                  </span>
+                 
+                      <span className="cursor-pointer hover:text-white/80 transition-colors">Admission</span>
+              <span className="cursor-pointer hover:text-white/80 transition-colors">News & Articles</span>
+      
+               
                 </div>
               </SheetContent>
             </Sheet>
