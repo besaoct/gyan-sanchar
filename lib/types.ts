@@ -42,3 +42,13 @@ export interface FilterOptions {
   studyMode: string[]
   exams: string[]
 }
+
+export interface Article {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  author: string;
+  date: string;
+}

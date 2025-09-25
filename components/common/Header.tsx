@@ -58,7 +58,8 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                   <Link href={'/courses'} className="cursor-pointer hover:text-white/80 transition-colors">Courses</Link>
               <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
 
-                      <span className="cursor-pointer hover:text-white/80 transition-colors">Admission</span>
+              <Link href={"/admission"} className="cursor-pointer hover:text-white/80 transition-colors">Admission</Link>
+
               <span className="cursor-pointer hover:text-white/80 transition-colors">News & Articles</span>
       
             </div>
@@ -82,8 +83,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                   <Link href={'/colleges'} className="cursor-pointer hover:text-white/80 transition-colors">Colleges</Link>
                   <Link href={'/courses'} className="cursor-pointer hover:text-white/80 transition-colors">Courses</Link>
                   <span className="cursor-pointer hover:text-white/80 transition-colors">Exams</span>
-                 
-                      <span className="cursor-pointer hover:text-white/80 transition-colors">Admission</span>
+                       <Link href={"/admission"} className="cursor-pointer hover:text-white/80 transition-colors">Admission</Link>
               <span className="cursor-pointer hover:text-white/80 transition-colors">News & Articles</span>
       
                
