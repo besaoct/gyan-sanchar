@@ -51,4 +51,6 @@ export interface Article {
   image: string;
   author: string;
   date: string;
+  category: string;
+  tags: string[];
 }

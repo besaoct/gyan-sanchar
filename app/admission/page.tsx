@@ -9,7 +9,7 @@ import Image from "next/image";
 export default function AdmissionPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isSticky={true} />
+      <Header isSticky={false} />
         <div className="bg-gradient-to-b from-[#044cac] to-[#033a8a] text-white">
             <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row gap-8 items-center">

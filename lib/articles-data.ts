@@ -1,4 +1,3 @@
-
 import type { Article } from "./types";
 
 export const articlesData: Article[] = [
@@ -10,6 +9,8 @@ export const articlesData: Article[] = [
     image: "top-10-colleges.jpg",
     author: "Priya Sharma",
     date: "2025-09-20",
+    category: "College Rankings",
+    tags: ["Engineering", "Top Colleges", "NIRF"]
   },
   {
     id: "2",
@@ -19,6 +20,8 @@ export const articlesData: Article[] = [
     image: "career-path.jpg",
     author: "Rahul Verma",
     date: "2025-09-18",
+    category: "Career Guidance",
+    tags: ["Career", "12th Grade", "Students"]
   },
   {
     id: "3",
@@ -28,5 +31,7 @@ export const articlesData: Article[] = [
     image: "ai-ml.jpg",
     author: "Anjali Singh",
     date: "2025-09-15",
+    category: "Technology",
+    tags: ["AI", "Machine Learning", "Job Market"]
   },
 ];

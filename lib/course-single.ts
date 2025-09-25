@@ -1,4 +1,3 @@
-
 export const courseDetails = {
     "basicInfo": {
       "courseName": "Bachelor of Technology (B.Tech) in Computer Science and Engineering",
@@ -10,7 +9,8 @@ export const courseDetails = {
       "accreditation": ["AICTE", "UGC"],
       "averageFees": "INR 1,50,000 per year",
       "averageSalary": "INR 4.5 LPA",
-      "level": "Graduate"
+      "level": "Graduate",
+      "heroImage": "/course/demo.jpg"
     },
     "overview": {
       "introduction": "The B.Tech in Computer Science and Engineering is a four-year undergraduate program designed to provide students with strong foundations in computer science, software development, algorithms, and emerging technologies such as AI, ML, Cloud Computing, and Cybersecurity.",
@@ -48,63 +48,72 @@ export const courseDetails = {
       }
     },
     "curriculum": {
-      "semesterWiseSubjects": {
-        "semester1": [
-          "Engineering Mathematics I",
-          "Engineering Physics",
-          "Basic Electrical Engineering",
-          "Engineering Graphics",
-          "Programming in C"
-        ],
-        "semester2": [
-          "Engineering Mathematics II",
-          "Data Structures",
-          "Digital Logic Design",
-          "Chemistry",
-          "Communication Skills"
-        ],
-        "semester3": [
-          "Discrete Mathematics",
-          "Computer Organization",
-          "Object Oriented Programming (Java/C++)",
-          "Database Management Systems",
-          "Environmental Science"
-        ],
-        "semester4": [
-          "Design and Analysis of Algorithms",
-          "Operating Systems",
-          "Software Engineering",
-          "Microprocessors",
-          "Probability and Statistics"
-        ],
-        "semester5": [
-          "Computer Networks",
-          "Compiler Design",
-          "Artificial Intelligence",
-          "Elective I (Cloud Computing/IoT)",
-          "Open Elective I"
-        ],
-        "semester6": [
-          "Machine Learning",
-          "Information Security",
-          "Web Technologies",
-          "Elective II",
-          "Open Elective II"
-        ],
-        "semester7": [
-          "Big Data Analytics",
-          "Mobile Application Development",
-          "Project Phase I",
-          "Elective III",
-          "Seminar/Minor Project"
-        ],
-        "semester8": [
-          "Project Phase II",
-          "Internship/Industrial Training",
-          "Elective IV",
-          "Ethics and Professional Practices"
-        ]
-      }
+      "semesterWiseSubjects": [
+        {
+          "semester": 1,
+          "title": "Semester 1: Foundational Concepts",
+          "description": "This semester lays the groundwork for the entire course, focusing on fundamental sciences and introductory engineering principles.",
+          "subjects": [
+            {
+              "name": "Engineering Mathematics I",
+              "description": "An introduction to differential calculus, integral calculus, and linear algebra.",
+              "outcome": "Students will be able to solve complex engineering problems using mathematical principles."
+            },
+            {
+              "name": "Engineering Physics",
+              "description": "Covers classical mechanics, electromagnetism, and quantum mechanics.",
+              "outcome": "A strong foundation in physics to understand and apply in engineering disciplines."
+            },
+            {
+              "name": "Basic Electrical Engineering",
+              "description": "Fundamentals of electrical circuits, machines, and measurements.",
+              "outcome": "Ability to design and analyze basic electrical circuits."
+            },
+            {
+              "name": "Engineering Graphics",
+              "description": "Introduction to engineering drawing and visualization.",
+              "outcome": "Skills to create and interpret technical drawings."
+            },
+            {
+              "name": "Programming in C",
+              "description": "Learning the basics of programming using the C language.",
+              "outcome": "Ability to write, debug, and execute C programs."
+            }
+          ]
+        },
+        {
+          "semester": 2,
+          "title": "Semester 2: Core Computer Science",
+          "description": "Building upon the first semester, this one introduces core concepts of computer science.",
+          "subjects": [
+            {
+              "name": "Engineering Mathematics II",
+              "description": "Advanced topics in calculus, differential equations, and complex variables.",
+              "outcome": "Enhanced mathematical skills for solving advanced engineering problems."
+            },
+            {
+              "name": "Data Structures",
+              "description": "Study of fundamental data structures like arrays, linked lists, stacks, queues, trees, and graphs.",
+              "outcome": "Ability to choose and implement appropriate data structures for specific problems."
+            },
+            {
+              "name": "Digital Logic Design",
+              "description": "Understanding of digital systems, logic gates, and combinational and sequential circuits.",
+              "outcome": "Ability to design and analyze digital circuits."
+            },
+            {
+              "name": "Chemistry",
+              "description": "Covers topics relevant to engineering like materials science and environmental chemistry.",
+              "outcome": "Understanding the chemical properties of materials used in engineering."
+            },
+            {
+              "name": "Communication Skills",
+              "description": "Developing written and verbal communication skills for a professional environment.",
+              "outcome": "Improved ability to communicate effectively in technical and non-technical settings."
+            }
+          ]
+        }
+      ]
     },
     "instructorInfo": [
       {

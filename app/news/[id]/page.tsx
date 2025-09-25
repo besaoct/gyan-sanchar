@@ -53,7 +53,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
 
           <div className="relative h-96 rounded-lg overflow-hidden mb-8">
             <Image
-              src={`/college/${article.image}`}
+              src={`/blog.png`}
               alt={article.title}
               fill
               className="object-cover"

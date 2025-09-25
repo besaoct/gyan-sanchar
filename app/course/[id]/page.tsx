@@ -61,13 +61,33 @@ export default function CourseDetailPage() {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-primary to-primary/90 text-white">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-2">{courseDetails.basicInfo.courseName}</h1>
-          <div className="flex flex-wrap items-center gap-4 text-white/80 mb-4">
-            <Badge variant="secondary" className="bg-white/20 text-white">{courseDetails.basicInfo.courseType}</Badge>
-            <div className="flex items-center gap-1"><Calendar className="h-4 w-4" />{courseDetails.basicInfo.duration}</div>
-            <div className="flex items-center gap-1"><Users className="h-4 w-4" />{courseDetails.basicInfo.mode}</div>
+      <div className="bg-primary text-white py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row gap-8 ">
+            <div className="md:w-1/3">
+              <Image
+                src={courseDetails.basicInfo.heroImage}
+                alt={courseDetails.basicInfo.courseName}
+                width={400}
+                height={250}
+                className="rounded-lg object-cover w-full"
+              />
+            </div>
+            <div className="md:w-2/3">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{courseDetails.basicInfo.courseName}</h1>
+              <div className="flex flex-wrap items-center gap-4 text-white/90 mb-4">
+                <Badge variant="secondary">{courseDetails.basicInfo.courseType}</Badge>
+                <div className="flex items-center gap-1"><Calendar className="h-4 w-4" />{courseDetails.basicInfo.duration}</div>
+                <div className="flex items-center gap-1"><Users className="h-4 w-4" />{courseDetails.basicInfo.mode}</div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="secondary" size="sm"><Heart className="h-4 w-4 mr-2" />Save</Button>
+                <Button variant="secondary" size="sm"><Phone className="h-4 w-4 mr-2" />Request a callback</Button>
+                <Button variant="secondary" size="sm"><Mail className="h-4 w-4 mr-2" />Ask us</Button>
+                <Button variant="secondary" size="sm"><Building className="h-4 w-4 mr-2" />Try Our College Finder</Button>
+                <Button variant="secondary" size="sm"><GraduationCap className="h-4 w-4 mr-2" />Check Eligibility</Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -133,13 +153,20 @@ export default function CourseDetailPage() {
               <CardHeader><CardTitle>Curriculum</CardTitle></CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible className="w-full">
-                  {Object.entries(courseDetails.curriculum.semesterWiseSubjects).map(([semester, subjects]) => (
-                    <AccordionItem key={semester} value={semester}>
-                      <AccordionTrigger>{`Semester ${semester.slice(-1)}`}</AccordionTrigger>
+                  {courseDetails.curriculum.semesterWiseSubjects.map((semester) => (
+                    <AccordionItem key={semester.semester} value={`semester-${semester.semester}`}>
+                      <AccordionTrigger>{semester.title}</AccordionTrigger>
                       <AccordionContent>
-                        <ul className="list-disc list-inside space-y-2">
-                          {subjects.map((subject, i) => <li key={i}>{subject}</li>)}
-                        </ul>
+                        <p className="mb-4 text-muted-foreground">{semester.description}</p>
+                        <div className="space-y-4">
+                          {semester.subjects.map((subject, i) => (
+                            <div key={i} className="p-4 border rounded-lg">
+                              <h4 className="font-semibold">{subject.name}</h4>
+                              <p className="text-sm text-muted-foreground mt-1">{subject.description}</p>
+                              <p className="text-sm mt-2"><span className="font-semibold">Outcome:</span> {subject.outcome}</p>
+                            </div>
+                          ))}
+                        </div>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
