@@ -123,6 +123,7 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    scroll-behavior: smooth;
   }
   h1,
   h2,

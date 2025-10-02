@@ -16,7 +16,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
     <header className={`bg-[#044cac] text-white ${isSticky && 'lg:sticky lg:top-0 lg:z-50'}`}>
       <div className="container mx-auto px-4">
         {/* Top bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
+        <div className="hidden lg:flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
             <span className="flex items-center gap-1">
               <Phone className="w-3 h-3" />

@@ -41,18 +41,18 @@ export default function ServicesSection() {
         </div>
 
         <div className="flex justify-center mb-12">
-          <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-lg shadow-sm w-full max-w-4xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center  gap-4 bg-white p-4 rounded-lg shadow-sm w-full max-w-4xl">
             <div className="flex items-center gap-2">
               <MapPin className="w-5 h-5 text-gray-400" />
               <span className="text-gray-600">Popular</span>
             </div>
             <Input
               placeholder="Select Course"
-              className="border-0 bg-gray-50 flex-1"
+              className="border-1 h-10 bg-gray-50 py-2 flex-1 shadow-none"
             />
             <Input
               placeholder="All Specialization"
-              className="border-0 bg-gray-50 flex-1"
+              className="border-1 h-10 bg-gray-50 py-2 flex-1 shadow-none"
             />
           </div>
         </div>

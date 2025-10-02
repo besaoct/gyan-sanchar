@@ -16,6 +16,9 @@ import { Badge } from "@/components/ui/badge";
 import { states, streams, exams, facilities } from "@/lib/colleges-data";
 import type { FilterOptions } from "@/lib/types";
 
+
+
+
 interface FilterSidebarProps {
   filters: FilterOptions;
   onFiltersChange: (filters: FilterOptions) => void;
@@ -89,7 +92,7 @@ export function FilterSidebar({
   };
 
   return (
-    <div className="bg-accent/50 border rounded-lg p-4 h-full lg:h-fit sticky top-36 ">
+    <div className="bg-white border rounded-lg p-4 h-auto lg:h-fit sticky top-6 ">
       <div className="flex items-center justify-between mb-8 lg:mb-0">
         <h3 className=" sr-only ">Filters</h3>
         {getActiveFiltersCount() > 0 && (
@@ -112,7 +115,7 @@ export function FilterSidebar({
           <Input
             placeholder="Search..."
             value={filters.search}
-            // onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
+            onChange={(e) => updateFilter("search", e.target.value)}
             className="pl-10 bg-white text-foreground"
           />
         </div>

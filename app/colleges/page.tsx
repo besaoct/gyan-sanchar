@@ -4,14 +4,14 @@ import { useState, useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { College, collegesData } from "@/lib/colleges-data";
 import type { FilterOptions } from "@/lib/types";
 import { FilterSidebar } from "@/components/college/filter-sidebar";
 
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { Filter } from "lucide-react";
+import { Filter, SlidersHorizontal } from "lucide-react";
 import { CollegeCard } from "@/components/college/college-card";
 
 export default function CollegeListingPage() {
@@ -136,8 +136,8 @@ export default function CollegeListingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header isSticky={true} />
+    <div className="min-h-screen bg-muted/80">
+      <Header  />
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           {/* Desktop Sidebar */}
@@ -150,13 +150,16 @@ export default function CollegeListingPage() {
             <div className="mb-4 lg:hidden">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="w-full bg-transparent">
-                    <Filter className="h-4 w-4 mr-2" />
+                  <Button variant="outline" className="w-fit bg-primary/5 border border-primary/30 text-primary">
+                    <SlidersHorizontal className="h-4 w-4 text-primary" />
                     Filters (
                     {Object.values(filters).flat().filter(Boolean).length})
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide">
+                <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide bg-white">
+                  <SheetTitle className="sr-only">
+                    <h1>filters</h1>
+                  </SheetTitle>
                   <FilterSidebar
                     filters={filters}
                     onFiltersChange={setFilters}
@@ -179,7 +182,7 @@ export default function CollegeListingPage() {
             </div>
 
             {/* College Cards */}
-            <div className="space-y-6">
+            <div className="flex flex-col gap-4">
               {filteredColleges.map((college) => (
                 <CollegeCard key={college.id} college={college} />
               ))}
