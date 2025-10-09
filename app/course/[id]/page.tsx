@@ -49,16 +49,7 @@ export default function CourseDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="bg-primary text-white">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/courses">
-            <Button variant="ghost" size="sm" className="text-white hover:text-white/80 hover:bg-white/10">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Courses
-            </Button>
-          </Link>
-        </div>
-      </div>
+
 
       {/* Hero Section */}
       <div className="bg-primary text-white py-8">

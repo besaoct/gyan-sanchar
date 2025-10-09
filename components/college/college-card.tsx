@@ -9,6 +9,8 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { useState } from "react"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { CollegeImageCarousel } from "./college-image-carousel"
 import { College } from "@/lib/colleges-data"
 
 
@@ -53,16 +55,23 @@ export function CollegeCard({ college, className }: { college: College; classNam
           "flex-row",
         )}
       >
-        <div className="w-28 self-start mb-2 md:mb-0 md:w-48 md:flex-shrink-0">
-          <div className="relative h-20 w-full overflow-hidden rounded-lg sm:h-24 md:h-28 md:w-48">
-            <Image
-              src={"https://media.collegedekho.com/media/img/institute/crawled_images/c2.jpg?w=350&h=350"}
-              alt={`${college.name} campus image`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 25vw, (max-width: 1024px) 192px, 192px"
-            />
-          </div>
+        <div className="w-28 self-start mb-2 md:mb-0 md:w-48 md:flex-shrink-0 mx-5">
+          <Dialog >
+            <DialogTrigger asChild>
+              <div className="relative h-20 w-full overflow-hidden rounded-lg sm:h-24 md:h-28 md:w-48 cursor-pointer">
+                <Image
+                  src={"https://media.collegedekho.com/media/img/institute/crawled_images/c2.jpg?w=350&h=350"}
+                  alt={`${college.name} campus image`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 25vw, (max-width: 1024px) 192px, 192px"
+                />
+              </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-5xl w-[80%] ">
+              <CollegeImageCarousel images={college.gallery} collegeName={college.name} />
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
