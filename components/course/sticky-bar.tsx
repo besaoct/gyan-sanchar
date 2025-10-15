@@ -14,9 +14,9 @@ export function StickyBar({ isVisible }: { isVisible: boolean }) {
     >
       <div className=" mx-auto w-full px-4 py-3 grid grid-cols-2 lg:flex justify-center gap-4">
           <CommonAdmissionForm
-          buttonText="Request A Callback"
+          buttonText="Apply Now"
           title="Why register with us?"
-          formTitle="Get college counselling from experts, free of cost !"
+          formTitle="Looking for admission. Give us your details and we shall help you get there!"
           description={
             <ul className="space-y-4 text-white/90">
               <li>Get help in selecting the right course from the large selection of options available.</li>
@@ -27,7 +27,7 @@ export function StickyBar({ isVisible }: { isVisible: boolean }) {
           }
           trigger={
             <Button variant="secondary" className="rounded-xl py-6 px-5 bg-orange-500 hover:bg-orange-500/90 text-white lg:w-fit w-full ">
-              Request A Callback
+              Apply Now
             </Button>
           }
         />

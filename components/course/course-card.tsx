@@ -21,7 +21,7 @@ export function CourseCard({ course }: { course: Course }) {
   };
 
   return (
-    <Card className="overflow-hidden shadow-none border-l-4 border-l-primary p-0">
+    <Card className="overflow-hidden shadow-none p-0">
       <CardContent className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative h-48 md:h-full">

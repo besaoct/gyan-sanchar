@@ -1,6 +1,5 @@
-
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -32,9 +31,30 @@ import { courseDetails } from "@/lib/course-single";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { CourseHero } from "@/components/course/course-hero";
+import { cn } from "@/lib/utils";
+import { CommonAdmissionForm } from "@/components/admission/common-form";
+import { StickyBar } from "@/components/course/sticky-bar";
 
 export default function CourseDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [isStickyBarVisible, setIsStickyBarVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const heroHeight = heroRef.current.offsetHeight;
+        const scrollPosition = window.scrollY;
+        setIsStickyBarVisible(scrollPosition > heroHeight);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -50,57 +70,36 @@ export default function CourseDetailPage() {
     <div className="min-h-screen bg-white">
       <Header />
 
-
       {/* Hero Section */}
-      <div className="bg-primary text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-8 ">
-            <div className="md:w-1/3">
-              <Image
-                src={courseDetails.basicInfo.heroImage}
-                alt={courseDetails.basicInfo.courseName}
-                width={400}
-                height={250}
-                className="rounded-lg object-cover w-full"
-              />
-            </div>
-            <div className="md:w-2/3">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{courseDetails.basicInfo.courseName}</h1>
-              <div className="flex flex-wrap items-center gap-4 text-white/90 mb-4">
-                <Badge variant="secondary">{courseDetails.basicInfo.courseType}</Badge>
-                <div className="flex items-center gap-1"><Calendar className="h-4 w-4" />{courseDetails.basicInfo.duration}</div>
-                <div className="flex items-center gap-1"><Users className="h-4 w-4" />{courseDetails.basicInfo.mode}</div>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Button variant="secondary" size="sm"><Heart className="h-4 w-4 mr-2" />Save</Button>
-                <Button variant="secondary" size="sm"><Phone className="h-4 w-4 mr-2" />Request a callback</Button>
-                <Button variant="secondary" size="sm"><Mail className="h-4 w-4 mr-2" />Ask us</Button>
-                <Button variant="secondary" size="sm"><Building className="h-4 w-4 mr-2" />Try Our College Finder</Button>
-                <Button variant="secondary" size="sm"><GraduationCap className="h-4 w-4 mr-2" />Check Eligibility</Button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div  className="px-4 container py-10 w-full max-w-full">
+        <CourseHero course={courseDetails} />
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex overflow-x-auto scrollbar-hide mb-8">
-          <div className="flex gap-2">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                  activeTab === tab.id ? "bg-primary text-white" : "bg-gray-100 text-primary hover:bg-primary/10"
-                }`}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div ref={heroRef} className="container mx-auto px-4 py-8">
+        <div className="w-full">
+          <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white ">
+            <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  ">
+              <ul className="flex items-center gap-6 text-sm w-full">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={cn(
+                      "whitespace-nowrap py-4",
+                      tab.id === activeTab
+                        ? "border-b-2 border-primary font-semibold text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                    aria-current={tab.id === activeTab ? "page" : undefined}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </ul>
+            </div>
+          </nav>
 
-        <div>
           {activeTab === "overview" && (
             <Card>
               <CardHeader><CardTitle>Overview</CardTitle></CardHeader>
@@ -213,6 +212,47 @@ export default function CourseDetailPage() {
           )}
         </div>
       </div>
+
+      {/* CTA Section */}
+      <div className="bg-[#044cac] text-white">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-4">Ready to Apply?</h3>
+            <p className="text-white/80 mb-6">
+              Get personalized counseling and application assistance
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <CommonAdmissionForm
+                buttonText="Apply Now"
+                title="Why register with us?"
+                formTitle="Schedule your free counseling session today!"
+                description={(
+                  <ul className="space-y-4 text-white/90">
+                    <li>Get help in selecting the right course from the large selection of options available.</li>
+                    <li>Boost your preparation with extensive knowledge of syllabus & exam pattern.</li>
+                    <li>Explore your courses offered by different colleges that match your skills.</li>
+                    <li>With totally online Admission Process we help you get college admission without having to step out.</li>
+                  </ul>
+                )}
+                trigger={
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    <Phone className="h-4 w-4 mr-2" />
+                    Schedule Counseling
+                  </Button>
+                }
+              />
+              <Button
+                variant="outline"
+                className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Visit Official Website
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <StickyBar isVisible={isStickyBarVisible} />
       <Footer />
     </div>
   );
