@@ -76,20 +76,20 @@ export default function CourseDetailPage() {
       </div>
 
       {/* Main Content */}
-      <div ref={heroRef} className="container mx-auto px-4 py-8">
+      <div ref={heroRef} className=" mx-auto  py-8">
         <div className="w-full">
-          <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white ">
-            <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  ">
+              <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow ">
+         <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  container px-4 mx-auto">
               <ul className="flex items-center gap-6 text-sm w-full">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      "whitespace-nowrap py-4",
+                            "whitespace-nowrap py-4 font-medium",
                       tab.id === activeTab
                         ? "border-b-2 border-primary font-semibold text-primary"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-black"
                     )}
                     aria-current={tab.id === activeTab ? "page" : undefined}
                   >
@@ -99,6 +99,8 @@ export default function CourseDetailPage() {
               </ul>
             </div>
           </nav>
+
+          <div className="mx-auto px-4 container">
 
           {activeTab === "overview" && (
             <Card>
@@ -210,6 +212,7 @@ export default function CourseDetailPage() {
               </CardContent>
             </Card>
           )}
+        </div>
         </div>
       </div>
 

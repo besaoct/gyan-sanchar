@@ -51,7 +51,7 @@ export function CollegeCard({ college, className }: { college: College; classNam
 
       <div 
         className={cn(
-          "flex w-full items-stretch gap-4 px-3 md:px-4 lg:px-5 pb-2",
+          "flex w-full items-stretch gap-4 pr-3 md:pr-4 lg:pr-5 pb-2",
           "flex-row",
         )}
       >

@@ -37,7 +37,6 @@ import { Badge } from "@/components/ui/badge";
 import { collegesData } from "@/lib/colleges-data";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { FaRupeeSign } from "react-icons/fa";
 import { CollegeHero } from "@/components/college/college-hero";
 import { cn } from "@/lib/utils";
 import { StickyBar } from "@/components/college/sticky-bar";
@@ -93,20 +92,20 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       </div>
 
       {/* Main Content */}
-      <div ref={heroRef} className="container mx-auto px-4 py-8">
+      <div ref={heroRef} className=" mx-auto py-8">
         <div className="w-full">
-          <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white ">
-            <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  ">
+          <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow ">
+            <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  container px-4 mx-auto">
               <ul className="flex items-center gap-6 text-sm w-full">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      "whitespace-nowrap py-4",
+                      "whitespace-nowrap py-4 font-medium",
                       tab.id === activeTab
                         ? "border-b-2 border-primary font-semibold text-primary"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-black"
                     )}
                     aria-current={tab.id === activeTab ? "page" : undefined}
                   >
@@ -116,6 +115,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               </ul>
             </div>
           </nav>
+
+          <div className="mx-auto px-4 container">
+
 
           {activeTab === "overview" && (
             <div className="space-y-6">
@@ -744,6 +746,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               </Card>
             </div>
           )}
+          </div>
+
+         
+
         </div>
       </div>
 
