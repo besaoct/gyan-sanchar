@@ -27,7 +27,7 @@ export function StickyBar({ isVisible }: { isVisible: boolean }) {
           }
           trigger={
             <Button variant="secondary" className="rounded-xl py-6 px-5 bg-orange-500 hover:bg-orange-500/90 text-white lg:w-fit w-full ">
-              Request A Callback
+              Request Callback
             </Button>
           }
         />
