@@ -12,7 +12,7 @@ export function StickyBar({ isVisible }: { isVisible: boolean }) {
         isVisible ? "translate-y-0" : "translate-y-full"
       )}
     >
-      <div className=" mx-auto w-full px-4 py-3 grid grid-cols-2 lg:flex justify-center gap-4">
+      <div className=" mx-auto w-full px-4 py-3 grid grid-cols-2 lg:flex justify-center gap-4 overflow-x-auto scrollbar-hide">
           <CommonAdmissionForm
           buttonText="Request A Callback"
           title="Why register with us?"
