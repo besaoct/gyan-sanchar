@@ -78,7 +78,7 @@ export default function CourseDetailPage() {
       {/* Main Content */}
       <div ref={heroRef} className=" mx-auto  py-8">
         <div className="w-full">
-              <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow ">
+              <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow-xs ">
          <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  container px-4 mx-auto">
               <ul className="flex items-center gap-6 text-sm w-full">
                 {tabs.map((tab) => (
@@ -103,9 +103,9 @@ export default function CourseDetailPage() {
           <div className="mx-auto px-4 container">
 
           {activeTab === "overview" && (
-            <Card>
-              <CardHeader><CardTitle>Overview</CardTitle></CardHeader>
-              <CardContent>
+            <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>Overview</CardTitle></CardHeader>
+              <CardContent className="p-0">
                 <p className="mb-4">{courseDetails.overview.introduction}</p>
                 <ul className="list-disc list-inside space-y-2">
                   {courseDetails.overview.highlights.map((highlight, i) => <li key={i}>{highlight}</li>)}
@@ -114,9 +114,9 @@ export default function CourseDetailPage() {
             </Card>
           )}
           {activeTab === "eligibility" && (
-            <Card>
-              <CardHeader><CardTitle>Eligibility</CardTitle></CardHeader>
-              <CardContent>
+             <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>Eligibility</CardTitle></CardHeader>
+               <CardContent className="p-0">
                 <ul className="list-disc list-inside space-y-2 mb-4">
                   {courseDetails.eligibility.criteria.map((c, i) => <li key={i}>{c}</li>)}
                 </ul>
@@ -125,9 +125,9 @@ export default function CourseDetailPage() {
             </Card>
           )}
           {activeTab === "admission" && (
-            <Card>
-              <CardHeader><CardTitle>Admission Process</CardTitle></CardHeader>
-              <CardContent>
+             <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>Admission Process</CardTitle></CardHeader>
+                <CardContent className="p-0">
                 <ol className="list-decimal list-inside space-y-2 mb-4">
                   {courseDetails.admissionProcess.steps.map((step, i) => <li key={i}>{step}</li>)}
                 </ol>
@@ -141,9 +141,9 @@ export default function CourseDetailPage() {
             </Card>
           )}
           {activeTab === "curriculum" && (
-            <Card>
-              <CardHeader><CardTitle>Curriculum</CardTitle></CardHeader>
-              <CardContent>
+             <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>Curriculum</CardTitle></CardHeader>
+              <CardContent className="p-0">
                 <Accordion type="single" collapsible className="w-full">
                   {courseDetails.curriculum.semesterWiseSubjects.map((semester) => (
                     <AccordionItem key={semester.semester} value={`semester-${semester.semester}`}>
@@ -167,9 +167,9 @@ export default function CourseDetailPage() {
             </Card>
           )}
           {activeTab === "instructors" && (
-            <Card>
-              <CardHeader><CardTitle>Instructors</CardTitle></CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-4">
+             <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>Instructors</CardTitle></CardHeader>
+              <CardContent className="grid md:grid-cols-2 gap-4 p-0">
                 {courseDetails.instructorInfo.map((instructor, i) => (
                   <div key={i} className="border p-4 rounded-lg">
                     <h4 className="font-semibold">{instructor.name}</h4>
@@ -183,9 +183,9 @@ export default function CourseDetailPage() {
             </Card>
           )}
           {activeTab === "career" && (
-            <Card>
-              <CardHeader><CardTitle>Career Prospects</CardTitle></CardHeader>
-              <CardContent>
+             <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>Career Prospects</CardTitle></CardHeader>
+              <CardContent className="p-0">
                 <h4 className="font-semibold mb-2">Job Roles</h4>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {courseDetails.careerProspects.jobRoles.map((role, i) => <Badge key={i} variant="secondary">{role}</Badge>)}
@@ -198,9 +198,9 @@ export default function CourseDetailPage() {
             </Card>
           )}
           {activeTab === "faqs" && (
-            <Card>
-              <CardHeader><CardTitle>FAQs</CardTitle></CardHeader>
-              <CardContent>
+             <Card className="border-none shadow-none p-0">
+              <CardHeader className="p-0"><CardTitle>FAQs</CardTitle></CardHeader>
+              <CardContent className="p-0">
                 <Accordion type="single" collapsible className="w-full">
                   {courseDetails.faqs.map((faq, i) => (
                     <AccordionItem key={i} value={`item-${i}`}>
