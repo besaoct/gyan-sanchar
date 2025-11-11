@@ -95,14 +95,14 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       <div ref={heroRef} className=" mx-auto py-8">
         <div className="w-full">
           <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow-xs ">
-            <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  container px-4 mx-auto">
-              <ul className="flex items-center gap-6 text-sm w-full">
+            <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth container  mx-auto">
+              <ul className="flex items-center gap-6 text-sm w-full ">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      "whitespace-nowrap py-4 font-medium",
+                      "whitespace-nowrap py-4 font-medium last:pr-4",
                       tab.id === activeTab
                         ? "border-b-2 border-primary font-semibold text-primary"
                         : "text-black"

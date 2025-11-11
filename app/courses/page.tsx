@@ -8,7 +8,7 @@ import { coursesData } from "@/lib/courses-data";
 import { FilterSidebar, CourseFilterOptions } from "@/components/course/filter-sidebar";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { Filter } from "lucide-react";
+import { Filter, SlidersHorizontal } from "lucide-react";
 import { CourseCard } from "@/components/course/course-card";
 
 export default function CourseListingPage() {
@@ -75,13 +75,13 @@ export default function CourseListingPage() {
             <div className="mb-4 lg:hidden">
                  <Sheet>
                    <SheetTrigger asChild>
-                     <Button variant="outline" className="w-full bg-transparent">
-                       <Filter className="h-4 w-4 mr-2" />
+                   <Button variant="outline" className="w-fit bg-primary/5 border border-primary/30 text-primary">
+                    <SlidersHorizontal className="h-4 w-4 text-primary" />
                        Filters (
                        {Object.values(filters).flat().filter(Boolean).length})
                      </Button>
                    </SheetTrigger>
-                   <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide">
+                   <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide bg-white">
                      <FilterSidebar
                        filters={filters}
                        onFiltersChange={setFilters}

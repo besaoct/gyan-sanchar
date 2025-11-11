@@ -1,29 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  ArrowLeft,
-  Star,
-  MapPin,
-  Calendar,
-  Award,
-  Phone,
-  Mail,
-  Share2,
-  Heart,
-  Download,
-  ExternalLink,
-  Building,
-  GraduationCap,
-  Users,
-  BookOpen,
-  DollarSign,
-  Briefcase,
-  IndianRupee,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +12,9 @@ import { CourseHero } from "@/components/course/course-hero";
 import { cn } from "@/lib/utils";
 import { CommonAdmissionForm } from "@/components/admission/common-form";
 import { StickyBar } from "@/components/course/sticky-bar";
+import { ExternalLink, Phone } from "lucide-react";
+import { collegesData } from "@/lib/colleges-data";
+import { CollegeCard } from "@/components/college/college-card";
 
 export default function CourseDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -58,13 +38,14 @@ export default function CourseDetailPage() {
 
   const tabs = [
     { id: "overview", label: "Overview" },
+    { id: "syllabus", label: "Syllabus" },
     { id: "eligibility", label: "Eligibility" },
-    { id: "admission", label: "Admission" },
-    { id: "curriculum", label: "Curriculum" },
-    { id: "instructors", label: "Instructors" },
-    { id: "career", label: "Career Prospects" },
-    { id: "faqs", label: "FAQs" },
+    { id: "colleges", label: "Colleges" },
   ];
+
+  const offeringColleges = collegesData.filter(college => 
+    college.courses.some(course => course.name.includes("Computer Science"))
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -86,7 +67,7 @@ export default function CourseDetailPage() {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                            "whitespace-nowrap py-4 font-medium",
+                            "whitespace-nowrap py-4 font-medium last:pr-4",
                       tab.id === activeTab
                         ? "border-b-2 border-primary font-semibold text-primary"
                         : "text-black"
@@ -124,25 +105,9 @@ export default function CourseDetailPage() {
               </CardContent>
             </Card>
           )}
-          {activeTab === "admission" && (
+          {activeTab === "syllabus" && (
              <Card className="border-none shadow-none p-0">
-              <CardHeader className="p-0"><CardTitle>Admission Process</CardTitle></CardHeader>
-                <CardContent className="p-0">
-                <ol className="list-decimal list-inside space-y-2 mb-4">
-                  {courseDetails.admissionProcess.steps.map((step, i) => <li key={i}>{step}</li>)}
-                </ol>
-                <h4 className="font-semibold mb-2">Important Dates</h4>
-                <ul className="list-disc list-inside space-y-2">
-                  <li>Application Start: {courseDetails.admissionProcess.importantDates.applicationStart}</li>
-                  <li>Application End: {courseDetails.admissionProcess.importantDates.applicationEnd}</li>
-                  <li>Exam Date: {courseDetails.admissionProcess.importantDates.examDate}</li>
-                </ul>
-              </CardContent>
-            </Card>
-          )}
-          {activeTab === "curriculum" && (
-             <Card className="border-none shadow-none p-0">
-              <CardHeader className="p-0"><CardTitle>Curriculum</CardTitle></CardHeader>
+              <CardHeader className="p-0"><CardTitle>Syllabus</CardTitle></CardHeader>
               <CardContent className="p-0">
                 <Accordion type="single" collapsible className="w-full">
                   {courseDetails.curriculum.semesterWiseSubjects.map((semester) => (
@@ -166,49 +131,13 @@ export default function CourseDetailPage() {
               </CardContent>
             </Card>
           )}
-          {activeTab === "instructors" && (
+          {activeTab === "colleges" && (
              <Card className="border-none shadow-none p-0">
-              <CardHeader className="p-0"><CardTitle>Instructors</CardTitle></CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-4 p-0">
-                {courseDetails.instructorInfo.map((instructor, i) => (
-                  <div key={i} className="border p-4 rounded-lg">
-                    <h4 className="font-semibold">{instructor.name}</h4>
-                    <p className="text-sm text-muted-foreground">{instructor.designation}</p>
-                    <p className="text-sm">{instructor.qualification}</p>
-                    <p className="text-sm">{instructor.experience} experience</p>
-                    <p className="text-sm">Specialization: {instructor.specialization}</p>
-                  </div>
+              <CardHeader className="p-0"><CardTitle>Colleges Offering Computer Science</CardTitle></CardHeader>
+              <CardContent className="grid md:grid-cols-1 gap-4 p-0">
+                {offeringColleges.map((college) => (
+                  <CollegeCard key={college.id} college={college} />
                 ))}
-              </CardContent>
-            </Card>
-          )}
-          {activeTab === "career" && (
-             <Card className="border-none shadow-none p-0">
-              <CardHeader className="p-0"><CardTitle>Career Prospects</CardTitle></CardHeader>
-              <CardContent className="p-0">
-                <h4 className="font-semibold mb-2">Job Roles</h4>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {courseDetails.careerProspects.jobRoles.map((role, i) => <Badge key={i} variant="secondary">{role}</Badge>)}
-                </div>
-                <h4 className="font-semibold mb-2">Top Recruiters</h4>
-                <div className="flex flex-wrap gap-2">
-                  {courseDetails.careerProspects.recruiters.map((recruiter, i) => <Badge key={i}>{recruiter}</Badge>)}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          {activeTab === "faqs" && (
-             <Card className="border-none shadow-none p-0">
-              <CardHeader className="p-0"><CardTitle>FAQs</CardTitle></CardHeader>
-              <CardContent className="p-0">
-                <Accordion type="single" collapsible className="w-full">
-                  {courseDetails.faqs.map((faq, i) => (
-                    <AccordionItem key={i} value={`item-${i}`}>
-                      <AccordionTrigger>{faq.question}</AccordionTrigger>
-                      <AccordionContent>{faq.answer}</AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
               </CardContent>
             </Card>
           )}

@@ -81,7 +81,7 @@ export function FilterSidebar({
   };
 
   return (
-    <div className="bg-accent/50 border rounded-lg p-4 h-full lg:h-fit sticky top-36 ">
+    <div className="bg-white  p-4 h-auto lg:h-fit sticky lg:top-36 ">
       <div className="flex items-center justify-between mb-8 lg:mb-0">
         <h3 className=" sr-only ">Filters</h3>
         {getActiveFiltersCount() > 0 && (
@@ -96,6 +96,7 @@ export function FilterSidebar({
           </Button>
         )}
       </div>
+
 
       <div className="mb-4 max-w-xs lg:mt-0">
         <div className="relative">

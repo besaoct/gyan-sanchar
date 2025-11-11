@@ -92,7 +92,7 @@ export function FilterSidebar({
   };
 
   return (
-    <div className="bg-white border rounded-lg p-4 h-auto lg:h-fit sticky top-6 ">
+    <div className="bg-white p-4 h-auto lg:h-fit sticky lg:top-6 ">
       <div className="flex items-center justify-between mb-8 lg:mb-0">
         <h3 className=" sr-only ">Filters</h3>
         {getActiveFiltersCount() > 0 && (
