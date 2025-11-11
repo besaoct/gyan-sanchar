@@ -17,7 +17,8 @@ export interface College {
     category: string
   }
   image: string
-  description: string
+  short_description: string 
+  description: string // rich text editor
   established: number
   accreditation: string[]
   streams: string[]
@@ -88,6 +89,8 @@ export const collegesData: College[] = [
     fees: { min: 5000, max: 231000 },
     ranking: { nirf: 1, category: "Engineering" },
     image: "/iit-madras-campus-aerial-view.jpg",
+    short_description:
+     "IIT Chennai, also known as IIT Madras, is the top-ranked engineering college in India as per NIRF ranking, and the institute also holds a good rank in world university rankings. IIT Chennai is popular for its engineering programmes - B.Tech and M.Tech in various specialisations.",
     description:
       "IIT Chennai, also known as IIT Madras, is the top-ranked engineering college in India as per NIRF ranking, and the institute also holds a good rank in world university rankings. IIT Chennai is popular for its engineering programmes - B.Tech and M.Tech in various specialisations.",
     established: 1959,
@@ -199,6 +202,8 @@ export const collegesData: College[] = [
     fees: { min: 8000, max: 250000 },
     ranking: { nirf: 2, category: "Engineering" },
     image: "/iit-delhi-campus-main-gate.jpg",
+        short_description:
+        "IIT Delhi is one of the premier engineering institutions in India, known for its cutting-edge research and excellent academic programs. The institute offers undergraduate, postgraduate, and doctoral programs in various engineering disciplines.",
     description:
       "IIT Delhi is one of the premier engineering institutions in India, known for its cutting-edge research and excellent academic programs. The institute offers undergraduate, postgraduate, and doctoral programs in various engineering disciplines.",
     established: 1961,
@@ -310,6 +315,8 @@ export const collegesData: College[] = [
     fees: { min: 350000, max: 450000 },
     ranking: { nirf: 25, category: "Engineering" },
     image: "/bits-pilani-campus-clocktower.jpg",
+        short_description:
+     "BITS Pilani, also known as BITS Pilani, is the top-ranked engineering college in India as per NIRF ranking, and the institute also holds a good rank in world university rankings. BITS Pilani is popular for its engineering programmes - B.Tech and M.Tech in various specialisations.",
     description:
       "BITS Pilani is a premier private technological university known for its innovative curriculum and excellent industry connections. The institute offers integrated programs and has a strong alumni network in top companies worldwide.",
     established: 1964,
@@ -421,6 +428,8 @@ export const collegesData: College[] = [
     fees: { min: 2300000, max: 2500000 },
     ranking: { nirf: 1, category: "Management" },
     image: "/placeholder.svg?height=200&width=300",
+        short_description:
+    "IIM Ahmedabad is the premier management institute in India, known for its rigorous academic programs and exceptional placement records. The institute has produced numerous business leaders and entrepreneurs.",
     description:
       "IIM Ahmedabad is the premier management institute in India, known for its rigorous academic programs and exceptional placement records. The institute has produced numerous business leaders and entrepreneurs.",
     established: 1961,
@@ -532,6 +541,8 @@ export const collegesData: College[] = [
     fees: { min: 25000, max: 80000 },
     ranking: { nirf: 3, category: "Agriculture" },
     image: "/placeholder.svg?height=200&width=300",
+        short_description:
+        "Punjab Agricultural University is a leading agricultural university in India, known for its contributions to the Green Revolution. The university offers comprehensive programs in agriculture, veterinary sciences, and allied fields.",
     description:
       "Punjab Agricultural University is a leading agricultural university in India, known for its contributions to the Green Revolution. The university offers comprehensive programs in agriculture, veterinary sciences, and allied fields.",
     established: 1962,
@@ -643,6 +654,8 @@ export const collegesData: College[] = [
     fees: { min: 200000, max: 300000 },
     ranking: { nirf: 15, category: "Engineering" },
     image: "/placeholder.svg?height=200&width=300",
+        short_description:
+      "IIIT Hyderabad is a premier institute focused on information technology and computer science education. Known for its research-oriented approach and strong industry partnerships, it produces highly skilled IT professionals.",
     description:
       "IIIT Hyderabad is a premier institute focused on information technology and computer science education. Known for its research-oriented approach and strong industry partnerships, it produces highly skilled IT professionals.",
     established: 1998,

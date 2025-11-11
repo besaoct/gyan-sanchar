@@ -1,5 +1,23 @@
-
-import type { Course } from "./types";
+export interface Course {
+  id: string;
+  title: string;
+  description: string; //rich text description
+  duration: number; // in years
+  fees: {
+    min: number;
+    max: number;
+  };
+  mode: (
+    | "Regular"
+    | "Distance"
+    | "Part-time"
+    | "Regular / Distance / Part-time"
+    | "Regular/ Distance"
+    | "Regular/part-time"
+  )[];
+  level: "Bachelors" | "Masters" | "Phd";
+  image: string;
+}
 
 export const coursesData: Course[] = [
   {
