@@ -1,5 +1,17 @@
 import { College } from "./colleges-data";
 
+export interface CourseDetails {
+  slug: string;
+  basicInfo: BasicInfo;
+  overview: Overview;
+  eligibility: Eligibility;
+  syllabus: Syllabus;
+  colleges_offering: CollegesOffering;
+  careerProspects: CareerProspects;
+  faqs: Faq[];
+}
+
+
 export interface BasicInfo {
   courseName: string;
   courseType: string;
@@ -58,16 +70,6 @@ export interface Faq {
   answer: string;
 }
 
-export interface CourseDetails {
-  slug: string;
-  basicInfo: BasicInfo;
-  overview: Overview;
-  eligibility: Eligibility;
-  syllabus: Syllabus;
-  colleges_offering: CollegesOffering;
-  careerProspects: CareerProspects;
-  faqs: Faq[];
-}
 
 export const courseDetails: CourseDetails = {
   slug: "btech-computer-science-engineering",
