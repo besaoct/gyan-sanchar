@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { courseDetails } from "@/lib/course-single";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
@@ -110,7 +109,7 @@ export default function CourseDetailPage() {
               <CardHeader className="p-0"><CardTitle>Syllabus</CardTitle></CardHeader>
               <CardContent className="p-0">
                 <Accordion type="single" collapsible className="w-full">
-                  {courseDetails.curriculum.semesterWiseSubjects.map((semester) => (
+                  {courseDetails.syllabus.semesterWiseSubjects.map((semester) => (
                     <AccordionItem key={semester.semester} value={`semester-${semester.semester}`}>
                       <AccordionTrigger>{semester.title}</AccordionTrigger>
                       <AccordionContent>
