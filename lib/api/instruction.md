@@ -18,6 +18,8 @@ https://gitcsdemoserver.online/gyansanchar/public
 
 ---
 
+**DAY 1:**
+
 ## **Authentication APIs**
 
 ### **1. Login API**
@@ -444,4 +446,6 @@ Add Authorization header (Bearer).
 }
 ```
 
---- Done ---
+---
+
+**DAY 2:**
