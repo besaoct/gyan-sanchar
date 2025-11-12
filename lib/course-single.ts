@@ -59,6 +59,7 @@ export interface Faq {
 }
 
 export interface CourseDetails {
+  slug: string;
   basicInfo: BasicInfo;
   overview: Overview;
   eligibility: Eligibility;
@@ -69,6 +70,7 @@ export interface CourseDetails {
 }
 
 export const courseDetails: CourseDetails = {
+  slug: "btech-computer-science-engineering",
   basicInfo: {
     courseName:
       "Bachelor of Technology (B.Tech) in Computer Science and Engineering",
