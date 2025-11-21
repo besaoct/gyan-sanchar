@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { articlesData } from "@/lib/articles-data";
+import { articlesData } from "@/lib/api/dummy/articles-data";
 import { FilterSidebar, ArticleFilterOptions } from "@/components/news/filter-sidebar";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";

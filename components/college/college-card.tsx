@@ -11,7 +11,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { useState } from "react"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { CollegeImageCarousel } from "./college-image-carousel"
-import { College } from "@/lib/colleges-data"
+import { College } from "@/lib/api/dummy/colleges-data";
+import { useRouter } from "next/navigation"
 
 
 function formatFees(min: number, max: number) {
@@ -23,42 +24,59 @@ export function CollegeCard({ college, className }: { college: College; classNam
 
   const [descOpen, setDescOpen] = useState(false)
 
+  // Prevent card navigation when clicking inner actions
+  const stopCardNavigation = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
+
+  const router = useRouter();
 
   return (
-
-       <Card
+    <Card
       className={cn(
-        "w-full bg-card py-3 gap-2",
+        "w-full bg-card py-3 gap-2 cursor-pointer",
         "hover:shadow-sm shadow-xs transition-shadow duration-300",
         className,
       )}
+      onClick={() => router.push(`/college/${college.id}`)}
     >
       <div className="px-4 py-2">
         <div className="flex items-start justify-between gap-1">
-             <Link href={`/college/${college.id}`} className={cn("block", className)}>
-          <h3 className="text-balance hover:text-primary text-base font-bold text-foreground md:text-lg">{college.name}</h3>
-             </Link>
+          <Link 
+            href={`/college/${college.id}`} 
+            className={cn("block", className)}
+            onClick={stopCardNavigation}
+          >
+            <h3 className="text-balance hover:text-primary text-base font-bold text-foreground md:text-lg">
+              {college.name}
+            </h3>
+          </Link>
+
           <div className="flex items-center gap-1">
-            <Button variant="secondary" size="icon" className="h-7 w-7 p-0" aria-label="Add to favorites">
+            <Button 
+              onClick={stopCardNavigation}
+              variant="secondary" size="icon" className="h-7 w-7 p-0"
+            >
               <Heart className="h-4 w-4" />
             </Button>
-            <Button variant="secondary" size="icon" className="h-7 w-7 p-0" aria-label="Share college">
+            <Button 
+              onClick={stopCardNavigation}
+              variant="secondary" size="icon" className="h-7 w-7 p-0"
+            >
               <Share2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </div>
 
-      <div 
-        className={cn(
-          "flex w-full items-stretch gap-4 pr-3 md:pr-4 lg:pr-5 pb-2",
-          "flex-row",
-        )}
-      >
+      <div className="flex w-full items-stretch gap-4 pr-3 md:pr-4 lg:pr-5 pb-2 flex-row">
         <div className="w-28 self-start mb-2 md:mb-0 md:w-48 md:flex-shrink-0 mx-5">
-          <Dialog >
+          <Dialog>
             <DialogTrigger asChild>
-              <div className="relative h-20 w-full overflow-hidden rounded-lg sm:h-24 md:h-28 md:w-48 cursor-pointer">
+              <div
+                onClick={stopCardNavigation}
+                className="relative h-20 w-full overflow-hidden rounded-lg sm:h-24 md:h-28 md:w-48 cursor-pointer"
+              >
                 <Image
                   src={"https://media.collegedekho.com/media/img/institute/crawled_images/c2.jpg?w=350&h=350"}
                   alt={`${college.name} campus image`}
@@ -68,7 +86,7 @@ export function CollegeCard({ college, className }: { college: College; classNam
                 />
               </div>
             </DialogTrigger>
-            <DialogContent className="max-w-5xl w-[80%] ">
+            <DialogContent className="max-w-5xl w-[80%]">
               <CollegeImageCarousel images={college.gallery} collegeName={college.name} />
             </DialogContent>
           </Dialog>
@@ -76,83 +94,89 @@ export function CollegeCard({ college, className }: { college: College; classNam
 
         <div className="flex min-w-0 flex-1 flex-col justify-center gap-2">
           <TooltipProvider>
-            {/* Row 1: nirf, type, streams, rating, location in one row */}
+            
+            {/* Row 1 */}
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              {college.ranking.nirf ? (
+              {college.nirf_ranking?.rank && (
                 <Badge variant="outline" className="text-xs text-white md:text-xs bg-green-600">
-                  NIRF #{college.ranking.nirf}
+                  NIRF #{college.nirf_ranking?.rank}
                 </Badge>
-              ) : null}
+              )}
+
               <Badge variant="outline" className="text-xs md:text-xs">
                 {college.type}
               </Badge>
 
-              {/* Streams: show one + +N tooltip */}
               {college.streams[0] && (
                 <Badge variant="secondary" className="text-xs md:text-xs">
                   {college.streams[0]}
                 </Badge>
               )}
+
               {college.streams.length > 1 && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
-                      type="button"
-                      className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-foreground hover:bg-muted/80"
-                      aria-label="Show other streams"
+                      onClick={stopCardNavigation}
+                      className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium hover:bg-muted/80"
                     >
                       +{college.streams.length - 1}
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-xs text-xs">{college.streams.slice(1).join(", ")}</TooltipContent>
+                  <TooltipContent className="max-w-xs text-xs">
+                    {college.streams.slice(1).join(", ")}
+                  </TooltipContent>
                 </Tooltip>
               )}
 
-              {/* Rating */}
               <span className="flex items-center gap-1">
-                <Star className="h-4 w-4 text-orange-300" aria-hidden="true" />
-                <span className="font-semibold text-foreground">{college.rating.toFixed(1)}</span>
+                <Star className="h-4 w-4 text-orange-300" />
+                <span className="font-semibold">{college.nirf_ranking?.rank.toFixed(1)}</span>
                 <span className="text-muted-foreground">({college.reviews} reviews)</span>
               </span>
 
-              {/* Location */}
               <span className="flex items-center gap-1">
-                <MapPin className="h-4 w-4" aria-hidden="true" />
+                <MapPin className="h-4 w-4" />
                 {college.location.city}, {college.location.state}
               </span>
             </div>
 
-            {/* Row 2: fee (+link), avg pkg, exams (show1 + chevron tooltip), placements */}
+            {/* Row 2 */}
             <div className="hidden sm:flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground md:text-sm">
-              {/* Fees + link */}
+
+              {/* Fees */}
               <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Fees:</span>
-                <span className="text-foreground">{formatFees(college.fees.min, college.fees.max)}</span>
-                <Link href={`/college/${college.id}#fees`} className="text-primary underline-offset-2 hover:underline">
+                <span className="font-semibold">Fees:</span>
+                <span>{formatFees(college.fees.min, college.fees.max)}</span>
+                <Link 
+                  href={`/college/${college.id}#fees`} 
+                  className="text-primary hover:underline"
+                  onClick={stopCardNavigation}
+                >
                   Fee details
                 </Link>
               </span>
 
               {/* Avg Package */}
               <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Avg:</span>
-                <span className="text-foreground">₹{(college.placement.averagePackage / 100000).toFixed(1)}L</span>
+                <span className="font-semibold">Avg:</span>
+                <span>₹{(college.placement.averagePackage / 100000).toFixed(1)}L</span>
               </span>
 
-              {/* Exams: show one + chevron tooltip for others */}
+              {/* Exams */}
               <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Exams:</span>
-                <span className="text-foreground">{college.admissionProcess.exams[0]}</span>
+                <span className="font-semibold">Exams:</span>
+                <span>{college.admissionProcess.exams[0]}</span>
+
                 {college.admissionProcess.exams.length > 1 && (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
-                        type="button"
-                        aria-label="Show all exams"
-                        className="inline-flex gap-0 px-1 py-1  items-center justify-center text-primary font-semibold text-sm"
+                        onClick={stopCardNavigation}
+                        className="inline-flex gap-0 px-1 py-1 items-center text-primary font-semibold text-sm"
                       >
-                       ... <Plus className="size-2.5" />
-                       {college.admissionProcess.exams.length - 1}
+                        ... <Plus className="size-2.5" />
+                        {college.admissionProcess.exams.length - 1}
                       </button>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs text-xs">
@@ -162,153 +186,189 @@ export function CollegeCard({ college, className }: { college: College; classNam
                 )}
               </span>
 
-              {/* Placement rate */}
               <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Placement:</span>
-                <span className="text-foreground">{college.placement.placementRate}%</span>
+                <span className="font-semibold">Placement:</span>
+                <span>{college.placement.placementRate}%</span>
               </span>
+
             </div>
           </TooltipProvider>
 
-          {/* One-liner description with chevron */}
+          {/* Description */}
           <div className="hidden sm:flex items-start gap-2">
             <div className={cn("text-pretty text-xs text-muted-foreground md:text-sm", descOpen ? "" : "line-clamp-1")}>
               {college.description}
             </div>
-            <button 
-              type="button"
-              className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full border hover:bg-primary bg-primary/80 text-white"
-              aria-label={descOpen ? "Collapse description" : "Expand description"}
-              onClick={() => setDescOpen((v) => !v)}
+            <button
+              onClick={(e) => { stopCardNavigation(e); setDescOpen(v => !v); }}
+              className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full border bg-primary/80 text-white"
             >
-              {descOpen ? <ChevronUp className="h-4 min-w-4" /> : <ChevronDown className="h-4 min-w-4" />}
+              {descOpen ? <ChevronUp className="h-4" /> : <ChevronDown className="h-4" />}
             </button>
           </div>
         </div>
       </div>
 
-      <div className="px-4">
-           <div className="sm:hidden flex items-start gap-2 pb-2">
-            <div className={cn("text-pretty text-xs text-muted-foreground md:text-sm", descOpen ? "" : "line-clamp-1")}>
-              {college.description}
-            </div>
-            <button 
-              type="button"
-              className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full border hover:bg-primary bg-primary/80 text-white"
-              aria-label={descOpen ? "Collapse description" : "Expand description"}
-              onClick={() => setDescOpen((v) => !v)}
-            >
-              {descOpen ? <ChevronUp className="h-2 min-w-2" /> : <ChevronDown className="h-2 min-w-2" />}
-            </button>
+      {/* Mobile description + fees */}
+      <div className="px-4" onClick={stopCardNavigation}>
+        <div className="sm:hidden flex items-start gap-2 pb-2">
+          <div className={cn("text-pretty text-xs text-muted-foreground md:text-sm", descOpen ? "" : "line-clamp-1")}>
+            {college.description}
           </div>
 
-          <div className="flex sm:hidden flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground md:text-sm">
-              {/* Fees + link */}
-              <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Fees:</span>
-                <span className="text-foreground">{formatFees(college.fees.min, college.fees.max)}</span>
-                <Link href={`/college/${college.id}#fees`} className="text-primary underline-offset-2 hover:underline">
-                  Fee details
-                </Link>
-              </span>
+          <button
+            onClick={() => setDescOpen(v => !v)}
+            className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full border bg-primary/80 text-white"
+          >
+            {descOpen ? <ChevronUp className="h-2" /> : <ChevronDown className="h-2" />}
+          </button>
+        </div>
 
-              {/* Avg Package */}
-              <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Avg:</span>
-                <span className="text-foreground">₹{(college.placement.averagePackage / 100000).toFixed(1)}L</span>
-              </span>
+        {/* Mobile fees block */}
+        <div className="flex sm:hidden flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground md:text-sm">
+          
+          <span className="flex items-center gap-2">
+            <span className="font-semibold text-foreground">Fees:</span>
+            <span className="text-foreground">{formatFees(college.fees.min, college.fees.max)}</span>
+            <Link
+              href={`/college/${college.id}#fees`}
+              className="text-primary hover:underline"
+              onClick={stopCardNavigation}
+            >
+              Fee details
+            </Link>
+          </span>
 
-              {/* Exams: show one + chevron tooltip for others */}
-              <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Exams:</span>
-                <span className="text-foreground">{college.admissionProcess.exams[0]}</span>
-                {college.admissionProcess.exams.length > 1 && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        aria-label="Show all exams"
-                        className="inline-flex gap-0 px-1 py-1  items-center justify-center text-primary font-semibold text-sm"
-                      >
-                       ... <Plus className="size-2.5" />
-                       {college.admissionProcess.exams.length - 1}
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs text-xs">
-                      {college.admissionProcess.exams.slice(1).join(", ")}
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </span>
+          <span className="flex items-center gap-2">
+            <span className="font-semibold">Avg:</span>
+            <span>₹{(college.placement.averagePackage / 100000).toFixed(1)}L</span>
+          </span>
 
-              {/* Placement rate */}
-              <span className="flex items-center gap-2">
-                <span className="font-semibold text-foreground">Placement:</span>
-                <span className="text-foreground">{college.placement.placementRate}%</span>
-              </span>
-            </div>
+          <span className="flex items-center gap-2">
+            <span className="font-semibold">Exams:</span>
+            <span>{college.admissionProcess.exams[0]}</span>
 
+            {college.admissionProcess.exams.length > 1 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={stopCardNavigation}
+                    className="inline-flex gap-0 px-1 py-1 items-center text-primary font-semibold text-sm"
+                  >
+                    ... <Plus className="size-2.5" />
+                    {college.admissionProcess.exams.length - 1}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs text-xs">
+                  {college.admissionProcess.exams.slice(1).join(", ")}
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </span>
 
+          <span className="flex items-center gap-2">
+            <span className="font-semibold">Placement:</span>
+            <span>{college.placement.placementRate}%</span>
+          </span>
+
+        </div>
       </div>
 
+      <hr className="md:hidden" />
 
-     <hr className="md:hidden" />    
-<div className="w-full md:hidden px-4 max-w-sm">
-         <nav aria-label="Quick links"
-       className="flex flex-wrap  items-center gap-x-3 gap-y-1 text-xs md:text-sm text-primary font-medium "
-                >
-                  <Link href={`/college/${college.id}#placement`} className="hover:underline flex items-center gap-1">
-                    <span className="size-1 bg-gray-300 rounded-full"></span>
-                    Placement
-                  </Link>
-                  <Link href={`/college/${college.id}#admission`} className="hover:underline flex items-center gap-1">
-                    <span className="size-1 bg-gray-300 rounded-full"></span>
-                    Admission
-                  </Link>
-      
-                  <Link href={`/college/${college.id}#ranking`} className="hover:underline flex items-center gap-1">
-                    <span className="size-1 bg-gray-300 rounded-full"></span>
-                    Ranking
-                  </Link>
-                </nav>
-</div>
+      {/* Mobile quick links */}
+      <div className="w-full md:hidden px-4 max-w-sm">
+        <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-primary font-medium">
+          <Link 
+            href={`/college/${college.id}#placement`} 
+            onClick={stopCardNavigation}
+            className="hover:underline flex items-center gap-1"
+          >
+            <span className="size-1 bg-gray-300 rounded-full" />
+            Placement
+          </Link>
 
-       <hr />
-      {/* Actions: buttons and quick links */}
+          <Link 
+            href={`/college/${college.id}#admission`} 
+            onClick={stopCardNavigation}
+            className="hover:underline flex items-center gap-1"
+          >
+            <span className="size-1 bg-gray-300 rounded-full" />
+            Admission
+          </Link>
+
+          <Link 
+            href={`/college/${college.id}#ranking`} 
+            onClick={stopCardNavigation}
+            className="hover:underline flex items-center gap-1"
+          >
+            <span className="size-1 bg-gray-300 rounded-full" />
+            Ranking
+          </Link>
+        </nav>
+      </div>
+
+      <hr />
+
+      {/* Desktop actions */}
       <div className="py-2 flex flex-wrap items-center justify-between gap-4 px-4">
-        
-       <nav aria-label="Quick links"
-       className="hidden md:flex flex-wrap items-center gap-x-3 gap-y-1 text-xs md:text-sm text-primary font-medium "
-                >
-                  <Link href={`/college/${college.id}#placement`} className="hover:underline flex items-center gap-1">
-                    <span className="size-1 bg-gray-300 rounded-full"></span>
-                    Placement
-                  </Link>
-                  <Link href={`/college/${college.id}#admission`} className="hover:underline flex items-center gap-1">
-                    <span className="size-1 bg-gray-300 rounded-full"></span>
-                    Admission
-                  </Link>
-        
-                  <Link href={`/college/${college.id}#ranking`} className="hover:underline flex items-center gap-1">
-                    <span className="size-1 bg-gray-300 rounded-full"></span>
-                    Ranking
-                  </Link>
-                </nav>
+
+        <nav className="hidden md:flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-primary font-medium">
+          <Link 
+            href={`/college/${college.id}#placement`} 
+            onClick={stopCardNavigation}
+            className="hover:underline flex items-center gap-1"
+          >
+            <span className="size-1 bg-gray-300 rounded-full" />
+            Placement
+          </Link>
+
+          <Link 
+            href={`/college/${college.id}#admission`} 
+            onClick={stopCardNavigation}
+            className="hover:underline flex items-center gap-1"
+          >
+            <span className="size-1 bg-gray-300 rounded-full" />
+            Admission
+          </Link>
+
+          <Link 
+            href={`/college/${college.id}#ranking`} 
+            onClick={stopCardNavigation}
+            className="hover:underline flex items-center gap-1"
+          >
+            <span className="size-1 bg-gray-300 rounded-full" />
+            Ranking
+          </Link>
+        </nav>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" className="text-xs md:text-sm bg-accent border border-primary text-primary hover:bg-accent/50">
+          <Button 
+            onClick={stopCardNavigation}
+            variant="outline" 
+            className="text-xs md:text-sm bg-accent border border-primary text-primary hover:bg-accent/50"
+          >
             Compare
           </Button>
-          <Button variant="default" className="text-xs md:text-sm bg-orange-500 hover:bg-orange-500/90">
+
+          <Button 
+            onClick={stopCardNavigation}
+            variant="default" 
+            className="text-xs md:text-sm bg-orange-500 hover:bg-orange-500/90"
+          >
             Brochure
           </Button>
-          
-          <Button className="text-xs md:text-sm">Apply Now</Button>
-          
+
+          <Button 
+            onClick={stopCardNavigation}
+            className="text-xs md:text-sm"
+          >
+            Apply Now
+          </Button>
         </div>
 
       </div>
-    </Card>
 
+    </Card>
   )
 }

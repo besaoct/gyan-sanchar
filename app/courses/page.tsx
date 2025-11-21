@@ -4,7 +4,7 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { coursesData } from "@/lib/courses-data";
+import { coursesData } from "@/lib/api/dummy/courses-data";
 import { FilterSidebar, CourseFilterOptions } from "@/components/course/filter-sidebar";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";

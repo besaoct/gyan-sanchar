@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { College } from "@/lib/colleges-data";
+import { College } from "@/lib/api/dummy/colleges-data";
 
 function RatingPill({ rating, reviewCount }: { rating: number; reviewCount: number }) {
   return (
@@ -18,7 +18,7 @@ function RatingPill({ rating, reviewCount }: { rating: number; reviewCount: numb
 function LocationAndGallery({ location }: { location: { city: string; state: string } }) {
   const avatars = ["/s/1.jpg", "/s/2.jpg", "/s/3.jpg", "/s/4.jpg", "/s/5.jpg"];
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-4">
+    <div className="flex flex-wrap items-center gap-4">
       <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-sm">
         <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" className="text-muted-foreground">
           <path
@@ -28,7 +28,8 @@ function LocationAndGallery({ location }: { location: { city: string; state: str
         </svg>
         <span>{location.city} ({location.state})</span>
       </div>
-      <div className="flex -space-x-3">
+<div className="flex items-center gap-4">
+        <div className="flex -space-x-3">
         {avatars.map((src, i) => (
           <img
             key={i}
@@ -41,6 +42,7 @@ function LocationAndGallery({ location }: { location: { city: string; state: str
       <a href="#gallery" className="text-primary font-medium hover:underline">
         Gallery
       </a>
+</div>
     </div>
   );
 }
@@ -92,13 +94,13 @@ function RightImagePanel({ college }: { college: College }) {
         </div>
       </div>
 
-      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 rounded-bl-[202px]">
+      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 ">
         <Image
           src={"/college/single.avif"}
           width={1000}
           height={1000}
           alt={`${college.name} campus building`}
-          className=" object-cover  sm:h-[320px] lg:h-[390px] w-full rounded-4xl rounded-bl-[202px]"
+          className=" object-cover  sm:h-[320px] lg:h-[390px] w-full rounded-4xl "
           priority
         />
       </div>
@@ -107,10 +109,10 @@ function RightImagePanel({ college }: { college: College }) {
         <div className="pointer-events-none absolute -left-6 top-6">
           <InfoBadge title="NIRF Rank" value={`#${college.ranking.nirf}`} />
         </div>
-        <div className="pointer-events-none absolute left-6 bottom-6">
+        <div className="pointer-events-none absolute -left-6 -bottom-6">
           <InfoBadge title="Highest Package" value={`${college.placement.highestPackage / 100000} Lacs`} />
         </div>
-        <div className="absolute -right-4 top-4 ">
+        <div className="absolute -right-4 -top-4 ">
           <InfoBadge title="Year of Establishment" value={String(college.established)} align="right" />
         </div>
         <div className="absolute -right-4 bottom-6">
@@ -123,7 +125,7 @@ function RightImagePanel({ college }: { college: College }) {
 
 export function CollegeHero({ college }: { college: College }) {
   return (
-    <div className="flex flex-col gap-12 lg:flex-row lg:items-start">
+    <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
       <section className=" ">
         <div className="mb-6 flex items-center gap-3 text-muted-foreground">
@@ -153,16 +155,17 @@ export function CollegeHero({ college }: { college: College }) {
           {college.name} - Admission 2025, Fees, Courses, Placement, Ranking
         </h1>
 
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap items-start gap-4">
           <RatingPill rating={college.rating} reviewCount={college.reviews} />
+               <LocationAndGallery location={college.location} />
+
         </div>
 
         <p className="mt-6 text-pretty text-sm leading-relaxed text-foreground">
           {college.description}
         </p>
 
-        <LocationAndGallery location={college.location} />
-
+   
         <div className="mt-8 flex flex-wrap gap-4">
           <Button variant="secondary" className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white">
             Download Brochure

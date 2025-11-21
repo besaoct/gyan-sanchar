@@ -5,7 +5,8 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { College, collegesData } from "@/lib/colleges-data";
+import { College, collegesData }  from "@/lib/api/dummy/colleges-data";
+
 import type { FilterOptions } from "@/lib/types";
 import { FilterSidebar } from "@/components/college/filter-sidebar";
 

@@ -34,12 +34,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { collegesData } from "@/lib/colleges-data";
+import { collegesData }  from "@/lib/api/dummy/colleges-data";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { CollegeHero } from "@/components/college/college-hero";
 import { cn } from "@/lib/utils";
 import { StickyBar } from "@/components/college/sticky-bar";
+import VideoReelCard from "@/components/college/video-reel-card";
 
 interface CollegeDetailPageProps {
   params: {
@@ -753,6 +754,38 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
         </div>
       </div>
 
+      {/* ==================== VIDEO REELS SECTION ==================== */}
+<section className="py-12 bg-gray-50">
+  <div className="container mx-auto px-4">
+    <h2 className="mb-8 text-center text-3xl font-bold text-[#044cac] md:text-4xl">
+      Campus Reels
+    </h2>
+
+    {/* ---- Desktop / Tablet Carousel ---- */}
+    <Carousel className="hidden md:block">
+      <CarouselContent className="-ml-4">
+        {college.videoReels?.map((reel) => (
+          <CarouselItem
+            key={reel.id}
+            className="pl-4 md:basis-1/2 lg:basis-1/3"
+          >
+            <VideoReelCard reel={reel} />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious className="left-4 bg-white/80 hover:bg-white" />
+      <CarouselNext className="right-4 bg-white/80 hover:bg-white" />
+    </Carousel>
+
+    {/* ---- Mobile vertical scroll (no carousel) ---- */}
+    <div className="md:hidden space-y-6">
+      {college.videoReels?.map((reel) => (
+        <VideoReelCard key={reel.id} reel={reel} />
+      ))}
+    </div>
+  </div>
+</section>
+{/* ============================================================ */}
       {/* CTA Section */}
       <div className="bg-[#044cac] text-white">
         <div className="container mx-auto px-4 py-8">
@@ -777,8 +810,12 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
           </div>
         </div>
       </div>
+
+
       <StickyBar isVisible={isStickyBarVisible} />
       <Footer />
     </div>
   );
 }
+
+

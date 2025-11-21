@@ -12,7 +12,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { courseLevels, courseModes } from "@/lib/courses-data";
+import { courseLevels, courseModes } from "@/lib/api/dummy/courses-data";
 
 export interface CourseFilterOptions {
   search: string;

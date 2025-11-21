@@ -13,7 +13,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
-import { states, streams, exams, facilities } from "@/lib/colleges-data";
+import { states, streams, exams, facilities } from "@/lib/api/dummy/colleges-data";
 import type { FilterOptions } from "@/lib/types";
 
 
@@ -192,7 +192,7 @@ export function FilterSidebar({
           onOpenChange={() => toggleSection("instituteType")}
         >
           <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded">
-            <span className="font-semibold">Institute Type</span>
+            <span  className="font-semibold">Institute Type</span>
             {openSections.instituteType ? (
               <ChevronUp className="h-4 w-4" />
             ) : (
@@ -200,7 +200,7 @@ export function FilterSidebar({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-2 mt-2">
-            {["Government", "Private", "Public"].map((type) => (
+            {[ "Private", "Public"].map((type) => (
               <div key={type} className="flex items-center space-x-2">
                 <Checkbox
                   id={`type-${type}`}
@@ -222,7 +222,7 @@ export function FilterSidebar({
         </Collapsible>
 
         {/* Study Mode Filter */}
-        <Collapsible
+        {/* <Collapsible
           open={openSections.studyMode}
           onOpenChange={() => toggleSection("studyMode")}
         >
@@ -250,7 +250,7 @@ export function FilterSidebar({
               </div>
             ))}
           </CollapsibleContent>
-        </Collapsible>
+        </Collapsible> */}
 
         {/* Hostel Filter */}
         <Collapsible
@@ -454,6 +454,16 @@ export function FilterSidebar({
             </div>
           </CollapsibleContent>
         </Collapsible>
+        
+
+        {/* student visa */}
+        <Button className="mt-4 w-full text-sm sm:hidden">
+          Student Visa
+        </Button>
+     
+         
+
+     
       </div>
 
       {/* Active Filters */}

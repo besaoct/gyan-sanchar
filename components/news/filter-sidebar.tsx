@@ -4,7 +4,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { articlesData } from "@/lib/articles-data";
+import { articlesData } from "@/lib/api/dummy/articles-data";
 
 export type ArticleFilterOptions = {
   search: string;

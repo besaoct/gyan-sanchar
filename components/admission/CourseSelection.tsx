@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { admissionCourses, AdmissionCourse } from '@/lib/admission-data';
+import { admissionCourses, AdmissionCourse } from '@/lib/api/dummy/admission-data';
 
 interface CourseSelectionProps {
   collegeId: string;

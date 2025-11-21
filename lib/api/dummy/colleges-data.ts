@@ -1,27 +1,54 @@
 export interface College {
+
   id: string
   name: string
+
   location: {
     city: string
     state: string
   }
-  type: string
-  rating: number
-  reviews: number
+
+
+  type: string //private, public etc
+
+  rating?: number
+  reviews?: number
+
   fees: {
     min: number
     max: number
   }
-  ranking: {
-    nirf: number
+
+  additionalFees: {
+    hostel: number
+    mess: number
+  }
+
+  feesStructure?: string // rich text editor here fees can be added with tables and all
+
+
+  nirf_ranking?: {
+    rank: number
     category: string
   }
-  image: string
-  short_description: string 
+
+  rankings?:{
+       ranking_body: string,
+       category: string,
+       rank:number
+       ranking_year: number
+  }[] // multi fields with plus icon
+  
+  image: string //campus image
+
+  short_description: string  //for seo and college card to show short desc
   description: string // rich text editor
+
   established: number
-  accreditation: string[]
-  streams: string[]
+
+  accreditation: string[] // multi fields with plus icon
+  streams: string[] // multi fields with plus icon
+
   courses: {
     id: string
     name: string
@@ -30,43 +57,47 @@ export interface College {
     eligibility: string
     seats: number
     highlights: string
-  }[]
+  }[] // multi fields with plus icon
+
   facilities: string[]
+
   hostel: {
     boys: boolean
     girls: boolean
-  }
-  hostelDetails: string
-  campusSize: number
-  campusHighlights: string
-  visionMission: string
+  } // availability 
+
+  hostelDetails: string //need rich text editor
+  campusSize: number 
+  campusHighlights: string //need rich text editor
+  visionMission: string //need rich text editor
   notableAlumni: { name: string; achievement: string }[]
-  additionalFees: {
-    hostel: number
-    mess: number
-  }
+
+
   scholarships: { name: string; description: string }[]
-  studyMode: string[]
+
+  studyMode: string[]  // multi fields with plus icon
+
   admissionProcess: {
-    exams: string[]
+    exams: string[]  // multi fields with plus icon
     criteria: string
     applicationFee: number
-    importantDates: { event: string; date: string }[]
+    importantDates: { event: string; date: string }[] // multi fields with plus icon
   }
+
   placement: {
     averagePackage: number
     highestPackage: number
     placementRate: number
-    topRecruiters: string[]
-    highlights: string[]
+    topRecruiters: string[] // multi fields with plus icon
+    highlights: string[] // multi fields with plus icon
     placementProcess: string
   }
   campusLife: {
     studentStrength: number
     facultyRatio: string
-    clubs: string[]
+    clubs: string[] // multi fields with plus icon
   }
-  gallery: string[]
+  gallery: string[] // multi fields with plus icon
   reviews_data: {
     id: string
     studentName: string
@@ -75,7 +106,18 @@ export interface College {
     course: string
     year: number
     date: string
-  }[]
+  }[] 
+  videoReels?: Reel[] // multi fields with plus icon
+}
+
+export interface Reel {
+  id: string;
+  /** Either a local video path OR a YouTube video ID */
+  type: "local" | "youtube";
+  src?: string;          // local: "/reels/xyz.mp4"
+  youtubeId?: string;    // youtube: "dQw4w9WgXcQ"
+  thumbnail?: string;    // optional for both
+  title: string;
 }
 
 export const collegesData: College[] = [
@@ -87,7 +129,7 @@ export const collegesData: College[] = [
     rating: 4.8,
     reviews: 9,
     fees: { min: 5000, max: 231000 },
-    ranking: { nirf: 1, category: "Engineering" },
+    nirf_ranking: { rank: 1, category: "Engineering" }, 
     image: "/iit-madras-campus-aerial-view.jpg",
     short_description:
      "IIT Chennai, also known as IIT Madras, is the top-ranked engineering college in India as per NIRF ranking, and the institute also holds a good rank in world university rankings. IIT Chennai is popular for its engineering programmes - B.Tech and M.Tech in various specialisations.",
@@ -135,7 +177,9 @@ export const collegesData: College[] = [
         name: "Merit-cum-Means Scholarship",
         description: "For students with academic excellence and financial need, covering up to 100% of tuition fees.",
       },
-      { name: "Institute Scholarship", description: "For top-ranking students, providing partial fee waivers." },
+      { name: "Institute Scholarship",
+         description: "For top-ranking students, providing partial fee waivers." 
+        },
     ],
     studyMode: ["Full-time"],
     admissionProcess: {
@@ -191,6 +235,38 @@ export const collegesData: College[] = [
         date: "2024-06-10",
       },
     ],
+
+    videoReels: [
+  {
+    id: "1",
+    type: "youtube",
+    youtubeId: "dQw4w9WgXcQ", // Rick Roll (for demo)
+    thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+    title: "Official College Anthem",
+  },
+  {
+    id: "2",
+    type: "youtube",
+    youtubeId: "dQw4w9WgXcQ", // Rick Roll (for demo)
+    thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+    title: "Official College Anthem",
+  },
+  {
+    id: "3",
+    type: "youtube",
+    youtubeId: "dQw4w9WgXcQ", // Rick Roll (for demo)
+    thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+    title: "Official College Anthem",
+  },
+    {
+    id: "4",
+    type: "youtube",
+    youtubeId: "dQw4w9WgXcQ", // Rick Roll (for demo)
+    thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+    title: "Official College Anthem",
+  },
+
+],
   },
   {
     id: "2",
@@ -200,7 +276,8 @@ export const collegesData: College[] = [
     rating: 4.7,
     reviews: 12,
     fees: { min: 8000, max: 250000 },
-    ranking: { nirf: 2, category: "Engineering" },
+    nirf_ranking: { rank: 2, category: "Engineering" }, 
+
     image: "/iit-delhi-campus-main-gate.jpg",
         short_description:
         "IIT Delhi is one of the premier engineering institutions in India, known for its cutting-edge research and excellent academic programs. The institute offers undergraduate, postgraduate, and doctoral programs in various engineering disciplines.",
@@ -313,7 +390,8 @@ export const collegesData: College[] = [
     rating: 4.6,
     reviews: 15,
     fees: { min: 350000, max: 450000 },
-    ranking: { nirf: 25, category: "Engineering" },
+    nirf_ranking: { rank: 13, category: "Engineering" }, 
+
     image: "/bits-pilani-campus-clocktower.jpg",
         short_description:
      "BITS Pilani, also known as BITS Pilani, is the top-ranked engineering college in India as per NIRF ranking, and the institute also holds a good rank in world university rankings. BITS Pilani is popular for its engineering programmes - B.Tech and M.Tech in various specialisations.",
@@ -426,7 +504,8 @@ export const collegesData: College[] = [
     rating: 4.9,
     reviews: 8,
     fees: { min: 2300000, max: 2500000 },
-    ranking: { nirf: 1, category: "Management" },
+    nirf_ranking: { rank: 13, category: "Engineering" }, 
+
     image: "/placeholder.svg?height=200&width=300",
         short_description:
     "IIM Ahmedabad is the premier management institute in India, known for its rigorous academic programs and exceptional placement records. The institute has produced numerous business leaders and entrepreneurs.",
@@ -539,7 +618,8 @@ export const collegesData: College[] = [
     rating: 4.3,
     reviews: 6,
     fees: { min: 25000, max: 80000 },
-    ranking: { nirf: 3, category: "Agriculture" },
+    nirf_ranking: { rank: 1, category: "Agriculture" }, 
+
     image: "/placeholder.svg?height=200&width=300",
         short_description:
         "Punjab Agricultural University is a leading agricultural university in India, known for its contributions to the Green Revolution. The university offers comprehensive programs in agriculture, veterinary sciences, and allied fields.",
@@ -652,7 +732,8 @@ export const collegesData: College[] = [
     rating: 4.5,
     reviews: 11,
     fees: { min: 200000, max: 300000 },
-    ranking: { nirf: 15, category: "Engineering" },
+    nirf_ranking: { rank: 12, category: "Engineering" }, 
+
     image: "/placeholder.svg?height=200&width=300",
         short_description:
       "IIIT Hyderabad is a premier institute focused on information technology and computer science education. Known for its research-oriented approach and strong industry partnerships, it produces highly skilled IT professionals.",

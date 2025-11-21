@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { courseDetails } from "@/lib/course-single";
+import { courseDetails } from "@/lib/api/dummy/course-single";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { CommonAdmissionForm } from "@/components/admission/common-form";
 import { StickyBar } from "@/components/course/sticky-bar";
 import { ExternalLink, Phone } from "lucide-react";
-import { collegesData } from "@/lib/colleges-data";
+import { collegesData } from "@/lib/api/dummy/colleges-data";
 import { CollegeCard } from "@/components/college/college-card";
 
 export default function CourseDetailPage() {

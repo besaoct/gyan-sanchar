@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { courseDetails } from "@/lib/course-single";
+import { courseDetails } from "@/lib/api/dummy/course-single";
 
 type CourseHeroProps = {
   course: typeof courseDetails;

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock,  BarChart, IndianRupee } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import type { Course } from "@/lib/types";
+import type { Course } from "@/lib/api/dummy/courses-data";
 
 export function CourseCard({ course }: { course: Course }) {
   const formatFees = (min: number, max: number) => {

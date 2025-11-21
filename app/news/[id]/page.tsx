@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { articlesData } from "@/lib/articles-data";
+import { articlesData } from "@/lib/api/dummy/articles-data";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
