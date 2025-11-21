@@ -223,6 +223,57 @@ id | college_id | type (local/youtube) | src | youtube_id | thumbnail | title
 
 ### 3. Admin Panel → College Resource (FilamentPHP v3 Recommended Structure)
 
+| Section (Collapsible)                  | Exact Field Name (DB/JSON)              | Admin Label (Exactly as you want it displayed)                  | Filament Component & Details                                                                 |
+|----------------------------------------|-----------------------------------------|-----------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| **Basic Information**                  | name                                    | Name                                                            | TextInput → required → auto-generate slug                              |
+|                                        | slug                                    | Slug                                                            | TextInput → unique → disabled or auto-filled                           |
+|                                        | type                                    | Type                                                            | Select → options: Public, Private, Deemed University, Autonomous      |
+|                                        | image                                   | Image (Campus Image)                                            | FileUpload → single image → required                                   |
+| **Location**                           | location.city                           | City                                                            | TextInput → required                                                   |
+|                                        | location.state                          | State                                                           | TextInput → required                                                   |
+| **SEO & Description**                  | short_description                       | Short Description                                               | Textarea → max 255 chars → required                                    |
+|                                        | description                             | Description                                                     | RichEditor (TipTap/CKEditor) → required → full width                   |
+| **General Info**                       | established                             | Established                                                     | TextInput → numeric (year)                                             |
+|                                        | campusSize                              | Campus Size (in acres)                                          | TextInput → numeric                                                    |
+| **Fees**                               | fees.min                                | Fees → Min                                                      | TextInput → numeric → prefix ₹                                         |
+|                                        | fees.max                                | Fees → Max                                                      | TextInput → numeric → prefix ₹                                         |
+|                                        | additionalFees.hostel                   | Additional Fees → Hostel                                        | TextInput → numeric → prefix ₹                                         |
+|                                        | additionalFees.mess                     | Additional Fees → Mess                                          | TextInput → numeric → prefix ₹                                         |
+|                                        | feesStructure                           | Fees Structure                                                  | RichEditor → allow tables, bold, etc.                                  |
+| **Rankings**                           | nirf_ranking.rank                       | NIRF Ranking → Rank                                             | TextInput → numeric                                                    |
+|                                        | nirf_ranking.category                   | NIRF Ranking → Category                                         | TextInput                                                              |
+|                                        | rankings                                | Rankings                                                        | Repeater (+ icon) → fields: ranking_body, category, rank, ranking_year |
+| **Accreditations & Streams**           | accreditation                           | Accreditation                                                   | TagsInput or Repeater (+ icon)                                         |
+|                                        | streams                                 | Streams                                                         | TagsInput or Repeater (+ icon)                                         |
+|                                        | studyMode                               | Study Mode                                                      | TagsInput or Repeater (+ icon)                                         |
+| **Courses**                            | courses                                 | Courses                                                         | Repeater (+ icon) → fields: name, duration, fees, eligibility, seats, highlights |
+| **Facilities**                         | facilities                              | Facilities                                                      | TagsInput                                                              |
+| **Hostel**                             | hostel.boys                             | Hostel → Boys                                                   | Toggle                                                                 |
+|                                        | hostel.girls                            | Hostel → Girls                                                  | Toggle                                                                 |
+|                                        | hostelDetails                           | Hostel Details                                                  | RichEditor                                                             |
+| **Campus**                             | campusHighlights                        | Campus Highlights                                               | RichEditor                                                             |
+|                                        | visionMission                           | Vision & Mission                                                | RichEditor                                                             |
+| **Notable Alumni**                     | notableAlumni                           | Notable Alumni                                                  | Repeater (+ icon) → name, achievement                                  |
+| **Scholarships**                       | scholarships                            | Scholarships                                                    | Repeater (+ icon) → name, description                                  |
+| **Admission Process**                  | admissionProcess.exams                  | Admission Process → Exams                                       | TagsInput or Repeater (+ icon)                                         |
+|                                        | admissionProcess.criteria               | Admission Process → Criteria                                    | RichEditor or Textarea                                                 |
+|                                        | admissionProcess.applicationFee         | Admission Process → Application Fee                            | TextInput → numeric → prefix ₹                                         |
+|                                        | admissionProcess.importantDates         | Admission Process → Important Dates                            | Repeater (+ icon) → event, date (DatePicker)                           |
+| **Placement**                          | placement.averagePackage                | Placement → Average Package                                     | TextInput → numeric → prefix ₹ or LPA                                  |
+|                                        | placement.highestPackage                | Placement → Highest Package                                     | TextInput → numeric → prefix ₹ or Cr                                   |
+|                                        | placement.placementRate                 | Placement → Placement Rate (%)                                  | TextInput → numeric → suffix %                                         |
+|                                        | placement.topRecruiters                 | Placement → Top Recruiters                                      | TagsInput or Repeater (+ icon)                                         |
+|                                        | placement.highlights                    | Placement → Highlights                                          | TagsInput or Repeater (+ icon)                                         |
+|                                        | placement.placementProcess              | Placement → Placement Process                                   | RichEditor                                                             |
+| **Campus Life**                        | campusLife.studentStrength              | Campus Life → Student Strength                                  | TextInput → numeric                                                    |
+|                                        | campusLife.facultyRatio                 | Campus Life → Faculty Ratio                                     | TextInput → e.g., 1:12                                                 |
+|                                        | campusLife.clubs                        | Campus Life → Clubs                                             | TagsInput or Repeater (+ icon)                                         |
+| **Media**                              | gallery                                 | Gallery                                                         | FileUpload → multiple → reorderable (+ icon)                           |
+|                                        | videoReels                              | Video Reels                                                     | Repeater (+ icon) → type (local/youtube), src or youtubeId, thumbnail, title |
+| **Reviews**                            | reviews_data                            | Reviews Data                                                    | Separate moderated resource (not in main form) or Repeater (optional) |
+| **Rating & Reviews Count**             | rating                                  | Rating (Average)                                                | TextInput → numeric → disabled (auto-calculated)                       |
+|                                        | reviews                                 | Reviews (Count)                                                 | Placeholder or TextInput → disabled (auto-calculated)                  |
+
 ```php
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
