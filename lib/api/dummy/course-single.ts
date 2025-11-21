@@ -210,7 +210,8 @@ export const courseDetails: CourseDetails = {
         rating: 4.8,
         reviews: 9,
         fees: { min: 5000, max: 231000 },
-        ranking: { nirf: 1, category: "Engineering" },
+        nirf_ranking: { rank: 2, category: "Engineering" },
+
         image: "/iit-madras-campus-aerial-view.jpg",
         short_description:
           "IIT Chennai, also known as IIT Madras, is the top-ranked engineering college in India as per NIRF ranking, and the institute also holds a good rank in world university rankings. IIT Chennai is popular for its engineering programmes - B.Tech and M.Tech in various specialisations.",
@@ -356,7 +357,7 @@ export const courseDetails: CourseDetails = {
         rating: 4.7,
         reviews: 12,
         fees: { min: 8000, max: 250000 },
-        ranking: { nirf: 2, category: "Engineering" },
+        nirf_ranking: { rank: 2, category: "Engineering" },
         image: "/iit-delhi-campus-main-gate.jpg",
         short_description:
           "IIT Delhi is one of the premier engineering institutions in India, known for its cutting-edge research and excellent academic programs. The institute offers undergraduate, postgraduate, and doctoral programs in various engineering disciplines.",
