@@ -221,33 +221,109 @@ id | college_id | student_name | rating | comment | course | batch_year | create
 id | college_id | type (local/youtube) | src | youtube_id | thumbnail | title
 ```
 
-### 3. Admin Panel Fields (FilamentPHP or Custom Blade)
+### 3. Admin Panel → College Resource (FilamentPHP v3 Recommended Structure)
 
-| Section                  | Field Type in Admin (Filament)                              | Notes / Component                                      |
-|--------------------------|-------------------------------------------------------------|--------------------------------------------------------|
-| Basic Info               | TextInput, Select (type)                                    | slug auto-generated from name                          |
-| Location                 | TextInput (city, state)                                     |                                                        |
-| Fees                     | TextInput (min, max, hostel, mess)                          |                                                        |
-| Fees Structure           | RichEditor (TipTap / CKEditor)                              | HTML stored directly                                   |
-| NIRF Ranking             | TextInput + Select                                          | Optional                                               |
-| Other Rankings           | Repeater (ranking_body, category, rank, year)               | + icon to add more                                     |
-| Main Image               | FileUpload (single, disk=s3/public)                         |                                                        |
-| Short & Full Description | TextInput + RichEditor                                      |                                                        |
-| Established              | TextInput (year)                                            |                                                        |
-| Accreditation / Streams / Facilities / Study Mode | TagsInput or Repeater                                      | TagsInput is cleaner                                   |
-| Courses                  | Repeater (all course fields)                                | Very important – allow add/remove                       |
-| Hostel Availability      | Toggle (boys/girls)                                         |                                                        |
-| Hostel Details           | RichEditor                                                  |                                                        |
-| Campus Size              | TextInput                                                   |                                                        |
-| Campus Highlights / Vision & Mission | RichEditor                                     |                                                        |
-| Notable Alumni           | Repeater (name, achievement)                                |                                                        |
-| Scholarships             | Repeater (name, description)                                |                                                        |
-| Admission Process        | - Exams: TagsInput<br>- Criteria: RichEditor<br>- Application Fee<br>- Important Dates: Repeater |                                                        |
-| Placement                | All fields + Repeater for recruiters & highlights           |                                                        |
-| Campus Life              | Numbers + Repeater for clubs                                |                                                        |
-| Gallery                  | FileUpload (multiple, ->multiple())                         |                                                        |
-| Video Reels              | Repeater<br> → Select (Local / YouTube)<br> → Conditional: FileUpload OR TextInput (youtubeId)<br> → TextInput title & thumbnail | Critical for good UX                                   |
-| Reviews                  | Separate ReviewsResource (approvable)                       | Can be moderated                                              |
+```php
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\ToggleButtons;
+use Filament\Forms\Components\DatePicker;
+```
+
+| Section (Collapsible)              | Field Name → Filament Component                                                                                   | Label / Hint / Rules                                                                                     |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| **Basic Information**              | `TextInput::make('name')->required()->reactive()->afterStateUpdated(fn ($state, $set) => $set('slug', Str::slug($state)))` | College Full Name                                                                                       |
+|                                    | `TextInput::make('slug')->unique(table: College::class, column: 'slug', ignoreRecord: true)->required()`       | Auto-generated from name                                                                                |
+|                                    | `TextInput::make('type')->required()`                                                                             | e.g., Public, Private, Deemed, Autonomous                                                              |
+|                                    | `Select::make('type')->options(['Public', 'Private', 'Deemed University', 'Autonomous'])->required()`           | Better UX than free text                                                                                |
+|                                    | `FileUpload::make('image')->image()->disk('public')->directory('colleges')->required()`                           | Main Campus Image (1600x900 recommended)                                                                |
+| **Location**                       | `TextInput::make('location.city')->label('City')->required()`                                                     |                                                                                                         |
+|                                    | `TextInput::make('location.state')->label('State')->required()`                                                  |                                                                                                         |
+| **Overview & SEO**                 | `TextInput::make('short_description')->maxLength(255)->required()`                                               | 150–160 chars ideal for meta description                                                                |
+|                                    | `RichEditor::make('description')->required()->columnSpanFull()`                                                  | Full college description (TipTap / Tiptap recommended)                                                  |
+| **Key Stats**                      | `TextInput::make('established')->numeric()->minValue(1800)->maxValue(now()->year)`                                | Year of Establishment                                                                                   |
+|                                    | `TextInput::make('campusSize')->label('Campus Size (acres)')->numeric()`                                         |                                                                                                         |
+|                                    | `TextInput::make('campusLife.studentStrength')->label('Total Students')->numeric()`                               |                                                                                                         |
+|                                    | `TextInput::make('campusLife.facultyRatio')->label('Faculty:Student Ratio')->placeholder('1:15')`                |                                                                                                         |
+| **Fees**                           | `TextInput::make('fees.min')->numeric()->prefix('₹')->required()`                                                 | Min Annual Fees                                                                                         |
+|                                    | `TextInput::make('fees.max')->numeric()->prefix('₹')->required()`                                                 | Max Annual Fees                                                                                         |
+|                                    | `TextInput::make('additionalFees.hostel')->numeric()->prefix('₹')->label('Hostel Fee (per year)')`              |                                                                                                         |
+|                                    | `TextInput::make('additionalFees.mess')->numeric()->prefix('₹')->label('Mess Fee (per year)')`                  |                                                                                                         |
+|                                    | `RichEditor::make('feesStructure')->label('Detailed Fees Structure')->columnSpanFull()`                           | Use tables, bold, etc. (optional but recommended)                                                       |
+| **Rankings**                       | `Section::make('NIRF Ranking')->collapsible()`                                                                    |                                                                                                         |
+|                                    | `TextInput::make('nirf_ranking.rank')->numeric()->label('NIRF Rank')`                                             |                                                                                                         |
+|                                    | `TextInput::make('nirf_ranking.category')->label('NIRF Category')`                                                | e.g., Engineering, Overall, University                                                                  |
+|                                    | `Repeater::make('rankings')->schema([                                                                             
+|                                        TextInput::make('ranking_body')->required(),                                                                | e.g., QS, Times Higher Education                                                                        |
+|                                        TextInput::make('category'),                                                                                |                                                                                                         |
+|                                        TextInput::make('rank')->numeric(),                                                                         |                                                                                                         |
+|                                        TextInput::make('ranking_year')->numeric()->minValue(2000),                                                 |                                                                                                         |
+|                                    ])->columns(4)->collapsible()`                                                                                    | Other Rankings (QS, THE, India Today, etc.)                                                             |
+| **Accreditation & Streams**        | `TagsInput::make('accreditation')->suggestions(['NAAC A++', 'NBA', 'NIRF', 'ABEC', 'UGC'])->separator(',')`      |                                                                                                         |
+|                                    | `TagsInput::make('streams')->suggestions(['Engineering', 'Medical', 'Management', 'Law', 'Design', ...])`        |                                                                                                         |
+|                                    | `TagsInput::make('studyMode')->suggestions(['Full Time', 'Part Time', 'Distance', 'Online'])`                    |                                                                                                         |
+| **Courses Offered**                | `Repeater::make('courses')->schema([                                                                              
+|                                        TextInput::make('name')->required(),                                                                        | e.g., B.Tech CSE                                                                                        |
+|                                        TextInput::make('duration')->required(),                                                                    | e.g., 4 Years                                                                                           |
+|                                        TextInput::make('fees')->numeric()->prefix('₹'),                                                            |                                                                                                         |
+|                                        TextInput::make('eligibility')->required(),                                                                 | e.g., JEE Main + JoSAA                                                                                  |
+|                                        TextInput::make('seats')->numeric(),                                                                        | Total Seats                                                                                             |
+|                                        Textarea::make('highlights')->rows(2),                                                                      |                                                                                                         |
+|                                    ])->columns(3)->collapsible()->itemLabel(fn (array $state): ?string => $state['name'] ?? null)`                 | Most important section — allow reorder                                                                  |
+| **Facilities**                     | `TagsInput::make('facilities')->suggestions([...common facilities like Wi-Fi, Library, Labs, Gym...])`           |                                                                                                         |
+| **Hostel**                         | `ToggleButtons::make('hostel')->boolean()->inline()->options(['boys' => 'Boys', 'girls' => 'Girls'])->grouped()` |                                                                                                         |
+|                                    | `RichEditor::make('hostelDetails')->columnSpanFull()`                                                            | Hostel facilities, rules, photos, etc.                                                                  |
+| **Campus Highlights & Vision**     | `RichEditor::make('campusHighlights')->columnSpanFull()`                                                         |                                                                                                         |
+|                                    | `RichEditor::make('visionMission')->columnSpanFull()`                                                             |                                                                                                         |
+| **Notable Alumni**                 | `Repeater::make('notableAlumni')->schema([                                                                        
+|                                        TextInput::make('name')->required(),                                                                        |                                                                                                         |
+|                                        Textarea::make('achievement')->required(),                                                                  |                                                                                                         |
+|                                    ])->columns(2)->collapsible()`                                                                                    |                                                                                                         |
+| **Scholarships**                   | `Repeater::make('scholarships')->schema([                                                                         
+|                                        TextInput::make('name')->required(),                                                                        |                                                                                                         |
+|                                        Textarea::make('description'),                                                                              |                                                                                                         |
+|                                    ])->columns(2)`                                                                                                   |                                                                                                         |
+| **Admission Process**              | `TagsInput::make('admissionProcess.exams')->label('Accepted Entrance Exams')`                                     | e.g., JEE Main, NEET, CAT, GATE                                                                         |
+|                                    | `RichEditor::make('admissionProcess.criteria')`                                                                   | Selection process details                                                                               |
+|                                    | `TextInput::make('admissionProcess.applicationFee')->numeric()->prefix('₹')`                                     |                                                                                                         |
+|                                    | `Repeater::make('admissionProcess.importantDates')->schema([                                                      
+|                                        TextInput::make('event')->required(),                                                                    | e.g., Application Starts                                                                                |
+|                                        DatePicker::make('date'),                                                                                   |                                                                                                         |
+|                                    ])->columns(2)`                                                                                                   | Key Dates (2025–26 session)                                                                             |
+| **Placement Records**              | `TextInput::make('placement.averagePackage')->numeric()->prefix('₹')->label('Avg Package (LPA)')`                | Convert to LPA if needed                                                                                |
+|                                    | `TextInput::make('placement.highestPackage')->numeric()->prefix('₹')->label('Highest Package')`                 |                                                                                                         |
+|                                    | `TextInput::make('placement.placementRate')->suffix('%')->numeric()`                                              |                                                                                                         |
+|                                    | `TagsInput::make('placement.topRecruiters')`                                                                      | Google, Microsoft, TCS, etc.                                                                            |
+|                                    | `TagsInput::make('placement.highlights')`                                                                         | 100% placement, 200+ offers, etc.                                                                       |
+|                                    | `RichEditor::make('placement.placementProcess')->columnSpanFull()`                                               | Step-by-step process                                                                                    |
+| **Campus Life**                    | `TagsInput::make('campusLife.clubs')`                                                                             | Robotics, Cultural, NSS, etc.                                                                           |
+| **Gallery**                        | `FileUpload::make('gallery')->multiple()->image()->disk('public')->directory('colleges/gallery')->reorderable()` | Min 10–15 high-quality images                                                                           |
+| **Video Reels / Tours**            | `Repeater::make('videoReels')->schema([                                                                           
+|                                        Select::make('type')->options(['local' => 'Uploaded Video', 'youtube' => 'YouTube'])->reactive()->required(),|                                                                                                         |
+|                                        FileUpload::make('src')->visible(fn ($get) => $get('type') === 'local')->acceptedFileTypes(['video/mp4']),   | Local video upload                                                                                      |
+|                                        TextInput::make('youtubeId')->label('YouTube Video ID')->visible(fn ($get) => $get('type') === 'youtube'),   | e.g., dQw4w9WgXcQ                                                                                       |
+|                                        FileUpload::make('thumbnail')->image()->visible(fn ($get) => $get('type') === 'local'),                      | Optional thumbnail                                                                                      |
+|                                        TextInput::make('title')->required(),                                                                       |                                                                                                         |
+|                                    ])->columns(2)->collapsible()`                                                                                    | Campus tour, fest highlights, etc.                                                                     |
+
+### Suggested Form Layout (for best UX)
+
+```php
+Forms\Components\Section::make('Basic Information')->columns(2),
+Forms\Components\Section::make('Fees & Rankings')->columns(2),
+Forms\Components\Section::make('Courses Offered')->collapsible(),
+Forms\Components\Section::make('Admission & Placement')->columns(2),
+Forms\Components\Section::make('Campus & Facilities')->collapsible(),
+Forms\Components\Section::make('Media')->description('Gallery and videos')->collapsible(),
+```
 
 ### Recommendation for Backend Developer (Laravel)
 
