@@ -78,7 +78,7 @@ function RightImagePanel({ college }: { college: College }) {
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">NIRF Rank</div>
-          <div className="text-lg font-semibold">#{college.ranking.nirf}</div>
+          <div className="text-lg font-semibold">#{college.nirf_ranking?.rank}</div>
         </div>
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Highest Package</div>
@@ -107,7 +107,7 @@ function RightImagePanel({ college }: { college: College }) {
 
       <div className="hidden sm:block">
         <div className="pointer-events-none absolute -left-6 top-6">
-          <InfoBadge title="NIRF Rank" value={`#${college.ranking.nirf}`} />
+          <InfoBadge title="NIRF Rank" value={`#${college.nirf_ranking?.rank}`} />
         </div>
         <div className="pointer-events-none absolute -left-6 -bottom-6">
           <InfoBadge title="Highest Package" value={`${college.placement.highestPackage / 100000} Lacs`} />
@@ -156,7 +156,7 @@ export function CollegeHero({ college }: { college: College }) {
         </h1>
 
         <div className="mt-6 flex flex-wrap items-start gap-4">
-          <RatingPill rating={college.rating} reviewCount={college.reviews} />
+          <RatingPill rating={college.rating || 0} reviewCount={college.reviews || 0} />
                <LocationAndGallery location={college.location} />
 
         </div>
