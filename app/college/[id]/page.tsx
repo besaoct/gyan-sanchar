@@ -294,10 +294,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </span>{" "}
                           {course.highlights}
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 text-center">
+                    <div className="mt-6 text-right">
                     <Button
                       variant="outline"
                       className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
@@ -306,6 +303,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       View Detailed Syllabus
                     </Button>
                   </div>
+                      </div>
+                    ))}
+                  </div>
+   
                 </CardContent>
               </Card>
             </div>

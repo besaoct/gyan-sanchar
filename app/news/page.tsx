@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { articlesData } from "@/lib/api/dummy/articles-data";
+import { getArticles, Article } from "@/lib/api/data/articles";
 import { FilterSidebar, ArticleFilterOptions } from "@/components/news/filter-sidebar";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
@@ -16,9 +16,34 @@ export default function NewsPage() {
     categories: [],
     tags: [],
   });
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const response = await getArticles();
+        if (response.success) {
+          setArticles(response.data);
+        } else {
+          setError(response.message);
+        }
+      } catch (err) {
+        setError("Failed to fetch articles.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchArticles();
+  }, []);
+
+  const allCategories = useMemo(() => [...new Set(articles.map(article => article.category))], [articles]);
+  const allTags = useMemo(() => [...new Set(articles.flatMap(article => article.tags))], [articles]);
 
   const filteredArticles = useMemo(() => {
-    return articlesData.filter(article => {
+    return articles.filter(article => {
       if (
         filters.search &&
         !article.title.toLowerCase().includes(filters.search.toLowerCase()) &&
@@ -43,7 +68,7 @@ export default function NewsPage() {
 
       return true;
     });
-  }, [filters]);
+  }, [filters, articles]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -51,7 +76,12 @@ export default function NewsPage() {
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           <div className="w-80 flex-shrink-0 hidden lg:block">
-            <FilterSidebar filters={filters} onFiltersChange={setFilters} />
+            <FilterSidebar
+              filters={filters}
+              onFiltersChange={setFilters}
+              allCategories={allCategories}
+              allTags={allTags}
+            />
           </div>
 
           <div className="flex-1">
@@ -64,7 +94,12 @@ export default function NewsPage() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide">
-                  <FilterSidebar filters={filters} onFiltersChange={setFilters} />
+                  <FilterSidebar
+                    filters={filters}
+                    onFiltersChange={setFilters}
+                    allCategories={allCategories}
+                    allTags={allTags}
+                  />
                 </SheetContent>
               </Sheet>
             </div>
@@ -80,20 +115,28 @@ export default function NewsPage() {
               </div>
             </div>
 
-            <div className="space-y-6">
-              {filteredArticles.map(article => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
+            {loading ? (
+              <p>Loading articles...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <>
+                <div className="space-y-6">
+                  {filteredArticles.map(article => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))}
+                </div>
 
-            {filteredArticles.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">📰</div>
-                <h3 className="text-xl font-semibold mb-2">No articles found</h3>
-                <p className="text-muted-foreground">
-                  Try adjusting your filters to see more results
-                </p>
-              </div>
+                {filteredArticles.length === 0 && (
+                  <div className="text-center py-12">
+                    <div className="text-6xl mb-4">📰</div>
+                    <h3 className="text-xl font-semibold mb-2">No articles found</h3>
+                    <p className="text-muted-foreground">
+                      Try adjusting your filters to see more results
+                    </p>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

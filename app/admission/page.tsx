@@ -2,7 +2,7 @@
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { ApplicationForm } from "@/components/admission/ApplicationForm";
-import { ApplicationTracker } from "@/components/admission/ApplicationTracker";
+
 import { ToolsAndResources } from "@/components/admission/ToolsAndResources";
 import Image from "next/image";
 
@@ -31,20 +31,11 @@ export default function AdmissionPage() {
             </div>
         </div>
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8 p-6 bg-gray-100 rounded-lg">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Application Steps:</h3>
-            <ol className="list-decimal list-inside space-y-2 text-gray-600">
-                <li>Fill out the common application form with your personal details.</li>
-                <li>Select the college you want to apply to from our curated list.</li>
-                <li>Choose the course you are interested in at your selected college.</li>
-                <li>Submit your application and wait for the good news!</li>
-            </ol>
-        </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <ApplicationForm />
-            <ApplicationTracker />
           </div>
           <div>
             <ToolsAndResources />

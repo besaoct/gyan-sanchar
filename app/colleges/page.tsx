@@ -80,7 +80,7 @@ export default function CollegeListingPage() {
       }
 
       // Rating filter
-      if (filters.rating > 0 && college.rating < filters.rating) {
+      if (filters.rating > 0 && college.rating && (college.rating < filters.rating)) {
         return false;
       }
 

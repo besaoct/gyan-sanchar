@@ -2,11 +2,12 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { courseDetails } from "@/lib/api/dummy/course-single";
+import { CourseDetails } from "@/lib/api/data/courses";
 
-type CourseHeroProps = {
-  course: typeof courseDetails;
-};
+interface CourseHeroProps {
+  course: CourseDetails;
+}
+
 
 function InfoBadge({
   title,
@@ -33,34 +34,34 @@ function InfoBadge({
   );
 }
 
-function RightImagePanel({ course }: CourseHeroProps) {
+function RightImagePanel({ course }: { course: CourseDetails }) {
   return (
     <div className="relative mx-auto sm:mx-4 lg:mx-0">
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Duration</div>
-          <div className="text-lg font-semibold">{course.basicInfo.duration}</div>
+          <div className="text-lg font-semibold">{course.basic_info.duration}</div>
         </div>
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Average Salary</div>
-          <div className="text-lg font-semibold">{course.basicInfo.averageSalary}</div>
+          <div className="text-lg font-semibold">{course.avg_salary}</div>
         </div>
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Level</div>
-          <div className="text-lg font-semibold">{course.basicInfo.level}</div>
+          <div className="text-lg font-semibold">{course.basic_info.level}</div>
         </div>
         <div className="p-2 px-4">
           <div className="text-xs text-muted-foreground">Type</div>
-          <div className="text-lg font-semibold">{course.basicInfo.courseType}</div>
+          <div className="text-lg font-semibold">{course.course_type}</div>
         </div>
       </div>
 
       <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 rounded-bl-[202px]">
         <Image
-          src={course.basicInfo.heroImage}
+          src={course.hero_image}
           width={1000}
           height={1000}
-          alt={`${course.basicInfo.courseName} cover image`}
+          alt={`${course.course_name} cover image`}
           className=" object-cover  sm:h-[320px] lg:h-[390px] w-full rounded-4xl rounded-bl-[202px]"
           priority
         />
@@ -68,16 +69,16 @@ function RightImagePanel({ course }: CourseHeroProps) {
 
       <div className="hidden sm:block">
         <div className="pointer-events-none absolute -left-6 top-6">
-          <InfoBadge title="Duration" value={course.basicInfo.duration} />
+          <InfoBadge title="Duration" value={`${course.basic_info.duration} Years`} />
         </div>
         <div className="pointer-events-none absolute left-6 bottom-6">
-          <InfoBadge title="Average Salary" value={course.basicInfo.averageSalary} />
+          <InfoBadge title="Average Salary" value={course.avg_salary} />
         </div>
         <div className="absolute -right-4 top-4 ">
-          <InfoBadge title="Level" value={course.basicInfo.level} align="right" />
+          <InfoBadge title="Level" value={course.basic_info.level} align="right" />
         </div>
         <div className="absolute -right-4 bottom-6">
-          <InfoBadge title="Type" value={course.basicInfo.courseType} align="right" />
+          <InfoBadge title="Type" value={course.course_type} align="right" />
         </div>
       </div>
     </div>
@@ -93,7 +94,7 @@ export function CourseHero({ course }: CourseHeroProps) {
           <div className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-secondary">
             <Image
               src="/icons/course-p.png"
-              alt={`${course.basicInfo.courseName} Logo`}
+              alt={`${course.course_name} Logo`}
               width={40}
               height={40}
               className="h-8 w-8"
@@ -113,11 +114,11 @@ export function CourseHero({ course }: CourseHeroProps) {
         </div>
 
         <h1 className="text-balance text-xl font-bold leading-tight text-primary md:text-3xl">
-          {course.basicInfo.courseName} - Admission 2025, Fees, Eligibility
+          {course.course_name} - Admission 2025, Fees, Eligibility
         </h1>
 
         <p className="mt-6 text-pretty text-sm leading-relaxed text-foreground">
-          {course.overview.introduction}
+          {course.short_description}
         </p>
 
         <div className="mt-8 flex flex-wrap gap-4">

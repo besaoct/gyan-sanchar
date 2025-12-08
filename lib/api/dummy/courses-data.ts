@@ -11,9 +11,6 @@ export interface Course {
     | "Regular"
     | "Distance"
     | "Part-time"
-    | "Regular / Distance / Part-time"
-    | "Regular/ Distance"
-    | "Regular/part-time"
   )[];
   level: "Bachelors" | "Masters" | "Phd";
   image: string;
@@ -76,7 +73,7 @@ export const coursesData: Course[] = [
     description: "A postgraduate program for specialized engineering disciplines.",
     duration: 2,
     fees: { min: 300000, max: 800000 },
-    mode: ["Regular/part-time"],
+    mode: ["Regular"],
     level: "Masters",
     image: "m-tech.jpg",
   },
@@ -87,7 +84,4 @@ export const courseModes: Course["mode"] = [
     "Regular",
     "Distance",
     "Part-time",
-    "Regular / Distance / Part-time",
-    "Regular/ Distance",
-    "Regular/part-time",
   ];

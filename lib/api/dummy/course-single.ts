@@ -87,6 +87,7 @@ export const courseDetails: CourseDetails = {
     level: "Graduate",
     heroImage: "/course/demo.jpg",
   },
+  
   overview: {
     introduction:
       "The B.Tech in Computer Science and Engineering is a four-year undergraduate program designed to provide students with strong foundations in computer science, software development, algorithms, and emerging technologies such as AI, ML, Cloud Computing, and Cybersecurity.",
@@ -98,6 +99,7 @@ export const courseDetails: CourseDetails = {
       "Opportunities for research and innovation.",
     ],
   },
+
   eligibility: {
     criteria: [
       "Candidates must have completed 10+2 with Physics, Chemistry, and Mathematics.",

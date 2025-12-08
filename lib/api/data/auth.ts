@@ -6,7 +6,7 @@ import { BASE_URL, API_ENDPOINTS } from "../config/urls";
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
-  data: T;
+  data: T ;
 }
 
 export interface ApiErrorResponse {

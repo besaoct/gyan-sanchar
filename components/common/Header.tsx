@@ -12,9 +12,13 @@ import {
 } from "@/components/ui/sheet";
 import CollegesDropdown from "../college/college-dropdown";
 import { useState } from "react";
+import { useAuth } from "@/contexts/auth/AuthContext";
+import { Button } from "../ui/button";
 
 export default function Header({ isSticky }: { isSticky?: boolean }) {
   const [isCollegesOpen, setIsCollegesOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header
@@ -72,12 +76,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
               {/* Colleges Dropdown */}
               <div className="relative">
                 <button
-                  onClick={() =>{ 
-
-                    console.log("clicked");
-                    setIsCollegesOpen(!isCollegesOpen)
-                  
-                  }}
+                  onClick={() => setIsCollegesOpen(!isCollegesOpen)}
                   className="flex items-center gap-1 hover:text-blue-200 transition"
                 >
                   Colleges
@@ -109,9 +108,21 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                 News & Articles
               </Link>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Search className="w-5 h-5" />
-              <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
+              {isAuthenticated ? (
+                <div className="flex items-center gap-2">
+                  <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
+                  <span>{user?.name}</span>
+                  <Button onClick={logout} variant="destructive">
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <Link href="/login">
+                  <Button variant="secondary">Login</Button>
+                </Link>
+              )}
             </div>
 
             {isCollegesOpen && (
@@ -123,11 +134,13 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                 />
               </>
             )}
-
           </div>
 
           <div className="lg:hidden">
-            <Sheet>
+            <Sheet
+              open={isMobileMenuOpen}
+              onOpenChange={setIsMobileMenuOpen}
+            >
               <SheetTrigger asChild>
                 <Menu className="w-6 h-6" />
               </SheetTrigger>
@@ -150,30 +163,65 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                   <Link
                     href={"/colleges"}
                     className="cursor-pointer hover:text-white/80 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Colleges
                   </Link>
                   <Link
                     href={"/courses"}
                     className="cursor-pointer hover:text-white/80 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Courses
                   </Link>
-                  <span className="cursor-pointer hover:text-white/80 transition-colors">
+                  <span
+                    className="cursor-pointer hover:text-white/80 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
                     Exams
                   </span>
                   <Link
                     href={"/admission"}
                     className="cursor-pointer hover:text-white/80 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Admission
                   </Link>
                   <Link
                     href={"/news"}
                     className="cursor-pointer hover:text-white/80 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     News & Articles
                   </Link>
+                  <div className="pt-4 border-t border-white/30">
+                    {isAuthenticated ? (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
+                          <span>{user?.name}</span>
+                        </div>
+                        <Button
+                          onClick={() => {
+                            logout();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          variant="destructive"
+                        >
+                          Logout
+                        </Button>
+                      </div>
+                    ) : (
+                      <Link href="/login">
+                        <Button
+                          variant="secondary"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Login
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

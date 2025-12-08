@@ -4,7 +4,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { articlesData } from "@/lib/api/dummy/articles-data";
 
 export type ArticleFilterOptions = {
   search: string;
@@ -12,27 +11,31 @@ export type ArticleFilterOptions = {
   tags: string[];
 };
 
-export function FilterSidebar({ filters, onFiltersChange }: {
+export function FilterSidebar({
+  filters,
+  onFiltersChange,
+  allCategories,
+  allTags,
+}: {
   filters: ArticleFilterOptions;
   onFiltersChange: (filters: ArticleFilterOptions) => void;
+  allCategories: string[];
+  allTags: string[];
 }) {
-  const allCategories = [...new Set(articlesData.map(article => article.category))];
-  const allTags = [...new Set(articlesData.flatMap(article => article.tags))];
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFiltersChange({ ...filters, search: e.target.value });
   };
 
   const handleCategoryChange = (category: string) => {
     const newCategories = filters.categories.includes(category)
-      ? filters.categories.filter(c => c !== category)
+      ? filters.categories.filter((c) => c !== category)
       : [...filters.categories, category];
     onFiltersChange({ ...filters, categories: newCategories });
   };
 
   const handleTagChange = (tag: string) => {
     const newTags = filters.tags.includes(tag)
-      ? filters.tags.filter(t => t !== tag)
+      ? filters.tags.filter((t) => t !== tag)
       : [...filters.tags, tag];
     onFiltersChange({ ...filters, tags: newTags });
   };
@@ -50,14 +53,16 @@ export function FilterSidebar({ filters, onFiltersChange }: {
       <div>
         <h3 className="text-lg font-semibold mb-4">Categories</h3>
         <div className="space-y-2">
-          {allCategories.map(category => (
+          {allCategories.map((category) => (
             <div key={category} className="flex items-center">
               <Checkbox
                 id={category}
                 checked={filters.categories.includes(category)}
                 onCheckedChange={() => handleCategoryChange(category)}
               />
-              <Label htmlFor={category} className="ml-2">{category}</Label>
+              <Label htmlFor={category} className="ml-2">
+                {category}
+              </Label>
             </div>
           ))}
         </div>
@@ -65,14 +70,16 @@ export function FilterSidebar({ filters, onFiltersChange }: {
       <div>
         <h3 className="text-lg font-semibold mb-4">Tags</h3>
         <div className="space-y-2">
-          {allTags.map(tag => (
+          {allTags.map((tag) => (
             <div key={tag} className="flex items-center">
               <Checkbox
                 id={tag}
                 checked={filters.tags.includes(tag)}
                 onCheckedChange={() => handleTagChange(tag)}
               />
-              <Label htmlFor={tag} className="ml-2">{tag}</Label>
+              <Label htmlFor={tag} className="ml-2">
+                {tag}
+              </Label>
             </div>
           ))}
         </div>

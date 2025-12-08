@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Search, Undo } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -12,7 +12,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { courseLevels, courseModes } from "@/lib/api/dummy/courses-data";
+import { getCoursesFilters, CourseFilterOptions as ApiCourseFilterOptions } from "@/lib/api/data/courses";
 
 export interface CourseFilterOptions {
   search: string;
@@ -37,6 +37,21 @@ export function FilterSidebar({
     level: true,
     fees: true,
   });
+  const [apiFilters, setApiFilters] = useState<ApiCourseFilterOptions | null>(null);
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const response = await getCoursesFilters();
+        if (response.success) {
+          setApiFilters(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch course filters:", error);
+      }
+    };
+    fetchFilters();
+  }, []);
 
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -63,20 +78,20 @@ export function FilterSidebar({
   const clearAllFilters = () => {
     onFiltersChange({
       search: "",
-      duration: [0, 6],
+      duration: [apiFilters?.duration.min ?? 0, apiFilters?.duration.max ?? 99],
       modes: [],
       levels: [],
-      feeRange: [0, 3000000],
+      feeRange: [apiFilters?.feeRange.min ?? 0, apiFilters?.feeRange.max ?? 0],
     });
   };
 
   const getActiveFiltersCount = () => {
     let count = 0;
     if (filters.search) count++;
-    if (filters.duration[0] !== 0 || filters.duration[1] !== 6) count++;
+    if (filters.duration[0] !== (apiFilters?.duration.min ?? 0) || filters.duration[1] !== (apiFilters?.duration.max ?? 0)) count++;
     if (filters.modes.length > 0) count++;
     if (filters.levels.length > 0) count++;
-    if (filters.feeRange[0] !== 0 || filters.feeRange[1] !== 3000000) count++;
+    if (filters.feeRange[0] !== (apiFilters?.feeRange.min ?? 0) || filters.feeRange[1] !== (apiFilters?.feeRange.max ?? 0)) count++;
     return count;
   };
 
@@ -134,8 +149,8 @@ export function FilterSidebar({
               onValueChange={(value) =>
                 updateFilter("duration", value as [number, number])
               }
-              max={6}
-              min={0}
+              max={apiFilters?.duration.max ?? 0}
+              min={apiFilters?.duration.min ?? 0}
               step={1}
               className="w-full"
             />
@@ -156,7 +171,7 @@ export function FilterSidebar({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-2 mt-2">
-            {courseModes.map((mode) => (
+            {(apiFilters?.modes ?? []).map((mode) => (
               <div key={mode} className="flex items-center space-x-2">
                 <Checkbox
                   id={`mode-${mode}`}
@@ -188,7 +203,7 @@ export function FilterSidebar({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-2 mt-2">
-            {courseLevels.map((level) => (
+            {(apiFilters?.levels ?? []).map((level) => (
               <div key={level} className="flex items-center space-x-2">
                 <Checkbox
                   id={`level-${level}`}
@@ -220,16 +235,16 @@ export function FilterSidebar({
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-4 mt-2">
             <div className="flex justify-between text-sm text-muted-foreground mb-2">
-              <span>₹{(filters.feeRange[0] / 100000).toFixed(1)}L</span>
-              <span>₹{(filters.feeRange[1] / 100000).toFixed(1)}L</span>
+              <span>₹{((filters.feeRange[0]) / 100000).toFixed(1)}L</span>
+              <span>₹{((filters.feeRange[1]) / 100000).toFixed(1)}L</span>
             </div>
             <Slider
               value={filters.feeRange}
               onValueChange={(value) =>
                 updateFilter("feeRange", value as [number, number])
               }
-              max={3000000}
-              min={0}
+              max={apiFilters?.feeRange.max ?? 0}
+              min={apiFilters?.feeRange.min ?? 0}
               step={50000}
               className="w-full"
             />

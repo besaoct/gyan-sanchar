@@ -2,18 +2,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Calendar, User } from "lucide-react";
-import type { Article } from "@/lib/types";
+import { Article } from "@/lib/api/data/articles";
 
 export function ArticleCard({ article }: { article: Article }) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 py-0">
-      <Link href={`/news/${article.id}`}>
+      <Link href={`/news/${article.slug}`}>
         <div className="grid grid-cols-1 md:grid-cols-3">
           <div className="relative h-56 md:h-full">
             <Image
-              src={`/blog.png`}
+              src={ article.image || `/blog.png`}
               alt={article.title}
               fill
               className="object-cover"
@@ -35,7 +35,7 @@ export function ArticleCard({ article }: { article: Article }) {
                 </div>
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  <span>{new Date(article.date).toLocaleDateString()}</span>
+                  <span>{new Date(article.date!).toLocaleDateString()}</span>
                 </div>
               </div>
               <div className="flex items-center gap-1 text-primary font-semibold whitespace-nowrap">

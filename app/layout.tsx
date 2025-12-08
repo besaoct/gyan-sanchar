@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   description: 'Find college and course information in India',
 }
 
+import { AuthProvider } from '@/contexts/auth/AuthContext'
+import Header from '@/components/common/Header'
+import  Footer  from '@/components/common/Footer'
+import { Toaster } from '@/components/ui/toaster'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,7 +29,12 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/logo-b.png" type="image/x-icon" />
       </head>
       <body className={`${font.className}`}>
-        {children}
+        <AuthProvider>
+          {/* <Header /> */}
+          {children}
+          <Toaster />
+          {/* <Footer /> */}
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

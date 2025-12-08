@@ -36,7 +36,7 @@ export default function HeroSection() {
                 className="border-white hover:bg-white hover:text-blue-900 px-6 md:px-8 py-3 text-base md:text-lg bg-transparent"
            
               >
-                Get Job Ready Degree
+                Book a Live Consultation
               </Button>
             </div>
             <p className="text-sm opacity-75 underline" >
