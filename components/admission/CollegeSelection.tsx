@@ -37,7 +37,7 @@ export function CollegeSelection({ onCollegeSelect }: CollegeSelectionProps) {
             >
               <div className="flex items-center gap-4">
                 <Image
-                  src={college.image || "/placeholder.svg"}
+                  src={ "/placeholder.svg"}
                   alt={college.name}
                   width={60}
                   height={60}

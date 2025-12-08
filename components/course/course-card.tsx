@@ -49,7 +49,7 @@ export function CourseCard({ course }: { course: CourseDetails }) {
               </div>
               <div className="flex items-center gap-1 ">
                 <IndianRupee className="h-4 w-4 text-primary" />
-                <span>{formatFees(course.min_fees, course.max_fees)}</span>
+                <span>{formatFees(course.fees.min, course.fees.max)}</span>
               </div>
               <div className="flex items-center gap-1 ">
                 <BarChart className="h-4 w-4 text-primary" />

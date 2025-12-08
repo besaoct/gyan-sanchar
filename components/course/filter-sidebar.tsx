@@ -78,7 +78,7 @@ export function FilterSidebar({
   const clearAllFilters = () => {
     onFiltersChange({
       search: "",
-      duration: [apiFilters?.duration.min ?? 0, apiFilters?.duration.max ?? 99],
+      duration: [apiFilters?.duration.min ?? 0, apiFilters?.duration.max ?? 0],
       modes: [],
       levels: [],
       feeRange: [apiFilters?.feeRange.min ?? 0, apiFilters?.feeRange.max ?? 0],
@@ -245,7 +245,7 @@ export function FilterSidebar({
               }
               max={apiFilters?.feeRange.max ?? 0}
               min={apiFilters?.feeRange.min ?? 0}
-              step={50000}
+              step={10000}
               className="w-full"
             />
           </CollapsibleContent>

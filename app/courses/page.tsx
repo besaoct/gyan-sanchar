@@ -16,10 +16,10 @@ import Loading from "./loading";
 export default function CourseListingPage() {
   const [filters, setFilters] = useState<CourseFilterOptions>({
     search: "",
-    duration: [0, 99],
+    duration: [0, 0],
     modes: [],
     levels: [],
-    feeRange: [0, 9900000],
+    feeRange: [0, 0],
   });
   const [courses, setCourses] = useState<CourseDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,8 +93,8 @@ export default function CourseListingPage() {
 
       // Fee Range Filter (check for overlap)
       if (
-        course.max_fees < filters.feeRange[0] ||
-        course.min_fees > filters.feeRange[1]
+        course.fees.max < filters.feeRange[0] ||
+        course.fees.min > filters.feeRange[1]
       ) {
         return false;
       }

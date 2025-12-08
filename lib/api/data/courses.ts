@@ -14,8 +14,10 @@ export interface CourseDetails {
   course_type: string;
   short_description: string;
   hero_image: string;
-  min_fees: number;
-  max_fees: number;
+  fees: {
+    min: number;
+    max: number;
+  }
   basic_info: {
     duration: number;
     mode: string[];
@@ -140,9 +142,9 @@ export const getCoursesFilters = async (): Promise<ApiResponse<CourseFilterOptio
     const levels = new Set<string>();
     const modes = new Set<string>();
     let minDuration = 0;
-    let maxDuration = 99;
+    let maxDuration = 0;
     let minFees = 0;
-    let maxFees = 9900000;
+    let maxFees = 0;
 
     courses?.forEach((course) => {
       levels.add(course.basic_info.level);
@@ -151,8 +153,8 @@ export const getCoursesFilters = async (): Promise<ApiResponse<CourseFilterOptio
       if (course.basic_info.duration < minDuration) minDuration = course.basic_info.duration;
       if (course.basic_info.duration > maxDuration) maxDuration = course.basic_info.duration;
 
-      if (course.min_fees < minFees) minFees = course.min_fees;
-      if (course.max_fees > maxFees) maxFees = course.max_fees;
+      if (course.fees.min < minFees) minFees = course.fees.min;
+      if (course.fees.max > maxFees) maxFees = course.fees.max;
     });
 
     return {
