@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { College } from "@/lib/api/dummy/colleges-data";
+import {  College } from "@/lib/api/data/colleges";
 
 function RatingPill({ rating, reviewCount }: { rating: number; reviewCount: number }) {
   return (
@@ -76,13 +76,15 @@ function RightImagePanel({ college }: { college: College }) {
   return (
     <div className="relative mx-auto sm:mx-4 lg:mx-0">
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
-        <div className="border-r p-2 px-4">
+  { college.nirf_ranking.rank ?     
+       <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">NIRF Rank</div>
           <div className="text-lg font-semibold">#{college.nirf_ranking?.rank}</div>
         </div>
+        : <></>}
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Highest Package</div>
-          <div className="text-lg font-semibold">{college.placement.highestPackage / 100000} Lacs</div>
+          <div className="text-lg font-semibold">{ (Number(college.placement?.highestPackage) / 100000).toFixed(1)} Lacs</div>
         </div>
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Year of Establishment</div>
@@ -106,11 +108,12 @@ function RightImagePanel({ college }: { college: College }) {
       </div>
 
       <div className="hidden sm:block">
+          { college.nirf_ranking.rank ? 
         <div className="pointer-events-none absolute -left-6 top-6">
           <InfoBadge title="NIRF Rank" value={`#${college.nirf_ranking?.rank}`} />
-        </div>
+        </div>: <></>}
         <div className="pointer-events-none absolute -left-6 -bottom-6">
-          <InfoBadge title="Highest Package" value={`${college.placement.highestPackage / 100000} Lacs`} />
+          <InfoBadge title="Highest Package" value={`${(Number(college.placement.highestPackage) / 100000).toFixed(1)} Lacs`} />
         </div>
         <div className="absolute -right-4 -top-4 ">
           <InfoBadge title="Year of Establishment" value={String(college.established)} align="right" />
@@ -162,7 +165,7 @@ export function CollegeHero({ college }: { college: College }) {
         </div>
 
         <p className="mt-6 text-pretty text-sm leading-relaxed text-foreground">
-          {college.description}
+          {college.short_description}
         </p>
 
    

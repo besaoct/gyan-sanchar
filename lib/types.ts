@@ -1,5 +1,4 @@
 
-
 export interface Review {
   id: string
   studentName: string
@@ -14,6 +13,7 @@ export interface FilterOptions {
   search: string
   states: string[]
   streams: string[]
+  courses: string[]
   instituteTypes: string[]
   feeRange: [number, number]
   rating: number
@@ -21,6 +21,7 @@ export interface FilterOptions {
   facilities: string[]
   studyMode: string[]
   exams: string[]
+
 }
 
 export interface Article {

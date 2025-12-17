@@ -44,8 +44,9 @@ const authApi = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
+     Accept: "application/json",
   },
+  
 });
 
 export const login = async (
@@ -58,7 +59,9 @@ export const login = async (
     );
     return response.data;
   } catch (error) {
+    console.log(error);
     if (axios.isAxiosError(error) && error.response) {
+      console.log(error.response.data);
       throw error.response.data as ApiErrorResponse;
     }
     throw error;

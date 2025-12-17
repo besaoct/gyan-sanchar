@@ -117,6 +117,15 @@
 }
 
 
+/* Fix popover/z-index issues inside Dialog */
+[data-radix-popper-content-wrapper] {
+  z-index: 9999 !important;
+}
+
+/* Or more specific */
+.PopoverContent {
+  z-index: 9999 !important;
+}
 
 @layer base {
   * {
@@ -147,6 +156,20 @@
 
 }
 
+
+.htmlContent{
+  @apply prose prose-sm max-w-none 
+                prose-p:leading-relaxed 
+                prose-p:m-0
+                prose-headings:m-0
+                prose-ul:pl-5 
+                prose-ol:pl-5
+                prose-li:mb-1
+                prose-table:text-sm
+                prose-th:px-2 prose-td:px-2
+                prose-th:py-1 prose-td:py-1
+                mb-6
+}
 
 .scrollbar-hide {
   scrollbar-width: none;

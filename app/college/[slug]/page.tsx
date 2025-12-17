@@ -34,25 +34,69 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { collegesData }  from "@/lib/api/dummy/colleges-data";
+import { getCollegeById, College } from "@/lib/api/data/colleges";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { CollegeHero } from "@/components/college/college-hero";
 import { cn } from "@/lib/utils";
 import { StickyBar } from "@/components/college/sticky-bar";
 import VideoReelCard from "@/components/college/video-reel-card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ReviewForm } from "@/components/college/review-form";
+import { ApplyNowForm } from "@/components/common/apply-now-form";
 
 interface CollegeDetailPageProps {
   params: {
-    id: string;
+    slug: string;
   };
 }
 
+interface ApplyNowType {
+    id: number;
+    name: string;
+    slug: string;
+    description_title: string;
+    description_keypoints: (string | null)[];
+}
+
+
 export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
-  const college = collegesData.find((c) => c.id === params.id);
+  const [college, setCollege] = useState<College | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [isStickyBarVisible, setIsStickyBarVisible] = useState(false);
+  const [applyNowData, setApplyNowData] = useState<ApplyNowType | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchCollegeAndTypes = async () => {
+      try {
+        setLoading(true);
+        const response = await getCollegeById(params.slug);
+        if (response.success && response.data) {
+          setCollege(response.data);
+        } else {
+          setError(response.message || "Failed to fetch college data.");
+        }
+
+         const typesResponse = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/types");
+         const typesResult = await typesResponse.json();
+         if (typesResult.success && typesResult.data) {
+             const applyNow = typesResult.data.find((t: ApplyNowType) => t.slug === 'apply-now');
+             setApplyNowData(applyNow);
+         }
+
+      } catch (err) {
+        setError("An unexpected error occurred.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollegeAndTypes();
+  }, [params.slug]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,6 +112,44 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <Skeleton className="h-64 w-full rounded-lg mb-8" />
+          <div className="flex gap-8">
+            <div className="w-full">
+              <Skeleton className="h-12 w-full mb-6" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col">
+        <Header />
+        <div className="flex-grow flex items-center justify-center text-center">
+          <div>
+            <h2 className="text-2xl font-bold text-destructive mb-4">
+              Error
+            </h2>
+            <p className="text-muted-foreground">{error}</p>
+            <Button onClick={() => window.location.reload()} className="mt-4">
+              Retry
+            </Button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!college) {
     notFound();
@@ -85,11 +167,13 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   ];
 
   return (
+
+
     <div className="min-h-screen bg-white">
       <Header />
       {/* Hero Section */}
       <div  className="px-4 container py-10 w-full max-w-full">
-        <CollegeHero college={collegesData[0]} />
+        <CollegeHero college={college} />
       </div>
 
       {/* Main Content */}
@@ -130,9 +214,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    {college.description}
-                  </p>
+                    <div className="htmlContent ">
+                   { college.description ?  <div dangerouslySetInnerHTML={{ __html: college.description }} /> :<></>
+}
+                    </div>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <h4 className="font-semibold mb-3">Key Information</h4>
@@ -162,7 +247,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             Student Strength:
                           </span>
                           <span className="font-medium">
-                            {college.campusLife.studentStrength.toLocaleString()}
+                            {college.campusLife.studentStrength}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
@@ -200,7 +285,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       </div>
                       <h4 className="font-semibold mb-3">Campus Life</h4>
                       <div className="flex flex-wrap gap-2">
-                        {college.campusLife.clubs.map((club) => (
+                        {college.campusLife.clubs?.map((club) => (
                           <Badge
                             key={club}
                             variant="outline"
@@ -221,7 +306,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   <div className="mt-6">
                     <h4 className="font-semibold mb-3">Notable Alumni</h4>
                     <div className="grid sm:grid-cols-2 gap-4">
-                      {college.notableAlumni.map((alumnus, index) => (
+                      {college.notableAlumni.map((alumnus: any, index) => (
                         <div
                           key={index}
                           className="p-3 border rounded-lg bg-[#044cac]/5"
@@ -240,7 +325,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
           )}
 
           {activeTab === "courses" && (
-            <div className="space-y-6">
+            <div className="space-y-6" id="courses">
               <Card className="border-none shadow-none p-0">
                 <CardHeader className="p-0">
                   <CardTitle className="flex items-center gap-2">
@@ -263,14 +348,14 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             variant="outline"
                             className="bg-[#044cac]/10 text-[#044cac]"
                           >
-                            {course.duration}
+                            {course.duration} y
                           </Badge>
                         </div>
                         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                           <div>
                             <span className="text-muted-foreground">Fees:</span>
                             <div className="font-medium">
-                              ₹{(course.fees / 100000).toFixed(1)}L
+                              {course.fees}
                             </div>
                           </div>
                           <div>
@@ -283,8 +368,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             <span className="text-muted-foreground">
                               Eligibility:
                             </span>
-                            <div className="font-medium">
-                              {course.eligibility}
+                            <div className="font-medium line-clamp-1">
+                              {Array.isArray(course.eligibility_exams) ? course.eligibility_exams.join(", ") : course.eligibility_exams}
                             </div>
                           </div>
                         </div>
@@ -292,16 +377,36 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           <span className="font-semibold">
                             Program Highlights:
                           </span>{" "}
-                          {course.highlights}
+                          {typeof course.highlights === 'string' ? course.highlights : course.highlights.map(h => h.title).join(', ')}
                         </div>
-                    <div className="mt-6 text-right">
+                    <div className="mt-6 text-right flex gap-2 flex-wrap justify-end">
                     <Button
                       variant="outline"
                       className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
                     >
                       <BookOpen className="h-4 w-4 mr-2" />
-                      View Detailed Syllabus
+                      View Detailed Course
                     </Button>
+                    {applyNowData && college.id && course.id && (
+                         <ApplyNowForm
+                            college_ids={[Number(college.id)]}
+                            course_ids={[Number(course.id)]}
+                            stream={college.streams?.[0]?.name}
+                            title={applyNowData.description_title}
+                            description={
+                                <ul className="space-y-4 text-white/90">
+                                {applyNowData.description_keypoints.map((point, index) =>
+                                    point ? <li key={index}>{point}</li> : null
+                                )}
+                                </ul>
+                            }
+                            trigger={
+                                <Button>
+                                    Apply Now
+                                </Button>
+                            }
+                        />
+                    )}
                   </div>
                       </div>
                     ))}
@@ -312,8 +417,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             </div>
           )}
 
-          {activeTab === "admission" && (
-            <div className="space-y-6">
+          {activeTab === "admission" && college.admissionProcess && (
+            <div className="space-y-6" id="admission">
               <Card className="border-none shadow-none p-0">
                 <CardHeader className="p-0">
                   <CardTitle className="flex items-center gap-2">
@@ -326,7 +431,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     <div>
                       <h4 className="font-semibold mb-3">Entrance Exams</h4>
                       <div className="flex flex-wrap gap-2">
-                        {college.admissionProcess.exams.map((exam) => (
+                        {college.admissionProcess.exams?.map((exam) => (
                           <Badge
                             key={exam}
                             variant="secondary"
@@ -339,21 +444,22 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-3">Admission Criteria</h4>
-                      <p className="text-muted-foreground mb-4">
-                        {college.admissionProcess.criteria}
-                      </p>
-                      <p className="text-muted-foreground">
-                        The admission process includes application submission,
-                        entrance exam scores, and counseling rounds. Shortlisted
-                        candidates may need to attend interviews or group
-                        discussions for specific programs.
-                      </p>
+                        
+                        <div className="htmlContent">
+                          {
+                            college.admissionProcess.criteria ? (
+                              <div dangerouslySetInnerHTML={{ __html: college.admissionProcess.criteria }} />
+                            ) : <></>
+                          }
+                        </div>
+
+              
                     </div>
                     <div>
                       <h4 className="font-semibold mb-3">
                         Application Process
                       </h4>
-                      <ol className="list-decimal list-inside text-sm text-muted-foreground space-y-2">
+                      <ol className="list-disc list-inside text-sm text-muted-foreground space-y-2">
                         <li>
                           Register on the official {college.name} website.
                         </li>
@@ -366,17 +472,27 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         </li>
                         <li>
                           Pay the application fee of ₹
-                          {college.admissionProcess.applicationFee / 1000}K.
+                          {college.admissionProcess.applicationFee}.
                         </li>
                         <li>
                           Attend counseling or interviews as per schedule.
                         </li>
                       </ol>
+
+                      <div className="htmlContent mt-4">
+                        {college.admissionProcess.applicationProcess ? (
+                          <div dangerouslySetInnerHTML={{ __html: college.admissionProcess.applicationProcess }} />
+                        ) : ( <></>
+                        )}
+                        </div>
+
+                    
+
                     </div>
                     <div>
                       <h4 className="font-semibold mb-3">Important Dates</h4>
                       <div className="text-sm text-muted-foreground">
-                        {college.admissionProcess.importantDates.map(
+                        {college.admissionProcess.importantDates?.map(
                           (date, index) => (
                             <div
                               key={index}
@@ -390,13 +506,30 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       </div>
                     </div>
                     <div className="text-center">
-                      <Button
-                        variant="outline"
-                        className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
-                      >
-                        <Mail className="h-4 w-4 mr-2" />
-                        Apply Now
-                      </Button>
+                    {applyNowData && college.id && (
+                        <ApplyNowForm
+                            college_ids={[Number(college.id)]}
+                            course_ids={null} // No specific course for general admission
+                            stream={college.streams?.[0]?.name}
+                            title={applyNowData.description_title}
+                            description={
+                                <ul className="space-y-4 text-white/90">
+                                {applyNowData.description_keypoints.map((point, index) =>
+                                    point ? <li key={index}>{point}</li> : null
+                                )}
+                                </ul>
+                            }
+                            trigger={
+                                <Button
+                                    variant="outline"
+                                    className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
+                                >
+                                    <Mail className="h-4 w-4 mr-2" />
+                                    Apply Now
+                                </Button>
+                            }
+                        />
+                    )}
                     </div>
                   </div>
                 </CardContent>
@@ -405,7 +538,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
           )}
 
           {activeTab === "fees" && (
-            <div className="space-y-6">
+            <div className="space-y-6" id="fees">
               <Card className="border-none shadow-none p-0">
                 <CardHeader className="p-0">
                   <CardTitle className="flex items-center gap-2">
@@ -414,11 +547,15 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
+                  
+                   <div className="htmlContent">
+                      { college.feesStructure?  <div dangerouslySetInnerHTML={{ __html: college.feesStructure}} /> :<></>}
+                   </div>
+                  
                   <div className="space-y-6">
                     <div className="bg-[#044cac]/5 rounded-lg p-4 text-center">
                       <div className="text-2xl font-bold text-[#044cac] mb-2">
-                        ₹{(college.fees.min / 100000).toFixed(1)}L - ₹
-                        {(college.fees.max / 100000).toFixed(1)}L
+                        ₹{college.fees.min} - ₹{college.fees.max}
                       </div>
                       <div className="text-muted-foreground">
                         Total Course Fees
@@ -432,7 +569,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         >
                           <span>{course.name}</span>
                           <span className="font-semibold">
-                            ₹{(course.fees / 100000).toFixed(1)}L
+                            {course.fees}
                           </span>
                         </div>
                       ))}
@@ -443,18 +580,13 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         <div className="flex justify-between items-center border-b pb-2 mb-2">
                           <span>Hostel Fees (Annual):</span>
                           <span className="font-medium">
-                            ₹
-                            {(college.additionalFees.hostel / 100000).toFixed(
-                              1
-                            )}
-                            L
+                            {college.additionalFees.hostel}
                           </span>
                         </div>
                         <div className="flex justify-between items-center border-b pb-2">
                           <span>Mess Fees (Annual):</span>
                           <span className="font-medium">
-                            ₹{(college.additionalFees.mess / 100000).toFixed(1)}
-                            L
+                            {college.additionalFees.mess}
                           </span>
                         </div>
                       </div>
@@ -462,7 +594,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     <div>
                       <h4 className="font-semibold mb-3">Scholarships</h4>
                       <div className="grid gap-4">
-                        {college.scholarships.map((scholarship, index) => (
+                        {college.scholarships.map((scholarship: any, index) => (
                           <div
                             key={index}
                             className="p-3 border rounded-lg bg-[#044cac]/5"
@@ -534,15 +666,26 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {college.hostelDetails}
-                      </p>
+                      {/* <p className="text-sm text-muted-foreground"> */}
+                        {college.hostelDetails ?
+                        <div className="htmlContent">
+                          <div dangerouslySetInnerHTML={{ __html: college.hostelDetails }} />
+                        </div>
+                        :<></>
+                        }
+                      {/* </p> */}
                     </div>
                     <div>
                       <h4 className="font-semibold mb-3">Campus Highlights</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {college.campusHighlights}
-                      </p>
+                      {/* <p className="text-sm text-muted-foreground"> */}
+                        
+                        {college.campusHighlights ?
+                        <div className="htmlContent">
+                          <div dangerouslySetInnerHTML={{ __html: college.campusHighlights }} />
+                        </div>
+                        :<></>
+                        }
+                      {/* </p> */}
                     </div>
                   </div>
                 </CardContent>
@@ -550,7 +693,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             </div>
           )}
 
-          {activeTab === "placement" && (
+          {activeTab === "placement" && college.placement && (
             <div className="space-y-6">
               <Card className="border-none shadow-none p-0">
                 <CardHeader className="p-0">
@@ -563,9 +706,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
                     <div className="text-center p-4 bg-green-50 rounded-lg">
                       <div className="text-2xl font-bold text-green-600 mb-1">
-                        ₹
-                        {(college.placement.averagePackage / 100000).toFixed(1)}
-                        L
+                      { (Number(college.placement?.averagePackage) / 100000).toFixed(1)} Lacs
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Average Package
@@ -573,9 +714,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </div>
                     <div className="text-center p-4 bg-blue-50 rounded-lg">
                       <div className="text-2xl font-bold text-blue-600 mb-1">
-                        ₹
-                        {(college.placement.highestPackage / 100000).toFixed(1)}
-                        L
+                   { (Number(college.placement?.highestPackage) / 100000).toFixed(1)} Lacs
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Highest Package
@@ -594,7 +733,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     <div>
                       <h4 className="font-semibold mb-3">Top Recruiters</h4>
                       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {college.placement.topRecruiters.map((recruiter) => (
+                        {college.placement.topRecruiters?.map((recruiter) => (
                           <div
                             key={recruiter}
                             className="p-3 border rounded-lg text-center bg-[#044cac]/5"
@@ -615,7 +754,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         Notable Placement Highlights
                       </h4>
                       <div className="grid gap-4">
-                        {college.placement.highlights.map(
+                        {college.placement.highlights?.map(
                           (highlight, index) => (
                             <div
                               key={index}
@@ -634,6 +773,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               </Card>
             </div>
           )}
+
 
           {activeTab === "reviews" && (
             <div className="space-y-6">
@@ -685,12 +825,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       ))}
                     </div>
                     <div className="text-center">
-                      <Button
-                        variant="outline"
-                        className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
-                      >
-                        Submit Your Review
-                      </Button>
+                   { college.id ?  <ReviewForm collegeId={Number(college.id)} />: <></>}
                     </div>
                   </div>
                 </CardContent>
@@ -717,7 +852,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         >
                           <div className="relative h-64 w-full overflow-hidden rounded-lg">
                             <Image
-                              src={`/college/${image}` || "/placeholder.svg"}
+                              src={image || "/placeholder.svg"}
                               alt={`${college.name} campus ${index + 1}`}
                               fill
                               className="object-cover"
@@ -796,7 +931,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               Get personalized counseling and application assistance
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+              <Button className="bg-orange-500 hover:bg-orange-600  text-white">
                 <Phone className="h-4 w-4 mr-2" />
                 Schedule Counseling
               </Button>
@@ -810,13 +945,13 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             </div>
           </div>
         </div>
-      </div>
+    </div>
+     
 
 
       <StickyBar isVisible={isStickyBarVisible} />
       <Footer />
     </div>
   );
+
 }
-
-
