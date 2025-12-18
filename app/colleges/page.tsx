@@ -238,71 +238,66 @@ export default function CollegeListingPage() {
 
   if (loading) {
     return (
-     <div className="min-h-screen bg-muted/80">
+      <div className="min-h-screen bg-muted/80">
         <Header />
         <div className="container mx-auto px-4 py-6">
-
-        <div className="flex gap-6">
-
-         {/* Desktop Filter Sidebar Skeleton */}
-         <div className="w-80 flex-shrink-0 hidden lg:block">
-            <FilterSidebarSkeleton/>
-          </div>
-          
-   
-          <div className="flex-1">
-
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">
-                  Loading Colleges...
-                </h2>
-                <p className="text-muted-foreground">
-                  Please wait while we fetch the colleges for you.
-                </p>
-              </div>
+          <div className="flex gap-6">
+            {/* Desktop Filter Sidebar Skeleton */}
+            <div className="w-80 flex-shrink-0 hidden lg:block">
+              <FilterSidebarSkeleton />
             </div>
 
-<div className="space-y-6">
-  {[...Array(5)].map((_, i) => (
-    <div
-      key={i}
-      className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200"
-    >
-      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-        {/* College Image Skeleton */}
-        <Skeleton className="h-48 w-full sm:h-32 sm:w-48 rounded-lg flex-shrink-0 order-1 sm:order-none" />
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Loading Colleges...
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Please wait while we fetch the colleges for you.
+                  </p>
+                </div>
+              </div>
 
-        {/* Content */}
-        <div className="flex-1 space-y-4">
-          {/* Title */}
-          <Skeleton className="h-7 w-3/4 sm:w-80" />
+              <div className="space-y-6">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200"
+                  >
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                      {/* College Image Skeleton */}
+                      <Skeleton className="h-48 w-full sm:h-32 sm:w-48 rounded-lg flex-shrink-0 order-1 sm:order-none" />
 
-          {/* Location / Subtitle */}
-          <Skeleton className="h-4 w-1/2 sm:w-64" />
+                      {/* Content */}
+                      <div className="flex-1 space-y-4">
+                        {/* Title */}
+                        <Skeleton className="h-7 w-3/4 sm:w-80" />
 
-          {/* Badges / Tags (e.g., Rating, Type, Fees) */}
-          <div className="flex flex-wrap gap-3">
-            <Skeleton className="h-8 w-28 rounded-full" />
-            <Skeleton className="h-8 w-32 rounded-full" />
-            <Skeleton className="h-8 w-36 rounded-full" />
-          </div>
+                        {/* Location / Subtitle */}
+                        <Skeleton className="h-4 w-1/2 sm:w-64" />
 
-          {/* Description lines */}
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-            <Skeleton className="h-4 w-4/5" />
+                        {/* Badges / Tags (e.g., Rating, Type, Fees) */}
+                        <div className="flex flex-wrap gap-3">
+                          <Skeleton className="h-8 w-28 rounded-full" />
+                          <Skeleton className="h-8 w-32 rounded-full" />
+                          <Skeleton className="h-8 w-36 rounded-full" />
+                        </div>
+
+                        {/* Description lines */}
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-5/6" />
+                          <Skeleton className="h-4 w-4/5" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  ))}
-</div>
-
-          </div>
-        </div>
-      </div>
 
         <Footer />
       </div>
@@ -372,7 +367,7 @@ export default function CollegeListingPage() {
               </Sheet>
 
               <div>
-                <StudentVisaFormButton/>
+                <StudentVisaFormButton />
               </div>
             </div>
 
@@ -409,13 +404,15 @@ export default function CollegeListingPage() {
                     if (!streamInfo?.description) return null;
 
                     return (
-                      <div key={streamName} className="flex gap-2">
-                        <p className="font-medium text-foreground">
-                          {streamName}:
-                        </p>
-                        <p className="text-sm text-muted-foreground ">
+                      <div key={streamName} className="flex flex-col">
+                      <div className="inline">
+                          <span className="font-medium text-foreground ">
+                          {streamName}: {" "}
+                        </span>
+                        <span className="text-sm text-muted-foreground flex-1">
                           {streamInfo.description}
-                        </p>
+                        </span>
+                      </div>
                       </div>
                     );
                   })}

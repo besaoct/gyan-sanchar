@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -71,6 +71,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const [applyNowData, setApplyNowData] = useState<ApplyNowType | null>(null);
   const [selectedReel, setSelectedReel] = useState<VideoReel | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchCollegeAndTypes = async () => {
@@ -394,6 +395,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </div>
                           <div className="mt-6 text-right flex gap-2 flex-wrap justify-end">
                             <Button
+                              onClick={()=>router.push(`/course/${course.slug ||"#"}`)}
                               variant="outline"
                               className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
                             >
