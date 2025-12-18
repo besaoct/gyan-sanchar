@@ -13,8 +13,8 @@ export interface Location {
 }
 
 export interface FeesRange {
-  min: number;
-  max: number;
+  min: number | string;
+  max: number | string;
 }
 
 export interface AdditionalFees {
@@ -386,8 +386,8 @@ college.courses?.forEach((course) => {
       });
 
       // Fallback to college-level fees if available
-      if (college.fees?.min !== undefined && college.fees.min < minFee) minFee = college.fees.min;
-      if (college.fees?.max !== undefined && college.fees.max > maxFee) maxFee = college.fees.max;
+      if (college.fees?.min !== undefined && Number(college.fees.min) < minFee) minFee = Number(college.fees.min);
+      if (college.fees?.max !== undefined && Number(college.fees.max) > maxFee) maxFee = Number(college.fees.max);
 
       // Rating
       if (college.rating > highestRating) highestRating = college.rating;

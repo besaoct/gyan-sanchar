@@ -187,8 +187,8 @@ export default function CollegeListingPage() {
         return false;
 
       if (
-        college.fees.min > filters.feeRange[1] ||
-        college.fees.max < filters.feeRange[0]
+        Number(college.fees.min) > filters.feeRange[1] ||
+        Number(college.fees.max) < filters.feeRange[0]
       )
         return false;
 

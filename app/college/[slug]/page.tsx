@@ -31,16 +31,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getCollegeById, College } from "@/lib/api/data/colleges";
+import { VideoReel } from "@/lib/api/data/colleges";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { CollegeHero } from "@/components/college/college-hero";
 import { cn } from "@/lib/utils";
 import { StickyBar } from "@/components/college/sticky-bar";
 import VideoReelCard from "@/components/college/video-reel-card";
+import VideoDialogPlayer from "@/components/college/VideoDialogPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReviewForm } from "@/components/college/review-form";
 import { ApplyNowForm } from "@/components/common/apply-now-form";
@@ -66,6 +69,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [isStickyBarVisible, setIsStickyBarVisible] = useState(false);
   const [applyNowData, setApplyNowData] = useState<ApplyNowType | null>(null);
+  const [selectedReel, setSelectedReel] = useState<VideoReel | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -662,10 +666,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       {college.facilities.map((facility) => (
                         <div
                           key={facility}
-                          className="flex items-center gap-2 p-3 border rounded-lg bg-[#044cac]/5"
+                          className="flex items-start gap-2 p-3 border rounded-lg bg-[#044cac]/5"
                         >
-                          <Building className="h-5 w-5 text-[#044cac]" />
-                          <span>{facility}</span>
+                          <Building className="h-4 w-4 mt-1 min-w-4 text-[#044cac]" />
+                          <p>{facility}</p>
                         </div>
                       ))}
                     </div>
@@ -961,7 +965,22 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   key={reel.id}
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                 >
-                  <VideoReelCard reel={reel} />
+                  <Dialog  onOpenChange={(open) => !open && setSelectedReel(null)} >
+                    <DialogTrigger asChild>
+                      <div className="cursor-pointer" onClick={() => setSelectedReel(reel)}>
+                        <VideoReelCard reel={reel} />
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-7xl w-full h-auto mx-auto  max-h-[96%] p-0 border-none ">
+                      {selectedReel && (
+                        <VideoDialogPlayer
+                          reel={selectedReel}
+                          isOpen={true} // Dialog is open
+                          onClose={() => setSelectedReel(null)}
+                        />
+                      )}
+                    </DialogContent>
+                  </Dialog>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -972,7 +991,22 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
           {/* ---- Mobile vertical scroll (no carousel) ---- */}
           <div className="md:hidden space-y-6">
             {college.videoReels?.map((reel) => (
-              <VideoReelCard key={reel.id} reel={reel} />
+              <Dialog onOpenChange={(open) => !open && setSelectedReel(null)}>
+                <DialogTrigger asChild>
+                  <div className="cursor-pointer" onClick={() => setSelectedReel(reel)}>
+                    <VideoReelCard key={reel.id} reel={reel} />
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl p-0">
+                  {selectedReel && (
+                    <VideoDialogPlayer
+                      reel={selectedReel}
+                      isOpen={true} // Dialog is open
+                      onClose={() => setSelectedReel(null)}
+                    />
+                  )}
+                </DialogContent>
+              </Dialog>
             ))}
           </div>
         </div>

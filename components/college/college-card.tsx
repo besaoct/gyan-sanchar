@@ -140,6 +140,7 @@ export function CollegeCard({
             </DialogTrigger>
             <DialogContent className="max-w-5xl w-[80%]">
               <CollegeImageCarousel
+                onClick={stopCardNavigation}
                 images={college.gallery}
                 collegeName={college.name}
               />
@@ -212,7 +213,7 @@ export function CollegeCard({
               {/* Fees */}
               <span className="flex items-center gap-2">
                 <span className="font-semibold">Fees:</span>
-                <span>{formatFees(college.fees.min, college.fees.max)}</span>
+                <span>{formatFees(Number(college.fees.min), Number(college.fees.max))}</span>
                 <Link
                   href={`/college/${collegeId}#fees`}
                   className="text-primary hover:underline"
@@ -321,7 +322,7 @@ export function CollegeCard({
           <span className="flex items-center gap-2">
             <span className="font-semibold text-foreground">Fees:</span>
             <span className="text-foreground">
-              {formatFees(college.fees.min, college.fees.max)}
+              {formatFees(Number(college.fees.min), Number(college.fees.max))}
             </span>
             <Link
               href={`/college/${collegeId}#fees`}

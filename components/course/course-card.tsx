@@ -28,6 +28,8 @@ export function CourseCard({ course }: { course: CourseDetails }) {
 
   const router = useRouter();
 
+  const correctHeroImageLink = course.hero_image.replace("/storage", "")
+
   
   return (
     <Card className="overflow-hidden shadow-none p-0 cursor-pointer"
@@ -37,7 +39,7 @@ export function CourseCard({ course }: { course: CourseDetails }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative h-48 md:h-full">
             <Image
-              src={course.hero_image || "/course/demo.jpg"}
+              src={correctHeroImageLink || "/course/demo.jpg"}
               alt={course.course_name}
               fill
               className="object-cover rounded-lg"
