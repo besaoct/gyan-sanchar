@@ -745,9 +745,11 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-3">Placement Process</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {college.placement.placementProcess}
-                      </p>
+                      {/* <p className="text-sm text-muted-foreground"> */}
+                  {  college.placement.placementProcess ?    <div className="htmlContent">
+                          <div dangerouslySetInnerHTML={{ __html: college.placement.placementProcess }} />
+                          </div> : <></>}
+                      {/* </p> */}
                     </div>
                     <div>
                       <h4 className="font-semibold mb-3">
