@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { notFound, useRouter } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -72,6 +72,19 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const [selectedReel, setSelectedReel] = useState<VideoReel | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
+
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+    router.push(`?tab=${tabId}`, { scroll: false });
+  };
 
   useEffect(() => {
     const fetchCollegeAndTypes = async () => {
@@ -188,7 +201,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => handleTabClick(tab.id)}
                     className={cn(
                       "whitespace-nowrap py-4 font-medium last:pr-4",
                       tab.id === activeTab
