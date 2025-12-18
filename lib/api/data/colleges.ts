@@ -63,7 +63,7 @@ export interface Stream {
 export interface AdmissionProcess {
   exams?: string[] | null;
   criteria?: string;
-  application_process?: string;
+  application_process?: string | null;
   applicationFee?: string | number;
   importantDates?: { event: string; date: string }[];
   [key: string]: any; // fallback for dynamic structures

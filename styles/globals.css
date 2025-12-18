@@ -169,7 +169,14 @@
                 prose-th:px-2 prose-td:px-2
                 prose-th:py-1 prose-td:py-1
                 mb-6
+                
+                /* prose-ul:list-inside prose-ol:list-inside */
+              
 }
+
+ /* .htmlContent div:has(li)  {
+  padding-left: calc(var(--spacing) * 5) !important;
+} */
 
 .scrollbar-hide {
   scrollbar-width: none;
