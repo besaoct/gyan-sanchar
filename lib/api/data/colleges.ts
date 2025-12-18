@@ -109,7 +109,7 @@ export interface College {
   name: string;
   verifyCollege?: boolean;
   location: Location;
-  type: "Private" | "Government" | string;
+  type: "Private" | "Deemed" | "Government" | string;
   rating: number;
   reviews: number;
   fees: FeesRange;
@@ -130,8 +130,8 @@ export interface College {
   campusSize: number;
   campusHighlights: string | null;
   visionMission: string | null;
-  notableAlumni: any[]; // often malformed JSON strings or objects
-  scholarships: any[];  // same issue — often malformed
+  notableAlumni: any[]; 
+  scholarships: any[];  
   studyMode: string[];
   admissionProcess: AdmissionProcess ;
   placement: Placement;
