@@ -14,7 +14,7 @@ interface DropdownData {
   topColleges: { name: string; slug: string }[]
 }
 
-export default function CollegesDropdown() {
+export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
   const router = useRouter()
   const [data, setData] = useState<DropdownData | null>(null)
   const [loading, setLoading] = useState(true)

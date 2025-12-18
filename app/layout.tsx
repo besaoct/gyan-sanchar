@@ -32,7 +32,7 @@ export default function RootLayout({
         <AuthProvider>
           {/* <Header /> */}
           {children}
-          <Toaster />
+          <Toaster  />
           {/* <Footer /> */}
         </AuthProvider>
         <Analytics />
