@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 }
 
 import { AuthProvider } from '@/contexts/auth/AuthContext'
-import Header from '@/components/common/Header'
-import  Footer  from '@/components/common/Footer'
+// import Header from '@/components/common/Header'
+// import  Footer  from '@/components/common/Footer'
 import { Toaster } from '@/components/ui/toaster'
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
         <AuthProvider>
           {/* <Header /> */}
           {children}
-          <Toaster />
+          <Toaster  />
           {/* <Footer /> */}
         </AuthProvider>
         <Analytics />

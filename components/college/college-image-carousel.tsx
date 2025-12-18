@@ -17,6 +17,7 @@ import Autoplay from "embla-carousel-autoplay";
 interface CollegeImageCarouselProps {
   images: string[];
   collegeName: string;
+  onClick: (e: any) => void;
 }
 
 export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarouselProps) {
@@ -47,12 +48,18 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
   }, [mainApi, thumbApi]);
 
   const onThumbClick = (index: number) => {
+
     mainApi?.scrollTo(index);
   };
 
+    const stopCardNavigation = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div>
+    <div  onClick={stopCardNavigation}>
       <Carousel
+       onClick={stopCardNavigation}
         setApi={setMainApi}
         // plugins={[plugin.current.]}
         className="w-full bg-transparent"
@@ -65,7 +72,7 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
               <Card className="border-none shadow-none bg-transparent">
                 <CardContent className="relative aspect-video bg-transparent">
                   <Image
-                    src={`/college/${image}` || "/placeholder.svg"}
+                    src={image || "/placeholder.svg"}
                     alt={`${collegeName} campus image ${index + 1}`}
                     fill
                     className="object-cover"
@@ -83,7 +90,13 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
           {images.map((image, index) => (
             <CarouselItem
               key={index}
-              onClick={() => onThumbClick(index)}
+              onClick={(e:React.MouseEvent) =>
+              { 
+                return (
+                stopCardNavigation(e),
+                onThumbClick(index)
+              )}
+              }
               className="basis-1/4 cursor-pointer"
             >
               <div
@@ -92,7 +105,7 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
                 }`}
               >
                 <Image
-                  src={`/college/${image}` || "/placeholder.svg"}
+                  src={`${image}` || "/placeholder.svg"}
                   alt={`${collegeName} thumbnail ${index + 1}`}
                   fill
                   className="object-cover rounded-md"

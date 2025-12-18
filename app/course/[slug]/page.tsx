@@ -17,7 +17,7 @@ import { CourseHero } from "@/components/course/course-hero";
 import { cn } from "@/lib/utils";
 import { CommonAdmissionForm } from "@/components/common/common-form";
 import { StickyBar } from "@/components/course/sticky-bar";
-import { ExternalLink, Phone } from "lucide-react";
+import { AlertCircle, ExternalLink, Phone } from "lucide-react";
 import Loading from "./loading";
 import { CourseCollegeCard } from "@/components/course/course-college-card";
 
@@ -44,7 +44,7 @@ export default function CourseDetailsPage() {
             setError(response.message);
           }
         } catch (err) {
-          setError("Failed to fetch course details");
+          setError("Something went Wrong !");
         } finally {
           setLoading(false);
         }
@@ -86,9 +86,13 @@ export default function CourseDetailsPage() {
       <Header />
 
       { error ? (
-        <div className="min-h-screen bg-white flex items-center justify-center">
-          <p className="text-red-500">{error}</p>
-        </div>
+    <div className="min-h-screen bg-white flex items-center justify-center">
+  <div className="text-center">
+    <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+    <p className="text-xl font-medium text-red-600">{error}</p>
+    <p className="mt-2 text-sm text-red-400">Something went wrong. Please try again later.</p>
+  </div>
+</div>
       ) : !course ? (
         <div className="min-h-screen bg-white flex items-center justify-center">
           <p>Course not found.</p>

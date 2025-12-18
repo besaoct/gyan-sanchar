@@ -50,10 +50,7 @@ export default function ServicesSection() {
               placeholder="Select Course"
               className="border-1 h-10 bg-gray-50 py-2 flex-1 shadow-none"
             />
-            <Input
-              placeholder="All Specialization"
-              className="border-1 h-10 bg-gray-50 py-2 flex-1 shadow-none"
-            />
+     
           </div>
         </div>
 

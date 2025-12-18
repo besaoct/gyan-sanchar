@@ -2,20 +2,14 @@
    VideoReelCard – handles play/pause, mute/unmute, thumbnail
    -------------------------------------------------------------- */
 
+import { VideoReel } from "@/lib/api/data/colleges";
 import { Play, Volume2, VolumeX } from "lucide-react";
 import React from "react";
 import { useRef, useState } from "react";
-interface Reel {
-  id: string;
-  type: "local" | "youtube";
-  src?: string;
-  youtubeId?: string;
-  thumbnail?: string;
-  title: string;
-}
+
 
 interface VideoReelCardProps {
-  reel: Reel;
+  reel: VideoReel;
 }
 
 export default function VideoReelCard({ reel }: VideoReelCardProps) {
@@ -31,15 +25,19 @@ export default function VideoReelCard({ reel }: VideoReelCardProps) {
   const togglePlay = () => {
     if (reel.type === "local") {
       if (!videoRef.current) return;
-      if (isPlaying) videoRef.current.pause();
-      else videoRef.current.play();
-      setIsPlaying(!isPlaying);
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
     } else {
       // YouTube
       if (!ytPlayerRef.current) return;
-      if (isPlaying) ytPlayerRef.current.pauseVideo();
-      else ytPlayerRef.current.playVideo();
-      setIsPlaying(!isPlaying);
+      if (ytPlayerRef.current.getPlayerState() !== 1) {
+        ytPlayerRef.current.playVideo();
+      } else {
+        ytPlayerRef.current.pauseVideo();
+      }
     }
   };
 
@@ -93,15 +91,17 @@ export default function VideoReelCard({ reel }: VideoReelCardProps) {
   return (
     <div className="group relative overflow-hidden rounded-xl bg-white shadow-md">
       {/* ---------- VIDEO / YOUTUBE ---------- */}
-      {reel.type === "local" ? (
+      {reel.type === "local" && reel.src ? (
         <video
           ref={videoRef}
           src={reel.src}
-          poster={reel.thumbnail}
+          poster={reel.thumbnail || "placeholder.svg"}
           className="aspect-video w-full object-cover"
           loop
           playsInline
           muted={isMuted}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
         />
       ) : (
         <div

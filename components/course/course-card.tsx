@@ -8,6 +8,7 @@ import { Clock,  BarChart, IndianRupee } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import type { CourseDetails } from "@/lib/api/data/courses";
+import { useRouter } from "next/navigation";
 
 export function CourseCard({ course }: { course: CourseDetails }) {
   const formatFees = (min: number, max: number) => {
@@ -20,13 +21,25 @@ export function CourseCard({ course }: { course: CourseDetails }) {
     return `${formatAmount(min)} - ${formatAmount(max)}`;
   };
 
+    // Prevent card navigation when clicking inner actions
+  const stopCardNavigation = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
+
+  const router = useRouter();
+
+  const correctHeroImageLink = course.hero_image.replace("/storage", "")
+
+  
   return (
-    <Card className="overflow-hidden shadow-none p-0">
+    <Card className="overflow-hidden shadow-none p-0 cursor-pointer"
+          onClick={() => router.push(`/course/${course.slug}`)}
+    >
       <CardContent className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative h-48 md:h-full">
             <Image
-              src={course.hero_image || "/course/demo.jpg"}
+              src={correctHeroImageLink || "/course/demo.jpg"}
               alt={course.course_name}
               fill
               className="object-cover rounded-lg"
@@ -49,7 +62,7 @@ export function CourseCard({ course }: { course: CourseDetails }) {
               </div>
               <div className="flex items-center gap-1 ">
                 <IndianRupee className="h-4 w-4 text-primary" />
-                <span>{formatFees(course.min_fees, course.max_fees)}</span>
+                <span>{formatFees(course.fees.min, course.fees.max)}</span>
               </div>
               <div className="flex items-center gap-1 ">
                 <BarChart className="h-4 w-4 text-primary" />
@@ -60,7 +73,8 @@ export function CourseCard({ course }: { course: CourseDetails }) {
             <p className="text-sm text-muted-foreground line-clamp-2">{course.short_description}</p>
    
             <div className="flex flex-wrap gap-2 mt-auto">
-              <Link href={`/course/${course.slug}`}>
+              <Link href={`/course/${course.slug}`}
+                onClick={stopCardNavigation}>
                 <Button className="bg-primary hover:bg-primary/90 text-white">
                   View Details
                 </Button>

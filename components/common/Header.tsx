@@ -113,7 +113,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
               {isAuthenticated ? (
                 <div className="flex items-center gap-2">
                   <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
-                  <span>{user?.name}</span>
+                  <span className="sr-only">{user?.name}</span>
                   <Button onClick={logout} variant="destructive">
                     Logout
                   </Button>
@@ -127,7 +127,9 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
 
             {isCollegesOpen && (
               <>
-                <CollegesDropdown onClose={() => setIsCollegesOpen(false)} />
+                <CollegesDropdown 
+                 onClose={() => setIsCollegesOpen(false)} 
+                />
                 <div
                   className="fixed inset-0 z-[30]"
                   onClick={() => setIsCollegesOpen(false)}

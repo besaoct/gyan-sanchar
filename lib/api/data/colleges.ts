@@ -3,6 +3,7 @@ import axios from "axios";
 import { BASE_URL, API_ENDPOINTS } from "../config/urls";
 import { ApiResponse, ApiErrorResponse } from "./auth"; // Re-using common types
 
+
 // Type Definitions for Colleges
 
 
@@ -12,8 +13,8 @@ export interface Location {
 }
 
 export interface FeesRange {
-  min: number;
-  max: number;
+  min: number | string;
+  max: number | string;
 }
 
 export interface AdditionalFees {
@@ -54,10 +55,15 @@ export interface Hostel {
   girls: boolean;
 }
 
+export interface Stream {
+  name: string;
+  description: string;
+}
+
 export interface AdmissionProcess {
-  exams?: string[];
+  exams?: string[] | null;
   criteria?: string;
-  application_process?: string;
+  application_process?: string | null;
   applicationFee?: string | number;
   importantDates?: { event: string; date: string }[];
   [key: string]: any; // fallback for dynamic structures
@@ -101,8 +107,9 @@ export interface College {
   id? : string | number;
   slug: string;
   name: string;
+  verifyCollege?: boolean;
   location: Location;
-  type: "Private" | "Government" | string;
+  type: "Private" | "Deemed" | "Government" | string;
   rating: number;
   reviews: number;
   fees: FeesRange;
@@ -115,7 +122,7 @@ export interface College {
   description: string | null;
   established: number;
   accreditation: string[];
-  streams: string[];
+  streams: Stream[];
   courses: Course[];
   facilities: string[];
   hostel: Hostel;
@@ -123,10 +130,10 @@ export interface College {
   campusSize: number;
   campusHighlights: string | null;
   visionMission: string | null;
-  notableAlumni: any[]; // often malformed JSON strings or objects
-  scholarships: any[];  // same issue — often malformed
+  notableAlumni: any[]; 
+  scholarships: any[];  
   studyMode: string[];
-  admissionProcess: AdmissionProcess | any[]; // mixed formats in data
+  admissionProcess: AdmissionProcess ;
   placement: Placement;
   campusLife: CampusLife;
   gallery: string[];
@@ -173,6 +180,19 @@ export interface PostCollegeReviewResponseData {
   date: string;
 }
 
+export interface CollegeFilterOptions {
+  states: string[]
+  streams: string[]
+  instituteTypes: string[]
+  feeRange: [number, number]
+  rating: number
+  hostel: string[]
+  facilities: string[]
+  studyMode: string[]
+  exams: string[]
+  courses: string[]
+}
+
 // API Service
 const collegeApi = axios.create({
   baseURL: BASE_URL,
@@ -195,6 +215,8 @@ export const getColleges = async (): Promise<ApiResponse<College[]>> => {
     throw error;
   }
 };
+
+
 
 export const getCollegeById = async (
   id: string | number
@@ -249,5 +271,172 @@ export const postCollegeReview = async (
       throw error.response.data as ApiErrorResponse;
     }
     throw error;
+  }
+};
+
+
+
+export const getCollegeFilters = async (): Promise<ApiResponse<CollegeFilterOptions>> => {
+  try {
+    const response = await getColleges();
+
+    if (!response.success || !response.data) {
+      return {
+        success: false,
+        message: response.message || "Failed to fetch colleges for filters",
+        data: {
+          states: [],
+          streams: [],
+          instituteTypes: [],
+          facilities: [],
+          exams: [],
+          feeRange: [0, 0], 
+          rating: 0,
+          hostel: [],
+          studyMode: [],
+          courses:[],
+        }
+      };
+    }
+
+    const colleges: College[] = response.data;
+
+    // Use Sets to avoid duplicates
+    const states = new Set<string>();
+    const streams = new Set<string>();
+    const instituteTypes = new Set<string>();
+    const facilities = new Set<string>();
+    const exams = new Set<string>();
+    const hostelOptions = new Set<string>();
+    const studyModes = new Set<string>();
+    const coursesSet = new Set<string>();
+
+    let minFee = 0;
+    let maxFee = 0;
+    let highestRating = 5.0;
+
+    const streamDescriptions = new Map<string, string>();
+
+    colleges.forEach((college) => {
+      // Location & State
+      if (college.location?.state) {
+        states.add(college.location.state);
+      }
+
+// Streams
+college.streams?.forEach((stream) => {
+  if (typeof stream === "string") {
+    streams.add(stream);
+    // No description if it's just string
+  } else if (stream && typeof stream === "object" && stream.name) {
+    streams.add(stream.name);
+    if (stream.description) {
+      streamDescriptions.set(stream.name, stream.description);
+    }
+  }
+});
+
+
+// courses
+college.courses?.forEach((course) => {
+  if (course.name && typeof course.name === "string") {
+    coursesSet.add(course.name.trim());
+  }
+});
+
+      // Institute Type
+      if (college.type) {
+        instituteTypes.add(college.type);
+      }
+
+      // Facilities
+      college.facilities?.forEach((facility) => facilities.add(facility));
+
+      // Exams (from courses)
+      college.courses?.forEach((course) => {
+        if (Array.isArray(course.eligibility_exams)) {
+          course.eligibility_exams.forEach((exam: any) => {
+            if (typeof exam === "string") {
+              exams.add(exam);
+            } else if (exam && typeof exam === "object" && "name" in exam) {
+              exams.add((exam as any).name);
+            }
+          });
+        } else if (typeof course.eligibility_exams === "string" && course.eligibility_exams.trim()) {
+          exams.add(course.eligibility_exams);
+        }
+      });
+
+      // Hostel
+      if (college.hostel) {
+        if (college.hostel.boys) hostelOptions.add("Boys");
+        if (college.hostel.girls) hostelOptions.add("Girls");
+      }
+
+      // Study Mode
+      college.studyMode?.forEach((mode) => studyModes.add(mode));
+
+      // Fee Range (from courses or college.fees)
+      college.courses?.forEach((course) => {
+        if (course.fees && !isNaN(parseInt(course.fees.replace(/[^0-9]/g, ""), 10))) {
+          const fee = parseInt(course.fees.replace(/[^0-9]/g, ""), 10);
+          if (fee < minFee) minFee = fee;
+          if (fee > maxFee) maxFee = fee;
+        }
+      });
+
+      // Fallback to college-level fees if available
+      if (college.fees?.min !== undefined && Number(college.fees.min) < minFee) minFee = Number(college.fees.min);
+      if (college.fees?.max !== undefined && Number(college.fees.max) > maxFee) maxFee = Number(college.fees.max);
+
+      // Rating
+      if (college.rating > highestRating) highestRating = college.rating;
+    });
+
+    // Final fee range fallback
+    if (minFee === Infinity) minFee = 0;
+    if (maxFee === 0) maxFee = 10000000;
+
+    
+
+    const filterOptions: CollegeFilterOptions = {
+      states: Array.from(states).sort(),
+      streams: Array.from(streams).sort(),
+      instituteTypes: Array.from(instituteTypes).sort(),
+      facilities: Array.from(facilities).sort(),
+      exams: Array.from(exams).sort(),
+      feeRange: [minFee, maxFee],
+      rating: Math.floor(highestRating), // or keep as float if UI supports
+      hostel: Array.from(hostelOptions),
+      studyMode: Array.from(studyModes).sort(),
+      courses: Array.from(coursesSet).sort()
+    };
+
+    return {
+      success: true,
+      message: "Filters loaded successfully",
+      data: filterOptions,
+    };
+
+  } catch (error) {
+    console.error("Error fetching college filters:", error);
+    return {
+      success: false,
+      message: axios.isAxiosError(error) 
+        ? error.response?.data?.message || "Failed to load filters"
+        : "An unexpected error occurred",
+      data: {
+        states: [],
+        streams: [],
+        instituteTypes: [],
+        facilities: [],
+        exams: [],
+        feeRange: [0, 0],
+        rating: 0,
+        hostel: [],
+        studyMode: [],
+        courses:[]
+      }
+    };
   }
 };

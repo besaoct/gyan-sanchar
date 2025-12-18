@@ -1,5 +1,6 @@
 'use client'
 
+import { BookConsultationForm } from "@/components/common/book-consultation-form";
 import { Button } from "@/components/ui/button"
 import { Play } from "lucide-react"
 
@@ -31,13 +32,17 @@ export default function HeroSection() {
               <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 text-base md:text-lg">
                 Find Your College
               </Button>
-              <Button
-                variant="outline"
-                className="border-white hover:bg-white hover:text-blue-900 px-6 md:px-8 py-3 text-base md:text-lg bg-transparent"
-           
-              >
-                Book a Live Consultation
-              </Button>
+              <BookConsultationForm
+                trigger={
+                  <Button
+                    variant="outline"
+                    className="border-white hover:bg-white hover:text-blue-900 px-6 md:px-8 py-3 text-base md:text-lg bg-transparent"
+              
+                  >
+                    Book a Live Consultation
+                  </Button>
+                }
+              />
             </div>
             <p className="text-sm opacity-75 underline" >
               Watch our Brand Film here

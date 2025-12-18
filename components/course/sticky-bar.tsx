@@ -3,8 +3,106 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CommonAdmissionForm } from "../common/common-form";
+import { useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
+
+interface StickyBarButtonData {
+  id?: number;
+  name: string;
+  slug: string;
+  description_title: string;
+  description_keypoints: (string | null)[];
+}
+
+const fallbackData: StickyBarButtonData[] = [
+  {
+
+    name: "Apply now",
+    slug: "apply-now",
+    description_title: "Why register with us?",
+    description_keypoints: [
+      "Get help in selecting the right course from the large selection of options available.",
+      "Boost your preparation with extensive knowledge of syllabus & exam pattern.",
+      "Explore your courses offered by different colleges that match your skills.",
+      "With totally online Admission Process we help you get college admission without having to step out."
+    ],
+  },
+  {
+
+    name: "Check Eligibility",
+    slug: "check-eligibility",
+    description_title: "Check Your Eligibility",
+    description_keypoints: [
+      "Get help in selecting the right course from the large selection of options available.",
+      "Boost your preparation with extensive knowledge of syllabus & exam pattern.",
+      "Explore your courses offered by different colleges that match your skills.",
+      "With totally online Admission Process we help you get college admission without having to step out."
+    ],
+  }
+];
+
+const StickyBarSkeleton = () => (
+  <div className="mx-auto w-full px-4 py-3 grid grid-cols-2 lg:flex justify-center gap-4">
+    <Skeleton className="h-12 w-full lg:w-32" />
+    <Skeleton className="h-12 w-full lg:w-32" />
+  </div>
+);
 
 export function StickyBar({ isVisible }: { isVisible: boolean }) {
+  const [buttonsData, setButtonsData] = useState<StickyBarButtonData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/types");
+        const result = await response.json();
+        if (result.success && result.data) {
+          const filteredData = result.data.filter(
+            (item: StickyBarButtonData) => item.slug === 'apply-now' || item.slug === 'check-eligibility'
+          );
+          if (filteredData.length > 0) {
+            setButtonsData(filteredData);
+          } else {
+             setButtonsData(fallbackData);
+          }
+        } else {
+           setButtonsData(fallbackData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch sticky bar data:", error);
+        setButtonsData(fallbackData);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getButtonClass = (slug: string) => {
+    switch (slug) {
+      case 'apply-now':
+        return "bg-orange-500 hover:bg-orange-500/90";
+      case 'check-eligibility':
+        return "bg-primary hover:bg-primary/90";
+      default:
+        return "bg-gray-500 hover:bg-gray-600";
+    }
+  };
+
+  const getFormTitle = (slug: string) => {
+    switch (slug) {
+      case 'apply-now':
+        return "Looking for admission? Give us your details!";
+      case 'check-eligibility':
+        return "Want to check if you are eligible? Let's get started.";
+      default:
+        return "Register with Us";
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -13,73 +111,37 @@ export function StickyBar({ isVisible }: { isVisible: boolean }) {
       )}
     >
       <div className=" mx-auto w-full px-4 py-3 grid grid-cols-2 lg:flex justify-center gap-4">
-        <CommonAdmissionForm
-          buttonText="Apply Now"
-          title="Why register with us?"
-          formTitle="Looking for admission. Give us your details and we shall help you get there!"
-          description={
-            <ul className="space-y-4 text-white/90">
-              <li>
-                Get help in selecting the right course from the large selection
-                of options available.
-              </li>
-              <li>
-                Boost your preparation with extensive knowledge of syllabus &
-                exam pattern.
-              </li>
-              <li>
-                Explore your courses offered by different colleges that match
-                your skills.
-              </li>
-              <li>
-                With totally online Admission Process we help you get college
-                admission without having to step out.
-              </li>
-            </ul>
-          }
-          trigger={
-            <Button
-              variant="secondary"
-              className="rounded-xl py-6 px-5 bg-orange-500 hover:bg-orange-500/90 text-white lg:w-fit w-full "
-            >
-              Apply Now
-            </Button>
-          }
-        />
-
-        <CommonAdmissionForm
-          buttonText="Check Eligibility"
-          title="Check Your Eligibility"
-          formTitle="Want to check if you are eligible? Let's get started."
-          description={
-            <ul className="space-y-4 text-white/90">
-              <li>
-                Get help in selecting the right course from the large selection
-                of options available.
-              </li>
-              <li>
-                Boost your preparation with extensive knowledge of syllabus &
-                exam pattern.
-              </li>
-              <li>
-                Explore your courses offered by different colleges that match
-                your skills.
-              </li>
-              <li>
-                With totally online Admission Process we help you get college
-                admission without having to step out.
-              </li>
-            </ul>
-          }
-          trigger={
-            <Button
-              variant="secondary"
-              className="rounded-xl py-6 px-5 bg-primary hover:bg-primary/90 text-white lg:w-fit w-full "
-            >
-              Check Eligibility
-            </Button>
-          }
-        />
+        {isLoading ? (
+          <StickyBarSkeleton />
+        ) : (
+          buttonsData.map((button) => (
+            <CommonAdmissionForm
+              key={button.slug}
+              buttonText={button.name}
+              title={button.description_title}
+              formTitle={getFormTitle(button.slug)}
+              type={button.slug}
+              description={
+                <ul className="space-y-4 text-white/90">
+                  {button.description_keypoints.map((point, index) =>
+                    point ? <li key={index}>{point}</li> : null
+                  )}
+                </ul>
+              }
+              trigger={
+                <Button
+                  variant="secondary"
+                  className={cn(
+                    "rounded-xl py-6 px-5 text-white lg:w-fit w-full",
+                    getButtonClass(button.slug)
+                  )}
+                >
+                  {button.name}
+                </Button>
+              }
+            />
+          ))
+        )}
       </div>
     </div>
   );
