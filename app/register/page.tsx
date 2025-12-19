@@ -6,24 +6,33 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [password_confirmation, setPasswordConfirmation] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [dob, setDob] = useState("");
+  const [stream, setStream] = useState("");
+  const [level, setLevel] = useState("");
+  const [interested_online_degree, setInterestedOnlineDegree] =
+    useState(false);
+  const [enable_whatsapp_updates, setEnableWhatsappUpdates] = useState(false);
   const { register, error, loading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== password_confirmation) {
-      alert("Passwords do not match");
-      return;
-    }
-    await register({ name, email, password, password_confirmation });
+    await register({
+      name,
+      email,
+      phone,
+      type:"register",
+      dob,
+      stream,
+      level,
+      interested_online_degree,
+      enable_whatsapp_updates,
+    });
   };
 
   return (
@@ -62,56 +71,83 @@ export default function RegisterPage() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="9876543210"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                disabled={loading}
+              />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="password_confirmation">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                  id="password_confirmation"
-                  type={showConfirmPassword ? "text" : "password"}
-                  required
-                  value={password_confirmation}
-                  onChange={(e) => setPasswordConfirmation(e.target.value)}
-                  disabled={loading}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
+              <Label htmlFor="dob">Date of Birth</Label>
+              <Input
+                id="dob"
+                type="date"
+                required
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="stream">Stream</Label>
+              <Input
+                id="stream"
+                type="text"
+                placeholder="Science"
+                required
+                value={stream}
+                onChange={(e) => setStream(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="level">Level</Label>
+              <Input
+                id="level"
+                type="text"
+                placeholder="Graduate"
+                required
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="interested_online_degree"
+                checked={interested_online_degree}
+                onCheckedChange={(checked) =>
+                  setInterestedOnlineDegree(Boolean(checked))
+                }
+                disabled={loading}
+              />
+              <label
+                htmlFor="interested_online_degree"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Interested in online degree
+              </label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="enable_whatsapp_updates"
+                checked={enable_whatsapp_updates}
+                onCheckedChange={(checked) =>
+                  setEnableWhatsappUpdates(Boolean(checked))
+                }
+                disabled={loading}
+              />
+              <label
+                htmlFor="enable_whatsapp_updates"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Enable Whatsapp updates
+              </label>
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
@@ -124,10 +160,10 @@ export default function RegisterPage() {
               Login
             </Link>
           </div>
-                     <div className="-mt-4 text-center text-sm">
+          <div className="-mt-4 text-center text-sm">
             or Back to{" "}
             <Link href="/" className="underline">
-             home
+              home
             </Link>
           </div>
         </div>

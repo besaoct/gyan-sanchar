@@ -35,8 +35,13 @@ export interface LoginRequest {
 export interface RegisterRequest {
   name: string;
   email: string;
-  password: string;
-  password_confirmation: string;
+  dob?: string;
+  type: string;
+  stream?: string;
+  level?: string;
+  phone?: string;
+  interested_online_degree?: boolean;
+  enable_whatsapp_updates?: boolean;
 }
 
 // API Service
