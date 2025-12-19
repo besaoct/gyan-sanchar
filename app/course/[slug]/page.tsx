@@ -73,6 +73,7 @@ export default function CourseDetailsPage() {
     { id: "syllabus", label: "Syllabus" },
     { id: "eligibility", label: "Eligibility" },
     { id: "colleges", label: "Colleges" },
+    { id: "faqs", label: "FAQs" },
   ];
 
 
@@ -100,12 +101,12 @@ export default function CourseDetailsPage() {
       ) : (
         <>
           {/* Hero Section */}
-          <div className="px-4 container py-10 w-full max-w-full">
+          <div  ref={heroRef}  className="px-4 container py-10 w-full max-w-full">
             <CourseHero course={course} />
           </div>
 
           {/* Main Content */}
-          <div ref={heroRef} className=" mx-auto  py-8">
+          <div className=" mx-auto  py-8">
             <div className="w-full">
               <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow-xs ">
                 <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth  container px-4 mx-auto">
@@ -137,14 +138,14 @@ export default function CourseDetailsPage() {
                     </CardHeader>
                     <CardContent className="p-0">
                       <div
-                        className="prose prose-headings:text-base "
+                        className="htmlContent "
                         dangerouslySetInnerHTML={{ __html: course.description }}
                       />
 
                       <h4 className="mt-6 mb-4  font-semibold">
                         Program Highlights
                       </h4>
-                      <ul className="list-disc list-inside space-y-2 mt-4">
+                      <ul className="list-disc list-inside space-y-2 mt-4 text-sm">
                         {course.program_highlights.map((highlight, i) => (
                           <li key={i}>
                             <span className="font-medium">
@@ -162,7 +163,7 @@ export default function CourseDetailsPage() {
                     <CardHeader className="p-0">
                       <CardTitle>Eligibility</CardTitle>
                     </CardHeader>
-                    <CardContent className="p-0">
+                    <CardContent className="p-0 text-sm">
                       <ul className="list-disc list-inside space-y-2 mb-4">
                         {course.eligibility.criteria.map((c, i) => (
                           <li key={i}>{c}</li>
@@ -176,11 +177,11 @@ export default function CourseDetailsPage() {
                   </Card>
                 )}
                 {activeTab === "syllabus" && (
-                  <Card className="border-none shadow-none p-0">
+                  <Card className="border-none shadow-none p-0 gap-2">
                     <CardHeader className="p-0">
                       <CardTitle>Syllabus</CardTitle>
                     </CardHeader>
-                    <CardContent className="p-0">
+                    <CardContent className="p-0 text-sm">
                       <Accordion type="single" collapsible className="w-full">
                         {course.syllabus.semesterWiseSubjects.map(
                           (semester, index) => (
@@ -245,6 +246,24 @@ export default function CourseDetailsPage() {
                     </CardContent>
                   </Card>
                 )}
+
+                {activeTab === "faqs" && (
+            <Card className="p-0 gap-2 border-0 shadow-none">
+              <CardHeader className="p-0 m-0">
+                <CardTitle className="p-0 ">FAQs</CardTitle>
+                </CardHeader>
+              <CardContent className="border-0 shadow-none p-0">
+                <Accordion type="single" collapsible className="w-full">
+                  {course.faqs.map((faq, i) => (
+                    <AccordionItem key={i} value={`item-${i}`} className="p-0">
+                      <AccordionTrigger>{faq.question}</AccordionTrigger>
+                      <AccordionContent>{faq.answer}</AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </CardContent>
+            </Card>
+          )}
               </div>
             </div>
           </div>

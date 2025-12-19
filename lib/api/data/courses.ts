@@ -36,6 +36,7 @@ export interface CourseDetails {
   }[];
 
   colleges: {
+    id?: string | number;
     slug?: string;
     name: string;
     fees: string;

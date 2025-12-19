@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/auth/AuthContext";
 
 interface ApplyNowFormProps {
   trigger: React.ReactNode;
@@ -33,14 +34,15 @@ export function ApplyNowForm({
   stream: propStream,
   level: propLevel,
 }: ApplyNowFormProps) {
+  const {user} = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
-    full_name: "",
-    email: "",
+    full_name: user?.name || "",
+    email: user?.email || "",
     phone: "",
     date_of_birth: "",
     address: "",
@@ -92,7 +94,7 @@ export function ApplyNowForm({
       if (!regResult.success) {
         throw new Error(regResult.message || "Registration failed. Please check your details.");
       }
-      toast({ title: "Registration Successful", description: "Submitting your application..." });
+      toast({ title: "Registration Successful", description: "Submitting your application...",  });
 
       // Step 2: Submit Application
       const applicationData = {
@@ -118,9 +120,7 @@ export function ApplyNowForm({
 
       toast({ 
         title: "Application Submitted!", description: "Thank you! We will get back to you soon." ,
-        style: {
-          color:"white"
-        }
+  
       });
       setIsDialogOpen(false);
       setFormData({
