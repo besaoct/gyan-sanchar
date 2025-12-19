@@ -168,7 +168,9 @@ function RightImagePanel({ college }: { college: College }) {
   );
 }
 
+
 export function CollegeHero({ college }: { college: College }) {
+  const currentYear = new Date().getFullYear()
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
@@ -211,7 +213,7 @@ export function CollegeHero({ college }: { college: College }) {
         </div>
 
         <h1 className="text-balance text-xl font-bold leading-tight text-primary md:text-3xl">
-          {college.name} - Admission 2025, Fees, Courses, Placement, Ranking
+          {college.name} - Admission {currentYear}, Fees, Courses, Placement, Ranking
         </h1>
 
         <div className="mt-6 flex flex-wrap items-start gap-4">
