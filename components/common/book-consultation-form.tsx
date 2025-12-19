@@ -137,6 +137,9 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
         title: "Error",
         description: errorMessage,
         variant: "destructive",
+          style: {
+          color:"white"
+        }
       });
     } finally {
       setIsLoading(false);

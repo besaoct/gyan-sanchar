@@ -56,13 +56,15 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
         </div>
       </div>
 
-      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 rounded-bl-[202px]">
+      <div className="relative bg-muted lg:min-w-xl overflow-hidden rounded-4xl p-2.5 rounded-bl-[202px]">
         <Image
-          src={course.hero_image}
+          src={course.hero_image.replace("/storage",
+            ""
+          )}
           width={1000}
           height={1000}
           alt={`${course.course_name} cover image`}
-          className=" object-cover  sm:h-[320px] lg:h-[390px] w-full rounded-4xl rounded-bl-[202px]"
+          className=" object-cover sm:h-[320px] lg:h-[390px] w-full rounded-4xl rounded-bl-[202px]"
           priority
         />
       </div>
@@ -114,7 +116,7 @@ export function CourseHero({ course }: CourseHeroProps) {
         </div>
 
         <h1 className="text-balance text-xl font-bold leading-tight text-primary md:text-3xl">
-          {course.course_name} - Admission 2025, Fees, Eligibility
+          {course.course_name}
         </h1>
 
         <p className="mt-6 text-pretty text-sm leading-relaxed text-foreground">
