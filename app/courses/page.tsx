@@ -124,8 +124,8 @@ export default function CourseListingPage() {
                    <SheetTrigger asChild>
                    <Button variant="outline" className="w-fit bg-primary/5 border border-primary/30 text-primary">
                     <SlidersHorizontal className="h-4 w-4 text-primary" />
-                       Filters (
-                       {Object.values(filters).flat().filter(Boolean).length})
+                       Filters {Object.values(filters).flat().filter(Boolean).length -2 < 1 ? "" : `(${Object.values(filters).flat().filter(Boolean).length -2})` } 
+
                      </Button>
                    </SheetTrigger>
                    <SheetContent side="left" className="w-80 p-0 overflow-y-auto scrollbar-hide bg-white">

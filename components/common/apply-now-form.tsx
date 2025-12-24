@@ -225,7 +225,7 @@ export function ApplyNowForm({
                       ))}
                     </SelectContent>
                   </Select>
-                  </div>
+                  </div> 
                 )}
                 {!propLevel && (
                   <div>
@@ -265,7 +265,7 @@ export function ApplyNowForm({
             </form>
           </div>
         </div>
-      </DialogContent>
+      </DialogContent> 
     </Dialog>
   );
 }

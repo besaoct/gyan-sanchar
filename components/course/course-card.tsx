@@ -28,7 +28,7 @@ export function CourseCard({ course }: { course: CourseDetails }) {
 
   const router = useRouter();
 
-  const correctHeroImageLink = course.hero_image.replace("/storage", "")
+  const correctHeroImageLink = course.hero_image?.replace("/storage", "")
 
   
   return (

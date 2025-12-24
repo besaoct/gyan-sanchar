@@ -58,7 +58,7 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
 
       <div className="relative bg-muted lg:min-w-xl overflow-hidden rounded-4xl p-2.5 rounded-bl-[202px]">
         <Image
-          src={course.hero_image.replace("/storage",
+          src={course.hero_image?.replace("/storage",
             ""
           )}
           width={1000}

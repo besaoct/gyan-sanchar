@@ -206,17 +206,21 @@ table{
 
 /* html content customizations */
 .htmlContent > table, td, tr, th, tbody, thead, tfoot, h2, h1, h3, h4, h5, h6, p, li {
-       font-family: '__Poppins_e36b36', '__Poppins_Fallback_e36b36';
+    font-family: '__Poppins_e36b36', '__Poppins_Fallback_e36b36';
     font-style: normal;
 }
 
-.htmlContent table, thead, tbody, tfoot {
-  @apply  !w-full;
+.htmlContent table, thead, tbody, tfoot, tr {
+  @apply  !w-full overflow-x-auto;
 }
 
 
-.htmlContent > table, td {
-  @apply w-1/2;
+.htmlContent div:has(> table:first-child), div:has(table) {
+  @apply  !w-full overflow-x-auto;
+}
+
+.htmlContent td {
+  @apply w-1/2 max-w-full;
 }
 
 

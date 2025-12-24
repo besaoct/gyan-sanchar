@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
@@ -17,13 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -32,6 +26,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { getCollegeFilters } from "@/lib/api/data/colleges";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getCoursesFilters } from "@/lib/api/data/courses";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -56,6 +59,30 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+
+    const [levelsOptions, setLevelsOptions] = useState<string[]>([]);
+    const [streamsOptions, setStreamsOptions] = useState<string[]>([]);
+  
+    useEffect(() => {
+      const loadFilters = async () => {
+        try {
+          const resCollege = await getCollegeFilters();
+          const resCourse = await getCoursesFilters();
+  
+          if (resCollege.success && resCollege.data) {
+            setStreamsOptions(resCollege.data.streams || []);
+          }
+          if (resCourse.success && resCourse.data) {
+            setLevelsOptions(resCourse.data.levels || []);
+          }
+        } catch (err) {
+          console.error("Failed to load filters", err);
+        }
+      };
+  
+      loadFilters();
+    }, []);
+  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -242,7 +269,22 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
                   <FormItem>
                     <FormLabel>Stream</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Science" {...field} />
+                         <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Stream" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {streamsOptions.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -256,7 +298,22 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
                   <FormItem>
                     <FormLabel>Level</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. Graduate" {...field} />
+                    <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {levelsOptions.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
