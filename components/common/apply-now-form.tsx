@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +14,15 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth/AuthContext";
+import { getCollegeFilters } from "@/lib/api/data/colleges";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getCoursesFilters } from "@/lib/api/data/courses";
 
 interface ApplyNowFormProps {
   trigger: React.ReactNode;
@@ -38,6 +47,28 @@ export function ApplyNowForm({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [levelsOptions, setLevelsOptions] = useState<string[]>([]);
+  const [streamsOptions, setStreamsOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadFilters = async () => {
+      try {
+        const resCollege = await getCollegeFilters();
+        const resCourse = await getCoursesFilters();
+
+        if (resCollege.success && resCollege.data) {
+          setStreamsOptions(resCollege.data.streams || []);
+        }
+        if (resCourse.success && resCourse.data) {
+          setLevelsOptions(resCourse.data.levels || []);
+        }
+      } catch (err) {
+        console.error("Failed to load filters", err);
+      }
+    };
+
+    loadFilters();
+  }, []);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -178,13 +209,43 @@ export function ApplyNowForm({
                 {!propStream && (
                   <div>
                     <Label htmlFor="stream">Stream</Label>
-                    <Input id="stream" value={formData.stream} onChange={(e) => handleInputChange("stream", e.target.value)} required disabled={isLoading} />
+                            <Select
+                    value={formData.stream}
+                   onValueChange={(value) => handleInputChange("stream", value)}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Stream" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {streamsOptions.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   </div>
                 )}
                 {!propLevel && (
                   <div>
                     <Label htmlFor="level">Level</Label>
-                    <Input id="level" value={formData.level} onChange={(e) => handleInputChange("level", e.target.value)} required disabled={isLoading} />
+                        <Select
+                    value={formData.level}
+                     onValueChange={(value) => handleInputChange("level", value)}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {levelsOptions.map((l) => (
+                        <SelectItem key={l} value={l}>
+                          {l}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   </div>
                 )}
               </div>

@@ -345,8 +345,7 @@ export default function CollegeListingPage() {
                     className="w-fit bg-primary/5 border border-primary/30 text-primary"
                   >
                     <SlidersHorizontal className="h-4 w-4 text-primary" />
-                    Filters (
-                    {Object.values(filters).flat().filter(Boolean).length})
+                    Filters {Object.values(filters).flat().filter(Boolean).length -1 < 1 ? "" : `(${Object.values(filters).flat().filter(Boolean).length -1})` } 
                   </Button>
                 </SheetTrigger>
                 <SheetContent
