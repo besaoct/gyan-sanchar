@@ -11,6 +11,7 @@ import {
   ChevronUp,
   ChevronDown,
   Plus,
+  Info,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -80,19 +81,35 @@ export function CollegeCard({
               className="text-balance hover:text-primary text-base font-bold text-foreground md:text-lg"
             >
               {college.name}
-              {college.verifyCollege === true ? (
-                <span>
-                  <Image
-                    title="Verified"
-                    src={"/verify-badge.png"}
-                    width={100}
-                    height={100}
-                    alt={""}
-                    className="size-6 inline ml-1"
-                  />
-                </span>
-              ) : (
-                <></>
+              {college.verifyCollege === true && (
+                <TooltipProvider >
+                  <Tooltip >
+                    <TooltipTrigger asChild className="">
+                      <span className="inline ">
+                        <Image
+                          title="Verified"
+                          src={"/verify-badge.png"}
+                          width={100}
+                          height={100}
+                          alt={""}
+                          className="size-4 sm:size-5 inline ml-1 "
+                        />
+                           <Image
+                          title="Verified"
+                          src={"/logo-b.png"}
+                          width={100}
+                          height={100}
+                          alt={""}
+                          className="size-10 inline ml-1 bg-blend-lighten "
+                        />
+                        {/* <Info className="h-4 w-4 text-gray-500 ml-1" />  */}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs text-xs">
+                      This college is verified by gyansanchar
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </h3>
           </Link>

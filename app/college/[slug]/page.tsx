@@ -47,6 +47,8 @@ import VideoDialogPlayer from "@/components/college/VideoDialogPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReviewForm } from "@/components/college/review-form";
 import { ApplyNowForm } from "@/components/common/apply-now-form";
+import { useGooglePlaceReviews } from "@/hooks/use-google-place-reviews";
+import GoogleReview from "@/components/common/google-review";
 
 interface CollegeDetailPageProps {
   params: {
@@ -172,6 +174,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   if (!college) {
     notFound();
   }
+
+
 
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -420,6 +424,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                                 college_ids={[Number(college.id)]}
                                 course_ids={[Number(course.id)]}
                                 stream={college.streams?.[0]?.name}
+                               
                                 title={applyNowData.description_title}
                                 description={
                                   <ul className="space-y-4 text-white/90">
@@ -851,6 +856,13 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
 
             {activeTab === "reviews" && (
               <div className="space-y-6">
+                <div className="mt-6">
+                  <h1>Google Reviews</h1>
+        <GoogleReview
+        placeName="Vels Institute of Science Technology Advanced Studies Pallavaram Chennai"
+        className="mb-10"
+      />
+                </div>
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">
                     <CardTitle className="flex items-center gap-2">
@@ -939,8 +951,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </CarouselItem>
                         ))}
                       </CarouselContent>
-                      <CarouselPrevious />
-                      <CarouselNext />
+                      <CarouselPrevious className="ml-8"  />
+                      <CarouselNext className="mr-8" />
                     </Carousel>
                     <div className="mt-6">
                       <h4 className="font-semibold mb-3">Virtual Tour</h4>

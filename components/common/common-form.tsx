@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,6 +13,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { getCollegeFilters } from "@/lib/api/data/colleges";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getCoursesFilters } from "@/lib/api/data/courses";
 
 interface CommonRegistrationFormProps {
   title: string;
@@ -20,13 +29,13 @@ interface CommonRegistrationFormProps {
   description: React.ReactNode;
   trigger: React.ReactNode;
   buttonText?: string;
-  type?:string;
+  type?: string;
 }
 
 export function CommonAdmissionForm({
   title,
   formTitle,
-  type="register",
+  type = "register",
   description,
   trigger,
   buttonText = "Register",
@@ -43,6 +52,28 @@ export function CommonAdmissionForm({
   const [enableWhatsappUpdates, setEnableWhatsappUpdates] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [streamsOptions, setStreamsOptions] = useState<string[]>([]);
+  const [levelsOptions, setLevelsOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadFilters = async () => {
+      try {
+        const resCollege = await getCollegeFilters();
+        const resCourse = await getCoursesFilters();
+
+        if (resCollege.success && resCollege.data) {
+          setStreamsOptions(resCollege.data.streams || []);
+        }
+        if (resCourse.success && resCourse.data) {
+          setLevelsOptions(resCourse.data.levels || []);
+        }
+      } catch (err) {
+        console.error("Failed to load filters", err);
+      }
+    };
+
+    loadFilters();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,21 +92,25 @@ export function CommonAdmissionForm({
     };
 
     try {
-      const response = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/auth/register", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(registrationData),
-      });
+      const response = await fetch(
+        "https://gitcsdemoserver.online/gyansanchar/public/api/v1/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(registrationData),
+        }
+      );
 
       const result = await response.json();
 
       if (result.success) {
         toast({
           title: "Registration Successful!",
-          description: "Thank you for registering. We will be in touch shortly.",
+          description:
+            "Thank you for registering. We will be in touch shortly.",
         });
         setIsDialogOpen(false);
         // Reset form fields
@@ -91,14 +126,15 @@ export function CommonAdmissionForm({
         throw new Error(result.message || "An unknown error occurred.");
       }
     } catch (error: any) {
-      const errorMessage = error.message || "Failed to register. Please try again.";
+      const errorMessage =
+        error.message || "Failed to register. Please try again.";
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
-              style: {
-          color:"white"
-        }
+        style: {
+          color: "white",
+        },
       });
     } finally {
       setIsLoading(false);
@@ -111,22 +147,39 @@ export function CommonAdmissionForm({
       <DialogContent className="lg:max-w-4xl sm:max-w-3xl w-full p-0 h-[96%] lg:h-fit !overflow-auto">
         <div className="flex flex-col-reverse sm:flex-row w-full">
           <div className="sm:w-1/2 bg-primary sm:rounded-l-lg text-white p-8 flex flex-col justify-start ">
-            <h2 className="text-2xl font-bold mb-4 text-left ">{ title}</h2>
+            <h2 className="text-2xl font-bold mb-4 text-left ">{title}</h2>
             {description}
           </div>
           <div className="sm:w-1/2 p-8">
             <DialogHeader className="mt-4">
-              <DialogTitle className="mb-4">{formTitle|| "Register with Us"}</DialogTitle>
+              <DialogTitle className="mb-4">
+                {formTitle || "Register with Us"}
+              </DialogTitle>
             </DialogHeader>
             <>
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} required disabled={isLoading} />
+                  <Input
+                    id="name"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
                 </div>
-                 <div>
+                <div>
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading} />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="mobile">Mobile</Label>
@@ -134,35 +187,100 @@ export function CommonAdmissionForm({
                     <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                       +91
                     </span>
-                    <Input id="mobile" type="tel" placeholder="Enter your mobile number" className="rounded-l-none" value={mobile} onChange={(e) => setMobile(e.target.value)} required disabled={isLoading} />
+                    <Input
+                      id="mobile"
+                      type="tel"
+                      placeholder="Enter your mobile number"
+                      className="rounded-l-none"
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                 </div>
                 <div>
                   <Label htmlFor="dob">Date of Birth</Label>
-                  <Input id="dob" type="date" value={dob} onChange={(e) => setDob(e.target.value)} required disabled={isLoading} />
+                  <Input
+                    id="dob"
+                    type="date"
+                    value={dob}
+                    onChange={(e) => setDob(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
                 </div>
-                 <div>
+                <div>
                   <Label htmlFor="stream">Stream</Label>
-                  <Input id="stream" placeholder="e.g. Science" value={stream} onChange={(e) => setStream(e.target.value)} required disabled={isLoading} />
+                  <Select
+                    value={stream}
+                    onValueChange={setStream}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Stream" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {streamsOptions.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                 <div>
+                <div>
                   <Label htmlFor="level">Level</Label>
-                  <Input id="level" placeholder="e.g. Graduate" value={level} onChange={(e) => setLevel(e.target.value)} required disabled={isLoading} />
+                  <Select
+                    value={level}
+                    onValueChange={setLevel}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {levelsOptions.map((l) => (
+                        <SelectItem key={l} value={l}>
+                          {l}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="flex items-start space-x-2">
-                  <Checkbox id="online-degree" checked={interestedOnlineDegree} onCheckedChange={(checked) => setInterestedOnlineDegree(!!checked)} disabled={isLoading} />
-                  <Label htmlFor="online-degree">Interested in Online Degree Program</Label>
+                  <Checkbox
+                    id="online-degree"
+                    checked={interestedOnlineDegree}
+                    onCheckedChange={(checked) =>
+                      setInterestedOnlineDegree(!!checked)
+                    }
+                    disabled={isLoading}
+                  />
+                  <Label htmlFor="online-degree">
+                    Interested in Online Degree Program
+                  </Label>
                 </div>
                 <div className="flex items-start space-x-2">
-                  <Checkbox id="whatsapp-updates" checked={enableWhatsappUpdates} onCheckedChange={(checked) => setEnableWhatsappUpdates(!!checked)} disabled={isLoading} />
-                  <Label htmlFor="whatsapp-updates">Enable updates & important information on Whatsapp.</Label>
+                  <Checkbox
+                    id="whatsapp-updates"
+                    checked={enableWhatsappUpdates}
+                    onCheckedChange={(checked) =>
+                      setEnableWhatsappUpdates(!!checked)
+                    }
+                    disabled={isLoading}
+                  />
+                  <Label htmlFor="whatsapp-updates">
+                    Enable updates & important information on Whatsapp.
+                  </Label>
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Submitting..." : buttonText}
                 </Button>
               </form>
               <p className="text-xs text-muted-foreground mt-4">
-                By proceeding ahead you expressly agree to the GyanSanchar Terms & Conditions and Privacy Policy
+                By proceeding ahead you expressly agree to the GyanSanchar Terms
+                & Conditions and Privacy Policy
               </p>
             </>
           </div>

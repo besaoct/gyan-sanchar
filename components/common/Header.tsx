@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail, Menu, User2, Search, ChevronDown } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  Menu,
+  User2,
+  Search,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa";
 import {
   Sheet,
@@ -14,11 +22,13 @@ import CollegesDropdown from "../college/college-dropdown";
 import { useState } from "react";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import { Button } from "../ui/button";
+import MobileCollegesDropdown from "../college/MobileCollegesDropdown";
 
 export default function Header({ isSticky }: { isSticky?: boolean }) {
   const [isCollegesOpen, setIsCollegesOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showCollegesDropdown, setShowCollegesDropdown] = useState(false);
 
   return (
     <header
@@ -127,9 +137,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
 
             {isCollegesOpen && (
               <>
-                <CollegesDropdown 
-                 onClose={() => setIsCollegesOpen(false)} 
-                />
+                <CollegesDropdown onClose={() => setIsCollegesOpen(false)} />
                 <div
                   className="fixed inset-0 z-[30]"
                   onClick={() => setIsCollegesOpen(false)}
@@ -138,6 +146,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
             )}
           </div>
 
+          {/* mobile nav */}
           <div className="lg:hidden">
             <Sheet
               open={isMobileMenuOpen}
@@ -161,70 +170,79 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                     />
                   </Link>
                 </SheetHeader>
-                <div className="flex flex-col gap-4 p-4">
-                  <Link
-                    href={"/colleges"}
-                    className="cursor-pointer hover:text-white/80 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Colleges
-                  </Link>
-                  <Link
-                    href={"/courses"}
-                    className="cursor-pointer hover:text-white/80 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Courses
-                  </Link>
-                  <span
-                    className="cursor-pointer hover:text-white/80 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Exams
-                  </span>
-                  <Link
-                    href={"/admission"}
-                    className="cursor-pointer hover:text-white/80 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Admission
-                  </Link>
-                  <Link
-                    href={"/news"}
-                    className="cursor-pointer hover:text-white/80 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    News & Articles
-                  </Link>
-                  <div className="pt-4 border-t border-white/30">
-                    {isAuthenticated ? (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
-                          <span>{user?.name}</span>
+                {showCollegesDropdown ? (
+                  <MobileCollegesDropdown
+                    onClose={() => {
+                      setShowCollegesDropdown(false);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  />
+                ) : (
+                  <div className="flex flex-col gap-4 p-4">
+                    <button
+                      onClick={() => setShowCollegesDropdown(true)}
+                      className="cursor-pointer hover:text-white/80 transition-colors flex justify-between items-center"
+                    >
+                      Colleges
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                    <Link
+                      href={"/courses"}
+                      className="cursor-pointer hover:text-white/80 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Courses
+                    </Link>
+                    <span
+                      className="cursor-pointer hover:text-white/80 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Exams
+                    </span>
+                    <Link
+                      href={"/admission"}
+                      className="cursor-pointer hover:text-white/80 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Admission
+                    </Link>
+                    <Link
+                      href={"/news"}
+                      className="cursor-pointer hover:text-white/80 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      News & Articles
+                    </Link>
+                    <div className="pt-4 border-t border-white/30">
+                      {isAuthenticated ? (
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-2">
+                            <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
+                            <span>{user?.name}</span>
+                          </div>
+                          <Button
+                            onClick={() => {
+                              logout();
+                              setIsMobileMenuOpen(false);
+                            }}
+                            variant="destructive"
+                          >
+                            Logout
+                          </Button>
                         </div>
-                        <Button
-                          onClick={() => {
-                            logout();
-                            setIsMobileMenuOpen(false);
-                          }}
-                          variant="destructive"
-                        >
-                          Logout
-                        </Button>
-                      </div>
-                    ) : (
-                      <Link href="/login">
-                        <Button
-                          variant="secondary"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          Login
-                        </Button>
-                      </Link>
-                    )}
+                      ) : (
+                        <Link href="/login">
+                          <Button
+                            variant="secondary"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            Login
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </SheetContent>
             </Sheet>
           </div>
