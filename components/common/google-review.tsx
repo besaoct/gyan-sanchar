@@ -63,7 +63,7 @@ const GoogleReview: React.FC<GoogleReviewProps> = ({ placeName, className = '' }
               key={index}
               className="p-4 bg-gray-50 rounded-lg border border-gray-200"
             >
-              <div className="flex items-start justify-between mb-2">
+              <div className="flex items-start justify-between mb-2 text-sm">
                 <div>
                   <p className="font-medium text-gray-800 line-clamp-1">{review.author_name}</p>
                   <div className="flex items-center gap-1 mt-1">
