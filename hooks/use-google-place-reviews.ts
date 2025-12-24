@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export interface GoogleReview {
   author_name: string;
@@ -49,18 +49,9 @@ export const useGooglePlaceReviews = (
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY as String || 'AIzaSyD1ydIgyJyqnEgdEfKYKoUkCcQvtkcD2Yo';
-
-
   const fetchReviews = async () => {
     if (!query.trim()) {
-      setError('Search query is required');
-      setLoading(false);
-      return;
-    }
-
-    if (!apiKey) {
-      setError('Google Places API key is required');
+      setError("Search query is required");
       setLoading(false);
       return;
     }
@@ -69,36 +60,18 @@ export const useGooglePlaceReviews = (
     setError(null);
 
     try {
-      // Step 1: Text Search
-      const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
-        query
-      )}&key=${apiKey}`;
+      const res = await fetch(
+        `/api/google-places/textsearch?query=${encodeURIComponent(query)}`
+      );
 
-      const searchRes = await fetch(searchUrl);
-      const searchData = await searchRes.json();
-
-      if (searchData.status !== 'OK' || !searchData.results?.length) {
-        throw new Error(searchData.status || 'Place not found');
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed");
       }
-
-      const place = searchData.results[0];
-      const placeId = place.place_id;
-
-      console.log('Place found:', place.name, placeId);
-
-
-      const result: GooglePlaceData = {
-        name: place.name,
-        place_id: placeId,
-        rating:  place.rating ?? 0,
-        user_ratings_total:  place.user_ratings_total ?? 0,
-        formatted_address: place.formatted_address,
-        reviews:place.reviews || [],
-      };
-
+      const result = await res.json();
       setData(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load reviews');
+      setError(err instanceof Error ? err.message : "Failed to load reviews");
       setData(null);
     } finally {
       setLoading(false);
@@ -109,7 +82,7 @@ export const useGooglePlaceReviews = (
     if (enabled) {
       fetchReviews();
     }
-  }, [query, apiKey, enabled]);
+  }, [query, enabled]);
 
   return {
     data,

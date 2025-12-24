@@ -49,6 +49,7 @@ import { ReviewForm } from "@/components/college/review-form";
 import { ApplyNowForm } from "@/components/common/apply-now-form";
 import { useGooglePlaceReviews } from "@/hooks/use-google-place-reviews";
 import GoogleReview from "@/components/common/google-review";
+import { FcGoogle } from "react-icons/fc";
 
 interface CollegeDetailPageProps {
   params: {
@@ -857,9 +858,11 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             {activeTab === "reviews" && (
               <div className="space-y-6">
                 <div className="mt-6">
-                  <h1>Google Reviews</h1>
+                  <h1 className="inline">
+                    <FcGoogle className="text-xl inline" /> {" "}
+                 Rating & Reviews</h1>
         <GoogleReview
-        placeName="Vels Institute of Science Technology Advanced Studies Pallavaram Chennai"
+        placeName={college.name}
         className="mb-10"
       />
                 </div>
@@ -874,10 +877,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     <div className="space-y-6">
                       <div className="text-center p-4 bg-[#044cac]/5 rounded-lg">
                         <div className="text-2xl font-bold text-[#044cac] mb-1">
-                          {college.rating}
+                          {calculateReviewStats(college.reviews_data).averageRating}{" "}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          Average Rating ({college.reviews} Reviews)
+                          Average Rating ({calculateReviewStats(college.reviews_data).totalReviews} Reviews)
                         </div>
                       </div>
                       <div className="space-y-4">
@@ -1068,4 +1071,45 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       <Footer />
     </div>
   );
+}
+
+
+
+interface Review {
+  id: string;
+  studentName: string;
+  rating: number;
+  comment: string;
+  course: string;
+  year: number;
+  date: string;
+}
+
+interface ReviewStats {
+  totalReviews: number;
+  averageRating: number;
+}
+
+/**
+ * Calculates total reviews and average rating from an array of reviews
+ * @param reviews - Array of review objects
+ * @returns Object with totalReviews and averageRating
+ */
+export function calculateReviewStats(reviews: Review[]): ReviewStats {
+  if (!reviews || reviews.length === 0) {
+    return {
+      totalReviews: 0,
+      averageRating: 0,
+    };
+  }
+
+  const totalReviews = reviews.length;
+
+  const sumRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+  const averageRating = Number((sumRatings / totalReviews).toFixed(1));
+
+  return {
+    totalReviews,
+    averageRating,
+  };
 }
