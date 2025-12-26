@@ -316,7 +316,7 @@ export default function MobileCollegesDropdown({
                   .replace(" colleges in india", "")
                   .trim();
                 return (
-                  <li key={degree} className="">
+                  <li key={degree} className="line-clamp-2">
                     <a
                       onClick={() =>
                         handleLinkClick(

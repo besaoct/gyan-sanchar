@@ -245,13 +245,13 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
               {data.degrees.map((degree) => {
                 const courseName = degree.replace(' colleges in india', '').trim()
                 return (
-                  <li key={degree}>
+                  <li key={degree} className="line-clamp-2">
                     <a
                       href={createFilterLink('courses', courseName)}
-                      className="text-gray-600 hover:text-blue-600 text-sm block"
+                      className="text-gray-600 hover:text-blue-600 text-sm block "
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {degree}
+                      {degree} 
                     </a>
                   </li>
                 )
