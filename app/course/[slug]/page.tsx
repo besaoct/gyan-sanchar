@@ -197,7 +197,7 @@ export default function CourseDetailsPage() {
                                   {semester.description}
                                 </p>
                                 <div className="space-y-4">
-                                  {semester.subjects.map((subject, i) => (
+                                  {semester?.subjects?.map((subject, i) => (
                                     <div
                                       key={i}
                                       className="p-4 border rounded-lg"
