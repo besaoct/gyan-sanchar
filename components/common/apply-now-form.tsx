@@ -187,28 +187,28 @@ export function ApplyNowForm({
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
               <div className="flex flex-col gap-4">
                 <div className="w-full">
-                  <Label htmlFor="full_name">Full Name</Label>
+                  <Label className="mb-2" htmlFor="full_name">Full Name</Label>
                   <Input id="full_name" className="w-full" value={formData.full_name} onChange={(e) => handleInputChange("full_name", e.target.value)} required disabled={isLoading} />
                 </div>
                 <div>
-                  <Label htmlFor="email">Email</Label>
+                  <Label className="mb-2"  htmlFor="email">Email</Label>
                   <Input id="email" type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} required disabled={isLoading} />
                 </div>
                 <div>
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label className="mb-2"  htmlFor="phone">Phone</Label>
                   <Input id="phone" type="tel" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} required disabled={isLoading} />
                 </div>
                 <div>
-                  <Label htmlFor="date_of_birth">Date of Birth</Label>
+                  <Label className="mb-2"  htmlFor="date_of_birth">Date of Birth</Label>
                   <Input id="date_of_birth" type="date" value={formData.date_of_birth} onChange={(e) => handleInputChange("date_of_birth", e.target.value)} required disabled={isLoading} />
                 </div>
                 <div className="col-span-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label className="mb-2"  htmlFor="address">Address</Label>
                   <Input id="address" value={formData.address} onChange={(e) => handleInputChange("address", e.target.value)} required disabled={isLoading} />
                 </div>
                 {!propStream && (
                   <div>
-                    <Label htmlFor="stream">Stream</Label>
+                    <Label className="mb-2"  htmlFor="stream">Stream</Label>
                             <Select
                     value={formData.stream}
                    onValueChange={(value) => handleInputChange("stream", value)}
@@ -229,7 +229,7 @@ export function ApplyNowForm({
                 )}
                 {!propLevel && (
                   <div>
-                    <Label htmlFor="level">Level</Label>
+                    <Label className="mb-2" htmlFor="level">Level</Label>
                         <Select
                     value={formData.level}
                      onValueChange={(value) => handleInputChange("level", value)}

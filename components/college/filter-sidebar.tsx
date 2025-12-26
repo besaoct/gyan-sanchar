@@ -171,7 +171,7 @@ export function FilterSidebar({
   <CollapsibleContent className="mt-2">
     <div className="max-h-64 overflow-y-auto space-y-2">
       {filterOptions.courses.map((course) => (
-        <div key={course} className="flex items-center space-x-2">
+        <div key={course} className="flex items-center space-x-2 ">
           <Checkbox
             id={`course-${course}`}
             checked={filters.courses.includes(course)}
@@ -179,7 +179,7 @@ export function FilterSidebar({
               toggleArrayFilter("courses", course, filters.courses)
             }
           />
-          <Label htmlFor={`course-${course}`} className="text-sm">
+          <Label htmlFor={`course-${course}`} className="text-sm line-clamp-2">
             {course}
           </Label>
         </div>

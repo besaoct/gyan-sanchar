@@ -159,7 +159,7 @@ export function CommonAdmissionForm({
             <>
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
-                  <Label htmlFor="name">Name</Label>
+                  <Label className="mb-2" htmlFor="name">Name</Label>
                   <Input
                     id="name"
                     placeholder="Enter your name"
@@ -170,7 +170,7 @@ export function CommonAdmissionForm({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="email">Email</Label>
+                  <Label className="mb-2" htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -182,7 +182,7 @@ export function CommonAdmissionForm({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="mobile">Mobile</Label>
+                  <Label className="mb-2" htmlFor="mobile">Mobile</Label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                       +91
@@ -200,7 +200,7 @@ export function CommonAdmissionForm({
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="dob">Date of Birth</Label>
+                  <Label className="mb-2" htmlFor="dob">Date of Birth</Label>
                   <Input
                     id="dob"
                     type="date"
@@ -211,7 +211,7 @@ export function CommonAdmissionForm({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="stream">Stream</Label>
+                  <Label className="mb-2" htmlFor="stream">Stream</Label>
                   <Select
                     value={stream}
                     onValueChange={setStream}
@@ -230,7 +230,7 @@ export function CommonAdmissionForm({
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="level">Level</Label>
+                  <Label className="mb-2" htmlFor="level">Level</Label>
                   <Select
                     value={level}
                     onValueChange={setLevel}
