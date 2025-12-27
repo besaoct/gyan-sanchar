@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { CalendarIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getCoursesFilters } from "@/lib/api/data/courses";
+import { useAuth } from "@/contexts/auth/AuthContext";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -57,6 +59,7 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
 
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
 
@@ -87,10 +90,10 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: user?.name || "",
+      email: user?.email || "",
       country_code: "+91",
-      mobile: "",
+      mobile:  "",
       preferred_date: "",
       preferred_time: "11:00 AM - 12:00 PM",
       message: "",
@@ -177,7 +180,7 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-      <DialogContent className="max-w-lg p-6 w-[96%] max-h-[96%] overflow-y-auto">
+      <DialogContent className="max-w-lg p-6 w-[96%] max-h-[96%] h-auto  overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Book a Free Consultation</DialogTitle>
         </DialogHeader>
@@ -392,6 +395,12 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
             </Button>
           </form>
         </Form>
+              <div className="mt-2 text-center text-sm">
+               Already registered?{" "}
+            <Link href="/login" className="underline">
+              Login
+            </Link>
+          </div>
       </DialogContent>
     </Dialog>
   );

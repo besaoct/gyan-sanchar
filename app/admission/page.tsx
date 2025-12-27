@@ -13,9 +13,13 @@ export default function AdmissionPage() {
         <div className="bg-gradient-to-b from-[#044cac] to-[#033a8a] text-white">
             <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row gap-8 items-center">
-                    <div className="lg:w-1/3 flex-shrink-0">
-                        <div className="relative h-64 rounded-lg overflow-hidden">
-                            <Image src="/happy-student-with-graduation-cap-and-certificate.jpg" alt="Happy Student" layout="fill" objectFit="cover" />
+                    <div className="lg:w-1/3 lg:flex-shrink-0">
+                        <div className="lg:relative  lg:h-64 rounded-lg lg:overflow-hidden">
+                            <Image src="/happy-student-with-graduation-cap-and-certificate.jpg" alt="Happy Student"  
+                            width={1000}
+                            height={1000}
+                              className="h-64 object-cover rounded-lg"
+                            />
                         </div>
                     </div>
                     <div className="flex-1">

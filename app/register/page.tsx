@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -19,6 +21,7 @@ export default function RegisterPage() {
     useState(false);
   const [enable_whatsapp_updates, setEnableWhatsappUpdates] = useState(false);
   const { register, error, loading } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,8 +40,16 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row">
-      <div className="flex items-center justify-center py-12 lg:w-1/2">
+      <div className="flex items-center justify-center container py-12 lg:w-1/2">
         <div className="mx-auto grid w-[350px] gap-6">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => router.back()}
+            className="justify-self-start bg-accent"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
           <div className="grid gap-2 text-start">
             <h1 className="text-3xl font-bold">Register</h1>
             <p className="text-balance text-muted-foreground sr-only">
@@ -127,7 +138,7 @@ export default function RegisterPage() {
                 disabled={loading}
               />
               <label
-                htmlFor="interested_online_degree"
+                htmlFor="interested_online_online_degree"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Interested in online degree

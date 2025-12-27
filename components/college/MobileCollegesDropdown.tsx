@@ -16,8 +16,10 @@ interface DropdownData {
 
 export default function MobileCollegesDropdown({
   onClose,
+  onMainMenuClick,
 }: {
   onClose?: () => void;
+  onMainMenuClick?: () => void;
 }) {
   const router = useRouter();
   const [data, setData] = useState<DropdownData | null>(null);
@@ -204,11 +206,24 @@ export default function MobileCollegesDropdown({
 
   if (view === "streams") {
     return (
-      <div className="p-4 overflow-y-auto">
-        <h3 className="font-semibold mb-4">Select a Stream</h3>
+      <div className="p-4 ">
+      
+
+        <div className="w-full  border-white/30  pb-4 ">
+               <button
+          onClick={onMainMenuClick}
+          className="flex items-center gap-2  "
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Back 
+        </button>
+        </div>
+
+        
+        <h3 className="font-bold mb-4">Select a Stream</h3>
         <ul className="space-y-2">
           {data.categories.map((category) => (
-            <li key={category}>
+            <li key={category} className="border-b last:border-0 border-white/30 pb-3">
               <button
                 onClick={() => handleStreamClick(category)}
                 className="w-full text-left flex justify-between items-center"
@@ -286,15 +301,15 @@ export default function MobileCollegesDropdown({
       .map(([state]) => `Colleges in ${state}`);
 
     return (
-      <div className="p-4 overflow-y-auto">
+      <div className="p-4">
         <button
           onClick={handleBackClick}
           className="flex items-center gap-2 mb-4"
         >
           <ChevronLeft className="h-4 w-4" />
-          Back to Streams
+          Back 
         </button>
-        <h3 className="font-semibold mb-4 underline">{selectedStream}</h3>
+        <h3 className="font-bold mb-4 underline">{selectedStream}</h3>
         <ul className="space-y-2">
           <li>
             <a
@@ -307,16 +322,16 @@ export default function MobileCollegesDropdown({
             </a>
           </li>
           <li>
-            <h4 className="font-semibold mt-4 mb-2 underline">
+            <h4 className="font-bold mt-4 mb-4 underline">
               Colleges By Degrees
             </h4>
-            <ul className="space-y-2 pl-0">
+            <ul className="space-y-3 pl-0">
               {degrees.map((degree) => {
                 const courseName = degree
                   .replace(" colleges in india", "")
                   .trim();
                 return (
-                  <li key={degree} className="line-clamp-2">
+                  <li key={degree} className="line-clamp-1">
                     <a
                       onClick={() =>
                         handleLinkClick(
@@ -338,10 +353,10 @@ export default function MobileCollegesDropdown({
             </ul>
           </li>
           <li>
-            <h4 className="font-semibold mt-4 mb-2 underline">
+            <h4 className="font-bold mt-4 mb-4 underline">
               Colleges By Location
             </h4>
-            <ul className="space-y-2 pl-0">
+            <ul className="space-y-3 pl-0">
               {locations.map((location) => {
                 const stateName = location.replace("Colleges in ", "").trim();
                 return (
@@ -367,10 +382,10 @@ export default function MobileCollegesDropdown({
             </ul>
           </li>
           <li>
-            <h4 className="font-semibold mt-4 mb-2 underline">
+            <h4 className="font-bold my-4 underline">
               Popular Colleges
             </h4>
-            <ul className="space-y-2 pl-0">
+            <ul className="space-y-3 pl-0">
               {popularColleges.map((college) => (
                 <li key={college.slug}>
                   <a
@@ -386,8 +401,8 @@ export default function MobileCollegesDropdown({
             </ul>
           </li>
           <li>
-            <h4 className="font-semibold mt-4 mb-2 underline">Top Colleges</h4>
-            <ul className="space-y-2 pl-0">
+            <h4 className="font-bold my-4 underline">Top Colleges</h4>
+            <ul className="space-y-3 pl-0">
               {topColleges.map((college) => (
                 <li key={college.slug}>
                   <a

@@ -36,7 +36,7 @@ function InfoBadge({
 
 function RightImagePanel({ course }: { course: CourseDetails }) {
   return (
-    <div className="relative mx-auto sm:mx-4 lg:mx-0">
+    <div className="relative mx-auto sm:mx-4 2xl:mx-0">
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
         <div className="border-r p-2 px-4">
           <div className="text-xs text-muted-foreground">Duration</div>

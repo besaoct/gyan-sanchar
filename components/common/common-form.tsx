@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getCoursesFilters } from "@/lib/api/data/courses";
+import Link from "next/link";
 
 interface CommonRegistrationFormProps {
   title: string;
@@ -144,7 +145,7 @@ export function CommonAdmissionForm({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="lg:max-w-4xl sm:max-w-3xl w-full p-0 h-[96%] lg:h-fit !overflow-auto">
+      <DialogContent className="lg:max-w-4xl sm:max-w-3xl w-full p-0 max-h-[96%] h-auto !overflow-auto">
         <div className="flex flex-col-reverse sm:flex-row w-full">
           <div className="sm:w-1/2 bg-primary sm:rounded-l-lg text-white p-8 flex flex-col justify-start ">
             <h2 className="text-2xl font-bold mb-4 text-left ">{title}</h2>
@@ -278,6 +279,12 @@ export function CommonAdmissionForm({
                   {isLoading ? "Submitting..." : buttonText}
                 </Button>
               </form>
+                      <div className="mt-2 text-center text-sm">
+               Already registered?{" "}
+            <Link href="/login" className="underline">
+              Login
+            </Link>
+          </div>
               <p className="text-xs text-muted-foreground mt-4">
                 By proceeding ahead you expressly agree to the GyanSanchar Terms
                 & Conditions and Privacy Policy
@@ -285,6 +292,7 @@ export function CommonAdmissionForm({
             </>
           </div>
         </div>
+
       </DialogContent>
     </Dialog>
   );

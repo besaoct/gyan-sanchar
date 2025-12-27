@@ -34,9 +34,9 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <div className="space-y-2 text-sm">
               <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Colleges</div>
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Exams</div>
+              {/* <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Exams</div> */}
               <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Courses</div>
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Careers</div>
+              {/* <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Careers</div> */}
             </div>
           </div>
           <div>
@@ -55,7 +55,7 @@ export default function Footer() {
                 <Phone className="w-4 h-4" />
                 1800-572-9877
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-start gap-2 break-all">
                 <Mail className="w-4 h-4" />
                 support@gyansanchar.com
               </div>

@@ -6,13 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff, ChevronLeft } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { login, error, loading } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +23,16 @@ export default function LoginPage() {
 
   return (
     <div className="w-full min-h-screen flex flex-col lg:flex-row">
-      <div className="flex items-center justify-center py-12 lg:w-1/2">
+      <div className="flex items-center justify-center container py-12 lg:w-1/2">
         <div className="mx-auto grid w-[350px] gap-6">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => router.back()}
+            className="justify-self-start bg-accent"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
           <div className="grid gap-2 text-start">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground sr-only">

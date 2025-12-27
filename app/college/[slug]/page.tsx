@@ -47,7 +47,7 @@ import VideoDialogPlayer from "@/components/college/VideoDialogPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReviewForm } from "@/components/college/review-form";
 import { ApplyNowForm } from "@/components/common/apply-now-form";
-import { useGooglePlaceReviews } from "@/hooks/use-google-place-reviews";
+// import { useGooglePlaceReviews } from "@/hooks/use-google-place-reviews";
 import GoogleReview from "@/components/common/google-review";
 import { FcGoogle } from "react-icons/fc";
 
@@ -176,8 +176,6 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     notFound();
   }
 
-
-
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "courses", label: "Courses" },
@@ -198,7 +196,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       </div>
 
       {/* Main Content */}
-      <div  className=" mx-auto py-8">
+      <div className=" mx-auto py-8">
         <div className="w-full">
           <nav className="sticky top-0 z-20 mb-6 w-full border-y border-border bg-white shadow-xs ">
             <div className="w-full flex overflow-x-auto scrollbar-hide scroll-smooth container  mx-auto">
@@ -413,7 +411,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </div>
                           <div className="mt-6 text-right flex gap-2 flex-wrap justify-end">
                             <Button
-                              onClick={()=>router.push(`/course/${course.slug ||"#"}`)}
+                              onClick={() =>
+                                router.push(`/course/${course.slug || "#"}`)
+                              }
                               variant="outline"
                               className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
                             >
@@ -425,7 +425,6 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                                 college_ids={[Number(college.id)]}
                                 course_ids={[Number(course.id)]}
                                 stream={college.streams?.[0]?.name}
-                               
                                 title={applyNowData.description_title}
                                 description={
                                   <ul className="space-y-4 text-white/90">
@@ -859,12 +858,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               <div className="space-y-6">
                 <div className="mt-6">
                   <h1 className="inline">
-                    <FcGoogle className="text-xl inline" /> {" "}
-                 Rating & Reviews</h1>
-        <GoogleReview
-        placeName={college.name}
-        className="mb-10"
-      />
+                    <FcGoogle className="text-xl inline" /> Rating & Reviews
+                  </h1>
+                  <GoogleReview placeName={college.name} className="mb-10" />
                 </div>
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">
@@ -877,10 +873,18 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     <div className="space-y-6">
                       <div className="text-center p-4 bg-[#044cac]/5 rounded-lg">
                         <div className="text-2xl font-bold text-[#044cac] mb-1">
-                          {calculateReviewStats(college.reviews_data).averageRating}{" "}
+                          {
+                            calculateReviewStats(college.reviews_data)
+                              .averageRating
+                          }{" "}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          Average Rating ({calculateReviewStats(college.reviews_data).totalReviews} Reviews)
+                          Average Rating (
+                          {
+                            calculateReviewStats(college.reviews_data)
+                              .totalReviews
+                          }{" "}
+                          Reviews)
                         </div>
                       </div>
                       <div className="space-y-4">
@@ -936,7 +940,13 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <Carousel className="w-full max-w-full">
+                    <Carousel
+                      opts={{
+                        align: "start",
+                        loop: true,
+                      }}
+                      className="w-full max-w-full"
+                    >
                       <CarouselContent>
                         {college.gallery.map((image, index) => (
                           <CarouselItem
@@ -954,7 +964,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </CarouselItem>
                         ))}
                       </CarouselContent>
-                      <CarouselPrevious className="ml-8"  />
+                      <CarouselPrevious className="ml-8" />
                       <CarouselNext className="mr-8" />
                     </Carousel>
                     <div className="mt-6">
@@ -995,9 +1005,14 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   key={reel.id}
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                 >
-                  <Dialog  onOpenChange={(open) => !open && setSelectedReel(null)} >
+                  <Dialog
+                    onOpenChange={(open) => !open && setSelectedReel(null)}
+                  >
                     <DialogTrigger asChild>
-                      <div className="cursor-pointer" onClick={() => setSelectedReel(reel)}>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => setSelectedReel(reel)}
+                      >
                         <VideoReelCard reel={reel} />
                       </div>
                     </DialogTrigger>
@@ -1023,7 +1038,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             {college.videoReels?.map((reel) => (
               <Dialog onOpenChange={(open) => !open && setSelectedReel(null)}>
                 <DialogTrigger asChild>
-                  <div className="cursor-pointer" onClick={() => setSelectedReel(reel)}>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setSelectedReel(reel)}
+                  >
                     <VideoReelCard key={reel.id} reel={reel} />
                   </div>
                 </DialogTrigger>
@@ -1072,8 +1090,6 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     </div>
   );
 }
-
-
 
 interface Review {
   id: string;

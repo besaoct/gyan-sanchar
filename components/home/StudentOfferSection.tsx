@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 
-export default function OnlineDegreesSection() {
+export default function StudentOfferSection() {
   return (
     <section className="py-12 md:py-16 bg-gradient-to-r from-orange-400 to-orange-500">
       <div className="container mx-auto px-4">

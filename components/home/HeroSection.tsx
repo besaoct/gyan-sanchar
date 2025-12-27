@@ -3,6 +3,7 @@
 import { BookConsultationForm } from "@/components/common/book-consultation-form";
 import { Button } from "@/components/ui/button"
 import { Play } from "lucide-react"
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -29,9 +30,10 @@ export default function HeroSection() {
               building a better future for your career at a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
+             <Link href="/colleges">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 text-base md:text-lg">
                 Find Your College
-              </Button>
+              </Button></Link>
               <BookConsultationForm
                 trigger={
                   <Button

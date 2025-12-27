@@ -7,12 +7,12 @@ import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import HeroSection from "@/components/home/HeroSection";
 import MediaSection from "@/components/home/MediaSection";
-import OnlineDegreesSection from "@/components/home/OnlineDegreesSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import TrustIndicators from "@/components/home/TrustIndicators";
 import RequestCallbackSection from "@/components/home/RequestCallbackSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import TopRankedCollegesSection from "@/components/home/TopRankedCollegesSection";
+import StudentOfferSection from "@/components/home/StudentOfferSection";
 
 export default function HomePage() {
   return (
@@ -21,7 +21,7 @@ export default function HomePage() {
       <HeroSection />
       <TrustIndicators />
       <ServicesSection />
-      <OnlineDegreesSection />
+      <StudentOfferSection />
       <MediaSection />
       <CareerGuidanceSection />
       <ApplicationFormSection />
