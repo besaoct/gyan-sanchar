@@ -955,7 +955,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           >
                             <div className="relative h-64 w-full overflow-hidden rounded-lg">
                               <Image
-                                src={image || "/placeholder.svg"}
+                                src={image?.replace('storage','') || "/placeholder.svg"}
                                 alt={`${college.name} campus ${index + 1}`}
                                 fill
                                 className="object-cover"

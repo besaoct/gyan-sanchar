@@ -43,6 +43,7 @@ export interface Course {
   id: string | number;
   slug?: string;
   name: string;
+  level?: string;
   duration: number;
   fees: string;
   eligibility_exams: string | string[] | (string | object)[];
@@ -183,6 +184,7 @@ export interface PostCollegeReviewResponseData {
 export interface CollegeFilterOptions {
   states: string[]
   streams: string[]
+  levels: string[]
   instituteTypes: string[]
   feeRange: [number, number]
   rating: number
@@ -191,6 +193,7 @@ export interface CollegeFilterOptions {
   studyMode: string[]
   exams: string[]
   courses: string[]
+
 }
 
 // API Service
@@ -285,6 +288,7 @@ export const getCollegeFilters = async (): Promise<ApiResponse<CollegeFilterOpti
         success: false,
         message: response.message || "Failed to fetch colleges for filters",
         data: {
+          levels: [],
           states: [],
           streams: [],
           instituteTypes: [],
@@ -304,6 +308,7 @@ export const getCollegeFilters = async (): Promise<ApiResponse<CollegeFilterOpti
     // Use Sets to avoid duplicates
     const states = new Set<string>();
     const streams = new Set<string>();
+    const levels = new Set<string>();
     const instituteTypes = new Set<string>();
     const facilities = new Set<string>();
     const exams = new Set<string>();
@@ -333,6 +338,13 @@ college.streams?.forEach((stream) => {
     if (stream.description) {
       streamDescriptions.set(stream.name, stream.description);
     }
+  }
+});
+
+// college levels
+college.courses?.forEach((course) => {
+  if (course.level && typeof course.level === "string") {
+    levels.add(course.level);
   }
 });
 
@@ -401,6 +413,7 @@ college.courses?.forEach((course) => {
 
     const filterOptions: CollegeFilterOptions = {
       states: Array.from(states).sort(),
+      levels: Array.from(levels).sort(),
       streams: Array.from(streams).sort(),
       instituteTypes: Array.from(instituteTypes).sort(),
       facilities: Array.from(facilities).sort(),
@@ -427,6 +440,7 @@ college.courses?.forEach((course) => {
         : "An unexpected error occurred",
       data: {
         states: [],
+        levels: [],
         streams: [],
         instituteTypes: [],
         facilities: [],

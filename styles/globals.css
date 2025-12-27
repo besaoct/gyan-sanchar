@@ -158,7 +158,8 @@
 
 
 .htmlContent{
-  @apply prose prose-sm max-w-none 
+  @apply prose prose-sm max-w-none prose-headings:!text-base
+
                 prose-p:leading-relaxed 
                 prose-p:m-0
                 prose-headings:m-0
@@ -170,6 +171,8 @@
                 prose-th:py-1 prose-td:py-1
                 mb-6
                 prose-table:w-full
+                prose-li:marker:!text-primary
+               
                 
                 /* prose-ul:list-inside prose-ol:list-inside */
               
@@ -202,16 +205,18 @@ table{
   display: block;
   white-space: nowrap ;
   overflow-x: auto;
+
 }
 
 /* html content customizations */
 .htmlContent > table, td, tr, th, tbody, thead, tfoot, h2, h1, h3, h4, h5, h6, p, li {
     font-family: '__Poppins_e36b36', '__Poppins_Fallback_e36b36';
     font-style: normal;
+
 }
 
 .htmlContent table, thead, tbody, tfoot, tr {
-  @apply  !w-full overflow-x-auto;
+  @apply  !w-full max-w-full overflow-x-auto;
 }
 
 
@@ -220,7 +225,16 @@ table{
 }
 
 .htmlContent td {
-  @apply w-1/2 max-w-full;
+  @apply w-full max-w-full;
+}
+
+/* .htmlContent ul, ul>li{
+   list-style: disc !important;
+   padding: 0 !important;
+} */
+
+.htmlContent  ul>li ::marker{
+  color: var(--primary) !important;
 }
 
 
