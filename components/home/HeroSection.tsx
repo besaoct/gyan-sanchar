@@ -30,10 +30,11 @@ export default function HeroSection() {
               building a better future for your career at a time.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
-             <Link href="/colleges">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 md:px-8 py-3 text-base md:text-lg">
+              <Link href="/colleges" className="block w-full">
                 Find Your College
-              </Button></Link>
+              </Link>
+              </Button>
               <BookConsultationForm
                 trigger={
                   <Button
