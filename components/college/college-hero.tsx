@@ -94,14 +94,15 @@ function RightImagePanel({ college }: { college: College }) {
   return (
     <div className="relative mx-auto sm:mx-4 2xl:mx-0">
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
-        {college.nirf_ranking.rank ? (
+        {college.nirf_ranking.rank !==null ? (
           <div className="border-r p-2 px-4">
             <div className="text-xs text-muted-foreground">NIRF Rank</div>
             <div className="text-lg font-semibold">
-              #{college.nirf_ranking?.rank}
+          {`${college.nirf_ranking.rank == 0 ? 'N/A': `#${college.nirf_ranking.rank}`}`}
             </div>
           </div>
-        ) : (
+        ) 
+        : (
           <></>
         )}
         <div className="border-r p-2 px-4">
@@ -135,11 +136,11 @@ function RightImagePanel({ college }: { college: College }) {
       </div>
 
       <div className="hidden sm:block">
-        {college.nirf_ranking.rank ? (
+        {college.nirf_ranking.rank !== null ? (
           <div className="pointer-events-none absolute -left-6 top-6">
             <InfoBadge
               title="NIRF Rank"
-              value={`#${college.nirf_ranking?.rank}`}
+              value={`${college.nirf_ranking.rank==0 ? 'N/A': `#${college.nirf_ranking.rank}`}`}
             />
           </div>
         ) : (

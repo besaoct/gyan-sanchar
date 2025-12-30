@@ -529,6 +529,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </>
                         )}
                       </div>
+                    {college.admissionProcess.importantDates ? (
                       <div>
                         <h4 className="font-semibold mb-3">Important Dates</h4>
                         <div className="text-sm text-muted-foreground">
@@ -545,6 +546,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           )}
                         </div>
                       </div>
+                    ) : (<></>)}
                       <div className="text-center">
                         {applyNowData && college.id && (
                           <ApplyNowForm

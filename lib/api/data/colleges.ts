@@ -23,7 +23,7 @@ export interface AdditionalFees {
 }
 
 export interface NirfRanking {
-  rank: number;
+  rank: number | string | null;
   category: string | null;
 }
 
