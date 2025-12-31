@@ -622,23 +622,34 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </div>
                         ))}
                       </div>
-                      <div>
+               {
+                college.additionalFees? (
+                         <div>
                         <h4 className="font-semibold mb-3">Additional Fees</h4>
                         <div className="text-sm text-muted-foreground">
-                          <div className="flex justify-between items-center border-b pb-2 mb-2">
+                           {
+                            college.additionalFees.hostel ? (
+                                   <div className="flex justify-between items-center border-b pb-2 mb-2">
                             <span>Hostel Fees (Annual):</span>
                             <span className="font-medium">
                               {college.additionalFees.hostel}
                             </span>
                           </div>
-                          <div className="flex justify-between items-center border-b pb-2">
+                            ):<></>
+                           }
+                            {college.additionalFees.mess ? (
+      <div className="flex justify-between items-center border-b pb-2">
                             <span>Mess Fees (Annual):</span>
                             <span className="font-medium">
                               {college.additionalFees.mess}
                             </span>
                           </div>
+                            ):<></>
+                              }
                         </div>
                       </div>
+                ):<></>
+               }
                       <div>
                         <h4 className="font-semibold mb-3">Scholarships</h4>
                         <div className="grid gap-4">
