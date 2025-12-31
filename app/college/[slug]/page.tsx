@@ -327,6 +327,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         {college.visionMission}
                       </p>
                     </div>
+                   { college.notableAlumni && college.notableAlumni.length > 0 ? (
                     <div className="mt-6">
                       <h4 className="font-semibold mb-3">Notable Alumni</h4>
                       <div className="grid sm:grid-cols-2 gap-4">
@@ -343,6 +344,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         ))}
                       </div>
                     </div>
+                    ) : (<></>)}
                   </CardContent>
                 </Card>
               </div>
