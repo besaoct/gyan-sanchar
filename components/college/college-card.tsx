@@ -184,13 +184,14 @@ export function CollegeCard({
                 {college.type}
               </Badge>
 
-              {college.streams?.[0] && (
+              {college.streams ? (
                 <Badge variant="secondary" className="text-xs md:text-xs">
                   {college.streams[0].name}
                 </Badge>
-              )}
+              ):<></>
+            }
 
-              {college.streams && college.streams.length > 1 && (
+              {(college.streams && college.streams.length > 1) ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -207,7 +208,8 @@ export function CollegeCard({
                       .join(", ")}
                   </TooltipContent>
                 </Tooltip>
-              )}
+              ):<></>
+            }
 
               <span className="flex items-center gap-1">
                 <Star className="h-4 w-4 text-orange-300" />
