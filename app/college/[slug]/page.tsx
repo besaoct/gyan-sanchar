@@ -652,6 +652,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       </div>
                 ):<></>
                }
+
+               {college.scholarships && college.scholarships.length > 0 ? (
                       <div>
                         <h4 className="font-semibold mb-3">Scholarships</h4>
                         <div className="grid gap-4">
@@ -672,6 +674,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           )}
                         </div>
                       </div>
+                ) : (<></>)}
                       <div className="text-center">
                         <Button
                           variant="outline"
