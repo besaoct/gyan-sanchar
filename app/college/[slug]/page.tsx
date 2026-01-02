@@ -949,7 +949,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             )}
 
             {activeTab === "gallery" && (
-              <div className="space-y-6">
+              <div className="space-y-6" id="gallery">
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">
                     <CardTitle className="flex items-center gap-2">

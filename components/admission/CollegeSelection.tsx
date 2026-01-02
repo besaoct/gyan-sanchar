@@ -8,6 +8,7 @@ import {
   getColleges,
   College,
   getCollegeFilters,
+  getStreams,
 } from "@/lib/api/data/colleges";
 // import { getCoursesFilters } from "@/lib/api/data/courses";
 import { Button } from "@/components/ui/button";
@@ -107,16 +108,19 @@ export function CollegeSelection({
 
 
   useEffect(() => {
+
+
     const fetchFilters = async () => {
       setFiltersLoading(true);
       try {
-        const [collegeFilters] = await Promise.all([
+        const [collegeFilters, streamRes] = await Promise.all([
           getCollegeFilters(),
+          getStreams()
         ]);
 
         if (collegeFilters.success && collegeFilters.data) {
           setStates(collegeFilters.data.states);
-          setStreams(collegeFilters.data.streams);
+          setStreams(streamRes.success && streamRes.data ? streamRes.data.map(s => s.title) : []);
           setTypes(collegeFilters.data.instituteTypes);
         }
      

@@ -22,6 +22,17 @@ export interface CourseDetails {
     duration: number;
     mode: string[];
     level: string;
+    Stream: {
+      id: string | number;
+      title: string;
+      description?: string;
+    };
+    degree: {
+      id: string | number;
+      parent_stream: string;
+      title: string;
+      description?: string;
+    }
     accreditation: string[];
   };
 

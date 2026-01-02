@@ -2,6 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { College } from "@/lib/api/data/colleges";
+import Link from "next/link";
 
 function RatingPill({
   rating,
@@ -57,9 +58,9 @@ function LocationAndGallery({
             />
           ))}
         </div>
-        <a href="#gallery" className="text-primary font-medium hover:underline">
+        <Link href="?tab=gallery#gallery" className="text-primary font-medium hover:underline">
           Gallery
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getColleges } from "@/lib/api/data/colleges"
+import { getColleges, getPopularColleges, getStreams, getTopColleges } from "@/lib/api/data/colleges"
 import type { College } from "@/lib/api/data/colleges"
 import { Skeleton } from "@/components/ui/skeleton" // Adjust path if needed
 
@@ -22,26 +22,29 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const response = await getColleges()
-        if (!response.success || !response.data) {
+
+
+     const [collegeResponse, streamResponse, popularCollegesRes, topCollegesRes] = await Promise.all([
+                  getColleges(),
+                  getStreams(),
+                  getPopularColleges(),
+                  getTopColleges(),
+                ]);
+
+        if (!collegeResponse.success || !collegeResponse.data) {
           setData(getFallbackData())
           return
         }
 
-        const colleges: College[] = response.data
+        const colleges: College[] = collegeResponse.data
+        const streams = streamResponse.success && streamResponse.data ? streamResponse.data : []
 
         // 1. Categories = Streams
-        const streamsSet = new Set<string>()
-        colleges.forEach((college) => {
-          college.streams?.forEach((stream) => {
-            if (typeof stream === "string") {
-              streamsSet.add(stream)
-            } else if (stream?.title) {
-              streamsSet.add(stream.title)
-            }
-          })
-        })
-        const categories = Array.from(streamsSet).sort()
+        const streamsSet = streams.length > 0
+          ? new Set(streams.map((s) => s.title))
+          : new Set<string>()
+
+        const categories = Array.from(streamsSet)
 
         // 2. Top 5 most common courses → "Course Name colleges in india"
         const courseCount = new Map<string, number>()
@@ -73,27 +76,27 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
           .map(([state]) => `Colleges in ${state}`)
 
         // 4. Popular Colleges (top 12 by rating + reviews)
-        const popularCollegesRaw = colleges
-          .sort((a, b) => {
-            if (b.rating !== a.rating) return b.rating - a.rating
-            return b.reviews - a.reviews
-          })
-          .slice(0, 12)
+        const popularColleges = popularCollegesRes.success && popularCollegesRes.data ? popularCollegesRes.data : []
+        //   .sort((a, b) => {
+        //     if (b.rating !== a.rating) return b.rating - a.rating
+        //     return b.reviews - a.reviews
+        //   })
+        //   .slice(0, 12)
 
-        const popularColleges = popularCollegesRaw.map((c) => ({
-          name: c.name,
-          slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
-        }))
+        // const popularColleges = popularCollegesRaw.map((c) => ({
+        //   name: c.name,
+        //   slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
+        // }))
 
         // 5. Top Colleges (top 10 by rating)
-        const topCollegesRaw = colleges
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 10)
+         const topColleges = topCollegesRes.success && topCollegesRes.data ? topCollegesRes.data : []
+        //   .sort((a, b) => b.rating - a.rating)
+        //   .slice(0, 10)
 
-        const topColleges = topCollegesRaw.map((c) => ({
-          name: c.name,
-          slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
-        }))
+        // const topColleges = topCollegesRaw.map((c) => ({
+        //   name: c.name,
+        //   slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
+        // }))
 
         setData({
           categories,

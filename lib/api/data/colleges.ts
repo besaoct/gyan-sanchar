@@ -466,3 +466,49 @@ export const getStreams = async (): Promise<ApiResponse<Stream[]>> => {
     throw error;
   }
 };
+
+
+// top colleges api function
+export const getTopColleges = async (): Promise<ApiResponse<College[]>> => {
+  try {
+    const response = await collegeApi.get<ApiResponse<College[]>>(
+      `${API_ENDPOINTS.COLLEGES_TOP}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+};
+
+// popular colleges api function
+export const getPopularColleges = async (): Promise<ApiResponse<College[]>> => {
+  try {
+    const response = await collegeApi.get<ApiResponse<College[]>>(
+      `${API_ENDPOINTS.COLLEGES_POPULAR}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+};
+
+// featured colleges api function
+export const getFeaturedColleges = async (): Promise<ApiResponse<College[]>> => {
+  try {
+    const response = await collegeApi.get<ApiResponse<College[]>>(
+      `${API_ENDPOINTS.COLLEGES_FEATURED}`
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+};
