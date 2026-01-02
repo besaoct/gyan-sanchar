@@ -3,30 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { MapPin, Check } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 import { MdTrendingUp } from "react-icons/md";
 import { HiOutlineAcademicCap, HiOutlineClipboardList } from "react-icons/hi";
 import { BiSupport } from "react-icons/bi";
-import { useState, useEffect } from "react";
-
-const steps = [
-  "Register",
-  "Select Course",
-  "Fill Application",
-  "Upload Docs",
-  "Make Payment",
-  "Admission Confirmed",
-];
+import SearchBar from "./SearchBar";
 
 export default function ServicesSection() {
-  // const [activeStep, setActiveStep] = useState(0);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setActiveStep((prev) => (prev + 1) % steps.length); // loop correctly
-  //   }, 2000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   return (
     <section className="py-12 md:py-16 bg-gray-50">
@@ -41,86 +24,10 @@ export default function ServicesSection() {
         </div>
 
         <div className="flex justify-center mb-12">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center  gap-4 bg-white p-4 rounded-lg shadow-sm w-full max-w-4xl">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-gray-400" />
-              <span className="text-gray-600">Popular</span>
-            </div>
-            <Input
-              placeholder="Select Course"
-              className="border-1 h-10 bg-gray-50 py-2 flex-1 shadow-none"
-            />
-     
-          </div>
-        </div>
-
-        {/* steps with animation */}
-        {/* <div className="mt-16 mb-12">
-  <div className="relative w-full mx-auto">
-
-    
-    <div className="hidden lg:block absolute top-6 left-0 w-full h-1 bg-gray-200 rounded-full"></div>
-    <div
-      className="hidden lg:block absolute top-6 left-0 h-1 bg-green-600/50 rounded-full transition-all duration-700 ease-in-out"
-      style={{ width: `${(activeStep / (steps.length - 1)) * 100}%` }}
-    ></div>
-
-<div className="flex flex-col items-center gap-10 lg:grid lg:grid-cols-6 lg:gap-8 lg:items-start relative z-10">
-  {steps.map((step, i) => {
-    const isLast = i === steps.length - 1;
-    const isCompleted = i < activeStep || (isLast && activeStep === 0);
-    const isActive = i === activeStep;
-
-    return (
-      <div
-        key={i}
-        className="flex flex-col items-center lg:flex-col lg:items-center lg:text-center relative"
-      >
-
-        {i !== 0 && (
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-1 h-10 bg-gray-200 lg:hidden"></div>
-        )}
-        {i !== 0 && isCompleted && (
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-1 h-10 bg-green-500 lg:hidden transition-all duration-700"></div>
-        )}
-
- 
-        <div
-          className={`relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-500
-            ${isCompleted
-              ? "bg-green-500 border-green-500/50 text-white"
-              : isActive
-              ? "border-green-500/50 text-green-500 bg-white shadow-sm"
-              : "border-gray-300 text-gray-400 bg-white"
-            }`}
-        >
-          {isCompleted ? (
-            <Check className="w-6 h-6 animate-scaleIn" />
-          ) : (
-            <span className="font-bold">{i + 1}</span>
-          )}
+        <SearchBar />
         </div>
 
 
-<p
-  className={`mt-3 px-3 w-60 lg:w-fit gap-4 h-10 flex items-center justify-center py-1 text-sm font-semibold rounded-sm text-center transition-colors duration-500 uppercase
-    ${isCompleted
-      ? "bg-[#044cac]/10 text-[#044cac] border border-[#044cac]/50"
-      : isActive
-      ? "bg-[#044cac]/10 text-[#044cac] border border-[#044cac]/50"
-      : "bg-gray-100 text-gray-500 border border-gray-200"
-    }`}
->
-  {step}
-</p>
-
-      </div>
-    );
-  })}
-</div>
-
-  </div>
-</div> */}
 
         {/* steps with animation end */}
 
