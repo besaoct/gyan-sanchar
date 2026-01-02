@@ -165,7 +165,7 @@ export default function CollegeListingPage() {
         return false;
 
       if (filters.streams.length > 0) {
-        const collegeStreamNames = college.streams?.map((s) => s.name) || [];
+        const collegeStreamNames = college.streams?.map((s) => s.title) || [];
         if (
           !filters.streams.some((stream) => collegeStreamNames.includes(stream))
         )
@@ -394,9 +394,9 @@ export default function CollegeListingPage() {
                     const streamInfo = colleges
                       .flatMap((c) => c.streams)
                       .find(
-                        (s): s is { name: string; description: string } =>
+                        (s): s is {id:number | string, title: string, description: string } =>
                           typeof s === "object" &&
-                          s.name === streamName &&
+                          s.title === streamName &&
                           !!s.description
                       );
 

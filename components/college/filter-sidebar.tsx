@@ -96,6 +96,9 @@ export function FilterSidebar({
     );
   };
 
+  console.log("Active Filters Count:", getActiveFiltersCount());
+  console.log("Streams Filter:", filters.streams);
+
   return (
     <div className="bg-white p-4 h-auto lg:h-fit sticky lg:top-6 ">
       <div className="flex items-center justify-between mb-8 lg:mb-0">

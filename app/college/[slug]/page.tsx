@@ -426,7 +426,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                               <ApplyNowForm
                                 college_ids={[Number(college.id)]}
                                 course_ids={[Number(course.id)]}
-                                stream={college.streams?.[0]?.name}
+                                stream={college.streams?.[0]?.title}
                                 title={applyNowData.description_title}
                                 description={
                                   <ul className="space-y-4 text-white/90">
@@ -554,7 +554,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           <ApplyNowForm
                             college_ids={[Number(college.id)]}
                             course_ids={null} // No specific course for general admission
-                            stream={college.streams?.[0]?.name}
+                            stream={college.streams?.[0]?.title}
                             title={applyNowData.description_title}
                             description={
                               <ul className="space-y-4 text-white/90">

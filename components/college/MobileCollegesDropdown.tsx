@@ -46,8 +46,8 @@ export default function MobileCollegesDropdown({
           college.streams?.forEach((stream) => {
             if (typeof stream === "string") {
               streamsSet.add(stream);
-            } else if (stream?.name) {
-              streamsSet.add(stream.name);
+            } else if (stream?.title) {
+              streamsSet.add(stream.title);
             }
           });
         });
@@ -243,7 +243,7 @@ export default function MobileCollegesDropdown({
       college.streams?.some((stream) =>
         typeof stream === "string"
           ? stream === selectedStream
-          : stream.name === selectedStream
+          : stream.title === selectedStream
       )
     );
 

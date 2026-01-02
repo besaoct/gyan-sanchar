@@ -54,7 +54,7 @@ export function CollegeSelection({
 
     if (selectedStreams.length > 0) {
       results = results.filter((college) =>
-        college.streams.some((s) => selectedStreams.includes(s.name))
+        college.streams.some((s) => selectedStreams.includes(s.title))
       );
     }
 

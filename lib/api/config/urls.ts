@@ -17,4 +17,5 @@ export const API_ENDPOINTS = {
   ENQUIRIES: "/api/v1/enquiries",
   APPLICATIONS: "/api/v1/applications",
   LIVE_CONSULTATION: "/api/v1/live-consultation",
+  STREAMS: "/api/v1/streams",
 };

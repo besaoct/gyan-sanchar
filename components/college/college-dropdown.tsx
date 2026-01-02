@@ -36,8 +36,8 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
           college.streams?.forEach((stream) => {
             if (typeof stream === "string") {
               streamsSet.add(stream)
-            } else if (stream?.name) {
-              streamsSet.add(stream.name)
+            } else if (stream?.title) {
+              streamsSet.add(stream.title)
             }
           })
         })

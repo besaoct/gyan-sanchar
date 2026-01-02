@@ -3,9 +3,7 @@ import axios from "axios";
 import { BASE_URL, API_ENDPOINTS } from "../config/urls";
 import { ApiResponse, ApiErrorResponse } from "./auth"; // Re-using common types
 
-
 // Type Definitions for Colleges
-
 
 export interface Location {
   city: string;
@@ -57,7 +55,8 @@ export interface Hostel {
 }
 
 export interface Stream {
-  name: string;
+  id: string | number;
+  title: string;
   description: string;
 }
 
@@ -105,7 +104,7 @@ export interface VideoReel {
 }
 
 export interface College {
-  id? : string | number;
+  id?: string | number;
   slug: string;
   name: string;
   verifyCollege?: boolean;
@@ -131,17 +130,16 @@ export interface College {
   campusSize: number;
   campusHighlights: string | null;
   visionMission: string | null;
-  notableAlumni: any[]; 
-  scholarships: any[];  
+  notableAlumni: any[];
+  scholarships: any[];
   studyMode: string[];
-  admissionProcess: AdmissionProcess ;
+  admissionProcess: AdmissionProcess;
   placement: Placement;
   campusLife: CampusLife;
   gallery: string[];
   reviews_data: Review[];
   videoReels: VideoReel[];
 }
-
 
 export interface CollegeReview {
   id: number;
@@ -154,11 +152,11 @@ export interface CollegeReview {
 }
 
 export interface CollegeReviewsResponse {
-    success: boolean;
-    college_id: string;
-    total_reviews: number;
-    average_rating: number;
-    data: CollegeReview[];
+  success: boolean;
+  college_id: string;
+  total_reviews: number;
+  average_rating: number;
+  data: CollegeReview[];
 }
 
 export interface PostCollegeReviewRequest {
@@ -182,18 +180,17 @@ export interface PostCollegeReviewResponseData {
 }
 
 export interface CollegeFilterOptions {
-  states: string[]
-  streams: string[]
-  levels: string[]
-  instituteTypes: string[]
-  feeRange: [number, number]
-  rating: number
-  hostel: string[]
-  facilities: string[]
-  studyMode: string[]
-  exams: string[]
-  courses: string[]
-
+  states: string[];
+  streams: string[];
+  levels: string[];
+  instituteTypes: string[];
+  feeRange: [number, number];
+  rating: number;
+  hostel: string[];
+  facilities: string[];
+  studyMode: string[];
+  exams: string[];
+  courses: string[];
 }
 
 // API Service
@@ -218,8 +215,6 @@ export const getColleges = async (): Promise<ApiResponse<College[]>> => {
     throw error;
   }
 };
-
-
 
 export const getCollegeById = async (
   id: string | number
@@ -258,16 +253,14 @@ export const postCollegeReview = async (
   token: string
 ): Promise<ApiResponse<PostCollegeReviewResponseData>> => {
   try {
-    const response = await collegeApi.post<ApiResponse<PostCollegeReviewResponseData>>(
-      API_ENDPOINTS.COLLEGE_REVIEWS,
-      reviewData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "*/*",
-        },
-      }
-    );
+    const response = await collegeApi.post<
+      ApiResponse<PostCollegeReviewResponseData>
+    >(API_ENDPOINTS.COLLEGE_REVIEWS, reviewData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "*/*",
+      },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -277,9 +270,9 @@ export const postCollegeReview = async (
   }
 };
 
-
-
-export const getCollegeFilters = async (): Promise<ApiResponse<CollegeFilterOptions>> => {
+export const getCollegeFilters = async (): Promise<
+  ApiResponse<CollegeFilterOptions>
+> => {
   try {
     const response = await getColleges();
 
@@ -294,12 +287,12 @@ export const getCollegeFilters = async (): Promise<ApiResponse<CollegeFilterOpti
           instituteTypes: [],
           facilities: [],
           exams: [],
-          feeRange: [0, 0], 
+          feeRange: [0, 0],
           rating: 0,
           hostel: [],
           studyMode: [],
-          courses:[],
-        }
+          courses: [],
+        },
       };
     }
 
@@ -328,33 +321,32 @@ export const getCollegeFilters = async (): Promise<ApiResponse<CollegeFilterOpti
         states.add(college.location.state);
       }
 
-// Streams
-college.streams?.forEach((stream) => {
-  if (typeof stream === "string") {
-    streams.add(stream);
-    // No description if it's just string
-  } else if (stream && typeof stream === "object" && stream.name) {
-    streams.add(stream.name);
-    if (stream.description) {
-      streamDescriptions.set(stream.name, stream.description);
-    }
-  }
-});
+      // Streams
+      college.streams?.forEach((stream) => {
+        if (typeof stream === "string") {
+          streams.add(stream);
+          // No description if it's just string
+        } else if (stream && typeof stream === "object" && stream.title) {
+          streams.add(stream.title);
+          if (stream.description) {
+            streamDescriptions.set(stream.title, stream.description);
+          }
+        }
+      });
 
-// college levels
-college.courses?.forEach((course) => {
-  if (course.level && typeof course.level === "string") {
-    levels.add(course.level);
-  }
-});
+      // college levels
+      college.courses?.forEach((course) => {
+        if (course.level && typeof course.level === "string") {
+          levels.add(course.level);
+        }
+      });
 
-
-// courses
-college.courses?.forEach((course) => {
-  if (course.name && typeof course.name === "string") {
-    coursesSet.add(course.name.trim());
-  }
-});
+      // courses
+      college.courses?.forEach((course) => {
+        if (course.name && typeof course.name === "string") {
+          coursesSet.add(course.name.trim());
+        }
+      });
 
       // Institute Type
       if (college.type) {
@@ -374,7 +366,10 @@ college.courses?.forEach((course) => {
               exams.add((exam as any).name);
             }
           });
-        } else if (typeof course.eligibility_exams === "string" && course.eligibility_exams.trim()) {
+        } else if (
+          typeof course.eligibility_exams === "string" &&
+          course.eligibility_exams.trim()
+        ) {
           exams.add(course.eligibility_exams);
         }
       });
@@ -390,7 +385,10 @@ college.courses?.forEach((course) => {
 
       // Fee Range (from courses or college.fees)
       college.courses?.forEach((course) => {
-        if (course.fees && !isNaN(parseInt(course.fees.replace(/[^0-9]/g, ""), 10))) {
+        if (
+          course.fees &&
+          !isNaN(parseInt(course.fees.replace(/[^0-9]/g, ""), 10))
+        ) {
           const fee = parseInt(course.fees.replace(/[^0-9]/g, ""), 10);
           if (fee < minFee) minFee = fee;
           if (fee > maxFee) maxFee = fee;
@@ -398,8 +396,10 @@ college.courses?.forEach((course) => {
       });
 
       // Fallback to college-level fees if available
-      if (college.fees?.min !== undefined && Number(college.fees.min) < minFee) minFee = Number(college.fees.min);
-      if (college.fees?.max !== undefined && Number(college.fees.max) > maxFee) maxFee = Number(college.fees.max);
+      if (college.fees?.min !== undefined && Number(college.fees.min) < minFee)
+        minFee = Number(college.fees.min);
+      if (college.fees?.max !== undefined && Number(college.fees.max) > maxFee)
+        maxFee = Number(college.fees.max);
 
       // Rating
       if (college.rating > highestRating) highestRating = college.rating;
@@ -408,8 +408,6 @@ college.courses?.forEach((course) => {
     // Final fee range fallback
     if (minFee === Infinity) minFee = 0;
     if (maxFee === 0) maxFee = 10000000;
-
-    
 
     const filterOptions: CollegeFilterOptions = {
       states: Array.from(states).sort(),
@@ -422,7 +420,7 @@ college.courses?.forEach((course) => {
       rating: Math.floor(highestRating), // or keep as float if UI supports
       hostel: Array.from(hostelOptions),
       studyMode: Array.from(studyModes).sort(),
-      courses: Array.from(coursesSet).sort()
+      courses: Array.from(coursesSet).sort(),
     };
 
     return {
@@ -430,12 +428,11 @@ college.courses?.forEach((course) => {
       message: "Filters loaded successfully",
       data: filterOptions,
     };
-
   } catch (error) {
     console.error("Error fetching college filters:", error);
     return {
       success: false,
-      message: axios.isAxiosError(error) 
+      message: axios.isAxiosError(error)
         ? error.response?.data?.message || "Failed to load filters"
         : "An unexpected error occurred",
       data: {
@@ -449,8 +446,23 @@ college.courses?.forEach((course) => {
         rating: 0,
         hostel: [],
         studyMode: [],
-        courses:[]
-      }
+        courses: [],
+      },
     };
+  }
+};
+
+// streams api function
+export const getStreams = async (): Promise<ApiResponse<Stream[]>> => {
+  try {
+    const response = await collegeApi.get<ApiResponse<Stream[]>>(
+      API_ENDPOINTS.STREAMS
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
   }
 };
