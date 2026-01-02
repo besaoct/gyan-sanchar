@@ -327,7 +327,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         {college.visionMission}
                       </p>
                     </div>
-                   { college.notableAlumni.length > 0 ? (
+                   { (college.notableAlumni?.length>0) && (college.notableAlumni[0].name !==null)  ? (
                     <div className="mt-6">
                       <h4 className="font-semibold mb-3">Notable Alumni</h4>
                       <div className="grid sm:grid-cols-2 gap-4">
