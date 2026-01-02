@@ -653,7 +653,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                 ):<></>
                }
 
-               {college.scholarships && college.scholarships.length > 0 ? (
+               {college.scholarships && college.scholarships.length > 0 && (college.scholarships[0].name !==null)  ? (
                       <div>
                         <h4 className="font-semibold mb-3">Scholarships</h4>
                         <div className="grid gap-4">
