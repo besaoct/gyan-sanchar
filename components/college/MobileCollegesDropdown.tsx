@@ -1,14 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getColleges } from "@/lib/api/data/colleges";
+import { getColleges, getDegrees, getPopularColleges, getStreams, getTopColleges, Degree } from "@/lib/api/data/colleges";
 import type { College } from "@/lib/api/data/colleges";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DropdownData {
   categories: string[];
-  degrees: string[];
+  degrees: Degree[];
+  courses: string[];
   locations: string[];
   popularColleges: { name: string; slug: string }[];
   topColleges: { name: string; slug: string }[];
@@ -31,44 +32,51 @@ export default function MobileCollegesDropdown({
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const response = await getColleges();
-        if (!response.success || !response.data) {
+
+      
+
+        const [collegeResponse, streamResponse, degreeResponse, popularCollegesRes, topCollegesRes] = await Promise.all([
+                  getColleges(),
+                  getStreams(),
+                  getDegrees(),
+                  getPopularColleges(),
+                  getTopColleges(),
+                ]);
+
+        if (!collegeResponse.success || !collegeResponse.data) {
           setData(getFallbackData());
           return;
         }
 
-        const colleges: College[] = response.data;
+        const colleges: College[] = collegeResponse.data;
         setAllColleges(colleges);
 
         // 1. Categories = Streams
-        const streamsSet = new Set<string>();
-        colleges.forEach((college) => {
-          college.streams?.forEach((stream) => {
-            if (typeof stream === "string") {
-              streamsSet.add(stream);
-            } else if (stream?.title) {
-              streamsSet.add(stream.title);
-            }
-          });
-        });
+        const streams = streamResponse.success && streamResponse.data ? streamResponse.data : []
+        const streamsSet = streams.length > 0
+          ? new Set(streams.map((s) => s.title))
+          : new Set<string>()
+
         const categories = Array.from(streamsSet).sort();
 
-        // 2. Top 5 most common courses → "Course Name colleges in india"
-        const courseCount = new Map<string, number>();
+        // Degrees
+        const degrees = degreeResponse.success && degreeResponse.data
+          ? degreeResponse.data
+          : []
+
+        // Courses (Top 5 most common courses)
+        const courseCount = new Map<string, number>()
         colleges.forEach((college) => {
           college.courses?.forEach((course) => {
             if (course.name) {
-              courseCount.set(
-                course.name,
-                (courseCount.get(course.name) || 0) + 1
-              );
+              courseCount.set(course.name, (courseCount.get(course.name) || 0) + 1)
             }
-          });
-        });
-        const degrees = Array.from(courseCount.entries())
+          })
+        })
+        const courses = Array.from(courseCount.entries())
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5)
-          .map(([name]) => `${name} colleges in india`);
+          .map(([name]) => `${name} colleges in india`)
 
         // 3. Top 5 states by college count
         const stateCount = new Map<string, number>();
@@ -85,36 +93,16 @@ export default function MobileCollegesDropdown({
           .slice(0, 5)
           .map(([state]) => `Colleges in ${state}`);
 
-        // 4. Popular Colleges (top 12 by rating + reviews)
-        const popularCollegesRaw = colleges
-          .sort((a, b) => {
-            if (b.rating !== a.rating) return b.rating - a.rating;
-            return b.reviews - a.reviews;
-          })
-          .slice(0, 12);
+        // 4. Popular Colleges
+        const popularColleges = popularCollegesRes.success && popularCollegesRes.data ? popularCollegesRes.data : []
 
-        const popularColleges = popularCollegesRaw.map((c) => ({
-          name: c.name,
-          slug:
-            c.slug ||
-            c.name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
-        }));
-
-        // 5. Top Colleges (top 10 by rating)
-        const topCollegesRaw = colleges
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 10);
-
-        const topColleges = topCollegesRaw.map((c) => ({
-          name: c.name,
-          slug:
-            c.slug ||
-            c.name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
-        }));
+        // 5. Top Colleges
+        const topColleges = topCollegesRes.success && topCollegesRes.data ? topCollegesRes.data : []
 
         setData({
           categories,
           degrees,
+          courses,
           locations,
           popularColleges,
           topColleges,
@@ -133,11 +121,18 @@ export default function MobileCollegesDropdown({
   const getFallbackData = (): DropdownData => ({
     categories: ["Engineering", "Management", "Law", "Pharmacy", "Science"],
     degrees: [
-      "B.Tech colleges in india",
-      "MBA colleges in india",
-      "LLB colleges in india",
-      "B.Pharm colleges in india",
-      "B.Sc colleges in india",
+      { id: "1", stream: "Engineering", title: "B.Tech" },
+      { id: "2", stream: "Management", title: "MBA" },
+      { id: "3", stream: "Law", title: "LLB" },
+      { id: "4", stream: "Pharmacy", title: "B.Pharm" },
+      { id: "5", stream: "Science", title: "B.Sc" },
+    ],
+    courses: [
+      "B.Tech",
+      "MBA",
+      "LLB",
+      "B.Pharm",
+      "B.Sc",
     ],
     locations: [
       "Colleges in Maharashtra",
@@ -153,7 +148,7 @@ export default function MobileCollegesDropdown({
     ],
     topColleges: [
       { name: "NLSIU Bangalore", slug: "nlsiu-bangalore" },
-      { name: "NLU Delhi", slug: "nlu-delhi" },
+      { name: "NLU Delhi", slug: "nlu-दिल्ली" },
     ],
   });
 
@@ -270,21 +265,13 @@ export default function MobileCollegesDropdown({
           c.name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
       }));
 
-    const courseCount = new Map<string, number>();
-    filteredColleges.forEach((college) => {
-      college.courses?.forEach((course) => {
-        if (course.name) {
-          courseCount.set(
-            course.name,
-            (courseCount.get(course.name) || 0) + 1
-          );
-        }
-      });
-    });
-    const degrees = Array.from(courseCount.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([name]) => `${name} colleges in india`);
+
+      // here get degrees from data and that have the selected stream
+
+    const degrees = data.degrees.filter((degree) =>
+      degree.stream.toLowerCase() === selectedStream!.toLowerCase()
+    ).slice(0, 5);
+
 
     const stateCount = new Map<string, number>();
     filteredColleges.forEach((college) => {
@@ -295,6 +282,7 @@ export default function MobileCollegesDropdown({
         );
       }
     });
+    
     const locations = Array.from(stateCount.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
@@ -327,25 +315,23 @@ export default function MobileCollegesDropdown({
             </h4>
             <ul className="space-y-3 pl-0">
               {degrees.map((degree) => {
-                const courseName = degree
-                  .replace(" colleges in india", "")
-                  .trim();
+                const dName = degree.title.trim();
                 return (
-                  <li key={degree} className="line-clamp-1">
+                  <li key={degree.id} className="line-clamp-1">
                     <a
                       onClick={() =>
                         handleLinkClick(
                           createFilterLink(
                             "streams",
                             selectedStream!,
-                            "courses",
-                            courseName
+                            "degrees",
+                            dName
                           )
                         )
                       }
                       className="cursor-pointer inline"
                     >
-                      {degree}
+                      {degree.title} colleges in india
                     </a>
                   </li>
                 );

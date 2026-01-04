@@ -186,7 +186,7 @@ export function CollegeCard({
 
               {college.streams ? (
                 <Badge variant="secondary" className="text-xs md:text-xs">
-                  {college.streams[0].name}
+                  {college.streams[0].title}
                 </Badge>
               ):<></>
             }
@@ -204,7 +204,7 @@ export function CollegeCard({
                   <TooltipContent className="max-w-xs text-xs">
                     {college.streams
                       .slice(1)
-                      .map((stream) => stream.name)
+                      .map((stream) => stream.title)
                       .join(", ")}
                   </TooltipContent>
                 </Tooltip>
@@ -234,7 +234,7 @@ export function CollegeCard({
                 <span className="font-semibold">Fees:</span>
                 <span>{formatFees(Number(college.fees.min), Number(college.fees.max))}</span>
                 <Link
-                  href={`/college/${collegeId}#fees`}
+                  href={`/college/${collegeId}?tab=fees`}
                   className="text-primary hover:underline"
                   onClick={stopCardNavigation}
                 >

@@ -58,6 +58,8 @@ export default function CollegeListingPage() {
       searchParams.get("facilities")?.split(",")?.filter(Boolean) || [],
     studyMode: searchParams.get("studyMode")?.split(",")?.filter(Boolean) || [],
     exams: searchParams.get("exams")?.split(",")?.filter(Boolean) || [],
+    levels: searchParams.get("levels")?.split(",")?.filter(Boolean) || [],
+    degrees: searchParams.get("degrees")?.split(",")?.filter(Boolean) || [],
   };
 
   const [filters, setFilters] = useState<FilterOptions>(initialFilters);
@@ -82,6 +84,10 @@ export default function CollegeListingPage() {
     if (filters.studyMode.length > 0)
       params.set("studyMode", filters.studyMode.join(","));
     if (filters.exams.length > 0) params.set("exams", filters.exams.join(","));
+    if (filters.levels.length > 0)
+      params.set("levels", filters.levels.join(","));
+    if (filters.degrees.length > 0)
+      params.set("degrees", filters.degrees.join(","));
     if (filters.rating > 0) params.set("rating", String(filters.rating));
 
     // Only set fee range if different from default
@@ -178,6 +184,22 @@ export default function CollegeListingPage() {
           filters.courses.includes(course.name)
         );
         if (!hasMatchingCourse) return false;
+      }
+      
+      // Levels filter
+      if (filters.levels.length > 0) {
+        const hasMatchingLevel = college.courses.some((course) =>
+          course.level && filters.levels.includes(course.level)
+        );
+        if (!hasMatchingLevel) return false;
+      }
+      
+      // Degrees filter
+      if (filters.degrees.length > 0) {
+        const hasMatchingDegree = college.courses.some((course) =>
+          course.degree && course.degree.title && filters.degrees.includes(course.degree.title)
+        );
+        if (!hasMatchingDegree) return false;
       }
 
       if (

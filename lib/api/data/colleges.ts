@@ -37,7 +37,7 @@ export interface CourseHighlight {
   description: string;
 }
 
-export interface Course {
+export interface CollegeCourse {
   id: string | number;
   slug?: string;
   name: string;
@@ -47,6 +47,15 @@ export interface Course {
   eligibility_exams: string | string[] | (string | object)[];
   seats: number;
   highlights: CourseHighlight[] | string; // sometimes JSON string, sometimes array
+  stream ?:{
+  id ?: string | number;
+  title ?: string;
+  };
+  degree ?: {
+    stream ?: string;
+    id ?: string | number;
+    title ?: string;
+  }
 }
 
 export interface Hostel {
@@ -57,7 +66,14 @@ export interface Hostel {
 export interface Stream {
   id: string | number;
   title: string;
-  description: string;
+  description?: string;
+}
+
+export interface Degree {
+  id: string | number;
+  stream: string;
+  title: string;
+  description?: string;
 }
 
 export interface AdmissionProcess {
@@ -123,7 +139,7 @@ export interface College {
   established: number;
   accreditation: string[];
   streams: Stream[];
-  courses: Course[];
+  courses: CollegeCourse[];
   facilities: string[];
   hostel: Hostel;
   hostelDetails: string | null;
@@ -191,6 +207,7 @@ export interface CollegeFilterOptions {
   studyMode: string[];
   exams: string[];
   courses: string[];
+  degrees: Degree[];
 }
 
 // API Service
@@ -275,6 +292,7 @@ export const getCollegeFilters = async (): Promise<
 > => {
   try {
     const response = await getColleges();
+    const degreesResponse = await getDegrees();
 
     if (!response.success || !response.data) {
       return {
@@ -292,11 +310,13 @@ export const getCollegeFilters = async (): Promise<
           hostel: [],
           studyMode: [],
           courses: [],
+          degrees: [],
         },
       };
     }
 
     const colleges: College[] = response.data;
+    const degrees: Degree[] = degreesResponse.success ? degreesResponse.data : [];
 
     // Use Sets to avoid duplicates
     const states = new Set<string>();
@@ -421,6 +441,7 @@ export const getCollegeFilters = async (): Promise<
       hostel: Array.from(hostelOptions),
       studyMode: Array.from(studyModes).sort(),
       courses: Array.from(coursesSet).sort(),
+      degrees: degrees,
     };
 
     return {
@@ -447,6 +468,7 @@ export const getCollegeFilters = async (): Promise<
         hostel: [],
         studyMode: [],
         courses: [],
+        degrees: [],
       },
     };
   }
@@ -466,6 +488,21 @@ export const getStreams = async (): Promise<ApiResponse<Stream[]>> => {
     throw error;
   }
 };
+
+// degrees api function
+export const getDegrees = async (): Promise<ApiResponse<Degree[]>> => {
+  try {
+    const response = await collegeApi.get<ApiResponse<Degree[]>>(
+      API_ENDPOINTS.DEGREES
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data as ApiErrorResponse;
+    }
+    throw error;
+  }
+}
 
 
 // top colleges api function

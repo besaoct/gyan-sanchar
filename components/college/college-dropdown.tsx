@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { getColleges, getPopularColleges, getStreams, getTopColleges } from "@/lib/api/data/colleges"
+import { getColleges, getDegrees, getPopularColleges, getStreams, getTopColleges } from "@/lib/api/data/colleges"
 import type { College } from "@/lib/api/data/colleges"
 import { Skeleton } from "@/components/ui/skeleton" // Adjust path if needed
 
 interface DropdownData {
   categories: string[]
   degrees: string[]
+  courses: string[]
   locations: string[]
   popularColleges: { name: string; slug: string }[]
   topColleges: { name: string; slug: string }[]
@@ -24,11 +25,13 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
       try {
 
 
-     const [collegeResponse, streamResponse, popularCollegesRes, topCollegesRes] = await Promise.all([
+     const [collegeResponse, streamResponse, degreeResponse, popularCollegesRes, topCollegesRes] = await Promise.all([
                   getColleges(),
                   getStreams(),
+                  getDegrees(),
                   getPopularColleges(),
                   getTopColleges(),
+
                 ]);
 
         if (!collegeResponse.success || !collegeResponse.data) {
@@ -46,6 +49,11 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
 
         const categories = Array.from(streamsSet)
 
+        // Degrees
+        const degrees = degreeResponse.success && degreeResponse.data
+          ? degreeResponse.data.map((d) => `${d.title} colleges in india`)?.slice(0, 5)
+          : []
+
         // 2. Top 5 most common courses → "Course Name colleges in india"
         const courseCount = new Map<string, number>()
         colleges.forEach((college) => {
@@ -55,7 +63,7 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
             }
           })
         })
-        const degrees = Array.from(courseCount.entries())
+        const courses = Array.from(courseCount.entries())
           .sort((a, b) => b[1] - a[1])
           .slice(0, 5)
           .map(([name]) => `${name} colleges in india`)
@@ -77,30 +85,15 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
 
         // 4. Popular Colleges (top 12 by rating + reviews)
         const popularColleges = popularCollegesRes.success && popularCollegesRes.data ? popularCollegesRes.data : []
-        //   .sort((a, b) => {
-        //     if (b.rating !== a.rating) return b.rating - a.rating
-        //     return b.reviews - a.reviews
-        //   })
-        //   .slice(0, 12)
 
-        // const popularColleges = popularCollegesRaw.map((c) => ({
-        //   name: c.name,
-        //   slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
-        // }))
 
         // 5. Top Colleges (top 10 by rating)
          const topColleges = topCollegesRes.success && topCollegesRes.data ? topCollegesRes.data : []
-        //   .sort((a, b) => b.rating - a.rating)
-        //   .slice(0, 10)
-
-        // const topColleges = topCollegesRaw.map((c) => ({
-        //   name: c.name,
-        //   slug: c.slug || c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
-        // }))
 
         setData({
           categories,
           degrees,
+          courses,
           locations,
           popularColleges,
           topColleges,
@@ -124,6 +117,13 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
       'LLB colleges in india',
       'B.Pharm colleges in india',
       'B.Sc colleges in india',
+    ],
+    courses: [
+      'B.Tech',
+      'MBA',
+      'LLB',
+      'B.Pharm',
+      'B.Sc',
     ],
     locations: [
       'Colleges in Maharashtra',
@@ -241,16 +241,16 @@ export default function CollegesDropdown({onClose}:{ onClose?: ()=>void}) {
             </ul>
           </div>
 
-          {/* Colleges By Degrees + Location */}
+          {/* Colleges By Degrees+ Location */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">Colleges By Degrees</h3>
             <ul className="space-y-2">
               {data.degrees.map((degree) => {
-                const courseName = degree.replace(' colleges in india', '').trim()
+                const dName = degree.replace(' colleges in india', '').trim()
                 return (
                   <li key={degree} className="line-clamp-2">
                     <a
-                      href={createFilterLink('courses', courseName)}
+                      href={createFilterLink('degrees', dName)}
                       className="text-gray-600 hover:text-blue-600 text-sm block "
                       onClick={(e) => e.stopPropagation()}
                     >

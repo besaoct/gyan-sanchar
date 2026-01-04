@@ -21,7 +21,8 @@ export interface FilterOptions {
   facilities: string[]
   studyMode: string[]
   exams: string[]
-
+  levels: string[]
+  degrees: string[]
 }
 
 export interface Article {

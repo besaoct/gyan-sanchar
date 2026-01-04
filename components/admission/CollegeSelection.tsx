@@ -9,6 +9,8 @@ import {
   College,
   getCollegeFilters,
   getStreams,
+  getDegrees,
+  Degree,
 } from "@/lib/api/data/colleges";
 // import { getCoursesFilters } from "@/lib/api/data/courses";
 import { Button } from "@/components/ui/button";
@@ -40,11 +42,13 @@ export function CollegeSelection({
   const [types, setTypes] = useState<string[]>([]);
   const [streams, setStreams] = useState<string[]>([]);
   const [states, setStates] = useState<string[]>([]);
+  const [degrees, setDegrees] = useState<Degree[]>([]); // New state for degrees
   const [filtersLoading, setFiltersLoading] = useState(true);
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedStreams, setSelectedStreams] = useState<string[]>([]);
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
+  const [selectedDegrees, setSelectedDegrees] = useState<string[]>([]); // New state for selected degrees
 
   const applyFilters = () => {
     let results = allColleges;
@@ -65,6 +69,14 @@ export function CollegeSelection({
       );
     }
     
+    if (selectedDegrees.length > 0) {
+      results = results.filter((college) =>
+        college.courses.some((course) =>
+          course.degree && course.degree.title && selectedDegrees.includes(course.degree.title)
+        )
+      );
+    }
+
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
         results = results.filter((college) =>
@@ -80,23 +92,26 @@ export function CollegeSelection({
     setSelectedTypes([]);
     setSelectedStreams([]);
     setSelectedStates([]);
+    setSelectedDegrees([]); // Clear selected degrees
     setFilteredColleges(allColleges.slice(0, 10));
     setIsDrawerOpen(false);
   };
   
   const handleCheckboxChange = (
-    filterType: "types" | "streams" | "states",
+    filterType: "types" | "streams" | "states" | "degrees", // Added "degrees"
     value: string
   ) => {
     const setters = {
       types: setSelectedTypes,
       streams: setSelectedStreams,
       states: setSelectedStates,
+      degrees: setSelectedDegrees, // Added setter for degrees
     };
     const states = {
       types: selectedTypes,
       streams: selectedStreams,
       states: selectedStates,
+      degrees: selectedDegrees, // Added state for degrees
     };
 
     const currentFilters = states[filterType];
@@ -113,15 +128,17 @@ export function CollegeSelection({
     const fetchFilters = async () => {
       setFiltersLoading(true);
       try {
-        const [collegeFilters, streamRes] = await Promise.all([
+        const [collegeFilters, streamRes, degreesRes] = await Promise.all([ // Added degreesRes
           getCollegeFilters(),
-          getStreams()
+          getStreams(),
+          getDegrees(), // Fetch degrees
         ]);
 
         if (collegeFilters.success && collegeFilters.data) {
           setStates(collegeFilters.data.states);
           setStreams(streamRes.success && streamRes.data ? streamRes.data.map(s => s.title) : []);
           setTypes(collegeFilters.data.instituteTypes);
+          setDegrees(degreesRes.success ? degreesRes.data : []); // Set degrees
         }
      
       } catch (error) {
@@ -249,6 +266,30 @@ export function CollegeSelection({
                               className="text-sm"
                             >
                               {stream}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Degrees Filter Section */}
+                    <div>
+                      <h3 className="font-semibold mb-3">Degrees</h3>
+                      <div className="space-y-2">
+                        {degrees.map((degree) => (
+                          <div
+                            key={degree.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox id={`degree-${degree.id}`}
+                              checked={selectedDegrees.includes(degree.title)}
+                              onCheckedChange={() => handleCheckboxChange("degrees", degree.title)}
+                            />
+                            <label
+                              htmlFor={`degree-${degree.id}`}
+                              className="text-sm"
+                            >
+                              {degree.title}
                             </label>
                           </div>
                         ))}

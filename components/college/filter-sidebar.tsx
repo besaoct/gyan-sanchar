@@ -31,7 +31,7 @@ export function FilterSidebar({
 }: FilterSidebarProps) {
   const [openSections, setOpenSections] = useState({
     degree: true,
-    courses: true,
+    courses: false,
     location: true,
     instituteType: true,
     studyMode: true,
@@ -40,7 +40,8 @@ export function FilterSidebar({
     rating: true,
     facilities: false,
     exams: false,
-    
+    levels: true,
+    degrees: true,
   });
 
   const toggleSection = (section: keyof typeof openSections) => {
@@ -78,6 +79,8 @@ export function FilterSidebar({
       facilities: [],
       studyMode: [],
       exams: [],
+      levels: [],
+      degrees: [],
     });
   };
 
@@ -91,6 +94,8 @@ export function FilterSidebar({
       filters.facilities.length +
       filters.studyMode.length +
       filters.exams.length +
+      filters.levels.length +
+      filters.degrees.length +
       (filters.rating > 0 ? 1 : 0) +
       (filters.feeRange[0] > filterOptions.feeRange[0] || filters.feeRange[1] < filterOptions.feeRange[1] ? 1 : 0)
     );
@@ -158,6 +163,64 @@ export function FilterSidebar({
                 </Label>
               </div>
             ))}
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Levels Filter */}
+        <Collapsible
+          open={openSections.levels}
+          onOpenChange={() => toggleSection("levels")}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded">
+            <span className="font-semibold">Levels</span>
+            {openSections.levels ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2">
+            <div className="max-h-64 overflow-y-auto space-y-2">
+              {filterOptions.levels.map((level) => (
+                <div key={level} className="flex items-center space-x-2 ">
+                  <Checkbox
+                    id={`level-${level}`}
+                    checked={filters.levels.includes(level)}
+                    onCheckedChange={() =>
+                      toggleArrayFilter("levels", level, filters.levels)
+                    }
+                  />
+                  <Label htmlFor={`level-${level}`} className="text-sm line-clamp-2">
+                    {level}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        {/* Degrees Filter */}
+        <Collapsible
+          open={openSections.degrees}
+          onOpenChange={() => toggleSection("degrees")}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded">
+            <span className="font-semibold">Degrees</span>
+            {openSections.degrees ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2">
+            <div className="max-h-64 overflow-y-auto space-y-2">
+              {filterOptions.degrees.map((degree) => (
+                <div key={degree.id} className="flex items-center space-x-2 ">
+                  <Checkbox
+                    id={`degree-${degree.id}`}
+                    checked={filters.degrees.includes(degree.title)}
+                    onCheckedChange={() =>
+                      toggleArrayFilter("degrees", degree.title, filters.degrees)
+                    }
+                  />
+                  <Label htmlFor={`degree-${degree.id}`} className="text-sm line-clamp-2">
+                    {degree.title}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </CollapsibleContent>
         </Collapsible>
 
@@ -259,36 +322,7 @@ export function FilterSidebar({
             ))}
           </CollapsibleContent>
         </Collapsible>
-{/*         
-        <Collapsible
-          open={openSections.studyMode}
-          onOpenChange={() => toggleSection("studyMode")}
-        >
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-muted rounded">
-            <span className="font-semibold">Study Mode</span>
-            {openSections.studyMode ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-2 mt-2">
-            {filterOptions.studyMode.map((mode) => (
-              <div key={mode} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`mode-${mode}`}
-                  checked={filters.studyMode.includes(mode)}
-                  onCheckedChange={() =>
-                    toggleArrayFilter("studyMode", mode, filters.studyMode)
-                  }
-                />
-                <Label htmlFor={`mode-${mode}`} className="text-sm">
-                  {mode}
-                </Label>
-              </div>
-            ))}
-          </CollapsibleContent>
-        </Collapsible> */}
+
 
         {/* Hostel Filter */}
         <Collapsible
@@ -510,6 +544,22 @@ export function FilterSidebar({
               <Badge key={stream} variant="secondary" className="text-xs">
                 {stream}
                 <span onClick={() => toggleArrayFilter("streams", stream, filters.streams)} className="cursor-pointer">
+                  <X className="h-3 w-3 ml-1" />
+                </span>
+              </Badge>
+            ))}
+            {filters.levels.map((level) => (
+              <Badge key={level} variant="secondary" className="text-xs">
+                {level}
+                <span onClick={() => toggleArrayFilter("levels", level, filters.levels)} className="cursor-pointer">
+                  <X className="h-3 w-3 ml-1" />
+                </span>
+              </Badge>
+            ))}
+            {filters.degrees.map((degree) => (
+              <Badge key={degree} variant="secondary" className="text-xs">
+                {degree}
+                <span onClick={() => toggleArrayFilter("degrees", degree, filters.degrees)} className="cursor-pointer">
                   <X className="h-3 w-3 ml-1" />
                 </span>
               </Badge>
