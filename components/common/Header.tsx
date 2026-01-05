@@ -10,12 +10,10 @@ import {
   Search,
   ChevronDown,
   ChevronRight,
-  Building2,
   Building,
   BookOpen,
   Zap,
   FileText,
-  File,
   User,
 } from "lucide-react";
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa";
@@ -26,16 +24,31 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import CollegesDropdown from "../college/college-dropdown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import { Button } from "../ui/button";
 import MobileCollegesDropdown from "../college/MobileCollegesDropdown";
+import React from "react";
+import SearchDialog from "./SearchDialog";
+import { getSettingsData, Settings } from "@/lib/api/data/settings";
 
 export default function Header({ isSticky }: { isSticky?: boolean }) {
   const [isCollegesOpen, setIsCollegesOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showCollegesDropdown, setShowCollegesDropdown] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [settings, setSettings] = useState<Settings | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const response = await getSettingsData();
+      if (response.success && response.data) {
+        setSettings(response.data);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   return (
     <header
@@ -45,37 +58,41 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
     >
       <div className="container mx-auto px-4">
         {/* Top bar */}
+          {settings && (
         <div className="hidden lg:flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-            <span className="flex items-center gap-1">
-              <Phone className="w-3 h-3" />
-              12345-567-890
-            </span>
-            <span className="flex items-center gap-1">
-              <Mail className="w-3 h-3" />
-              support@gyansanchar.com
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden sm:block">
-              We're on your favourite socials!
-            </span>
-            <div className="flex gap-2">
-              <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
-                <FaFacebookF className="w-3 h-3 text-white" />
+        
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+                <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-1">
+                  <Phone className="w-3 h-3" />
+                  {settings.contact_phone}
+                </a>
+                <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-1">
+                  <Mail className="w-3 h-3" />
+                  {settings.contact_email}
+                </a>
               </div>
-              <div className="w-5 h-5 bg-red-600 rounded flex items-center justify-center">
-                <FaYoutube className="w-3 h-3 text-white" />
+              <div className="flex items-center gap-2">
+                <span className="hidden sm:block">
+                  We're on your favourite socials!
+                </span>
+                <div className="flex gap-2">
+                  <a href={settings.facebook} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
+                    <FaFacebookF className="w-3 h-3 text-white" />
+                  </a>
+                  <a href={settings.youtube} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-red-600 rounded flex items-center justify-center">
+                    <FaYoutube className="w-3 h-3 text-white" />
+                  </a>
+                  <a href={settings.twitter} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center">
+                    <FaTwitter className="w-3 h-3 text-white" />
+                  </a>
+                  <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center">
+                    <FaInstagram className="w-3 h-3 text-white" />
+                  </a>
+                </div>
               </div>
-              <div className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center">
-                <FaTwitter className="w-3 h-3 text-white" />
-              </div>
-              <div className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center">
-                <FaInstagram className="w-3 h-3 text-white" />
-              </div>
-            </div>
-          </div>
+         
         </div>
+          )}
 
         {/* Main navigation */}
         <nav className="flex justify-between items-center py-4 h-20">
@@ -100,16 +117,13 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </div>
-              {/* <Link href="/streams"><span className="cursor-pointer hover:text-white/80 transition-colors">Streams</span></Link> */}
+
               <Link
                 href={"/courses"}
                 className="cursor-pointer hover:text-white/80 transition-colors"
               >
                 Courses
               </Link>
-              {/* <span className="cursor-pointer hover:text-white/80 transition-colors">
-                Exams
-              </span> */}
 
               <Link
                 href={"/admission"}
@@ -126,7 +140,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <Search className="w-5 h-5" />
+              <Search className="w-5 h-5" onClick={() => setOpen(true)} />
               {isAuthenticated ? (
                 <div className="flex items-center gap-2">
                   <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
@@ -213,40 +227,34 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                           <ChevronRight className="h-4 w-4" />
                         </Link>
                       </div>
-                      {/* <span
-                      className="cursor-pointer hover:text-white/80 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Exams
-                    </span> */}
-                           <div className="flex items-center gap-2 w-full border-b border-white/30 pb-4">
+
+                      <div className="flex items-center gap-2 w-full border-b border-white/30 pb-4">
                         <div className="p-2 h-10 flex justify-center items-center bg-white/20 rounded-sm">
                           <FileText className="h-4 min-w-4 text-white" />
                         </div>
-                      <Link
-                        href={"/admission"}
-                        className="cursor-pointer w-full hover:text-white/80 transition-colors flex justify-between items-center"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Admission
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
+                        <Link
+                          href={"/admission"}
+                          className="cursor-pointer w-full hover:text-white/80 transition-colors flex justify-between items-center"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Admission
+                          <ChevronRight className="h-4 w-4" />
+                        </Link>
                       </div>
-                   <div className="flex  items-center gap-2 w-full border-b border-white/30 pb-4">
+                      <div className="flex  items-center gap-2 w-full border-b border-white/30 pb-4">
                         <div className="p-2 h-10 flex justify-center items-center bg-white/20 rounded-sm">
                           <Zap className="h-4 min-w-4 text-white" />
                         </div>
-                      <Link
-                        href={"/news"}
-                        className="cursor-pointer w-full hover:text-white/80 transition-colors flex justify-between items-center"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        News & Articles
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
+                        <Link
+                          href={"/news"}
+                          className="cursor-pointer w-full hover:text-white/80 transition-colors flex justify-between items-center"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          News & Articles
+                          <ChevronRight className="h-4 w-4" />
+                        </Link>
                       </div>
 
-                      
                       <div className=" border-white/30">
                         {isAuthenticated ? (
                           <div className="flex flex-col w-full gap-6 ">
@@ -266,37 +274,39 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                             </Button>
                           </div>
                         ) : (
-                    <div className="flex  items-center gap-2 w-full border-b border-white/30 pb-4">
-                       <div className="p-2 h-10 flex justify-center items-center bg-white/20 rounded-sm">
-                          <User className="h-4 min-w-4 text-white" />
-                        </div>
-                          <Link href="/login" className="text-start w-full">
-                            <button
-                              className="w-full p-0 m-0  text-white cursor-pointer hover:text-white/80 transition-colors flex justify-between items-center"
-                              // variant="link"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                               Login
-                             <ChevronRight className="h-4 w-4" />
-                            </button>
-                          </Link>
-                        </div>
+                          <div className="flex  items-center gap-2 w-full border-b border-white/30 pb-4">
+                            <div className="p-2 h-10 flex justify-center items-center bg-white/20 rounded-sm">
+                              <User className="h-4 min-w-4 text-white" />
+                            </div>
+                            <Link href="/login" className="text-start w-full">
+                              <button
+                                className="w-full p-0 m-0  text-white cursor-pointer hover:text-white/80 transition-colors flex justify-between items-center"
+                                // variant="link"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                Login
+                                <ChevronRight className="h-4 w-4" />
+                              </button>
+                            </Link>
+                          </div>
                         )}
                       </div>
 
-                            <div>
-            <h4 className="font-semibold mb-4">Contact Info</h4>
-            <div className="space-y-2 text-sm text-gray-100">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                1800-572-9877
-              </div>
-              <div className="flex items-start gap-2 break-all">
-                <Mail className="w-4 h-4" />
-                support@gyansanchar.com
-              </div>
-            </div>
-          </div>
+                      {settings && (
+                        <div>
+                          <h4 className="font-semibold mb-4">Contact Info</h4>
+                          <div className="space-y-2 text-sm text-gray-100">
+                            <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2">
+                              <Phone className="w-4 h-4" />
+                              {settings.contact_phone}
+                            </a>
+                            <a href={`mailto:${settings.contact_email}`} className="flex items-start gap-2 break-all">
+                              <Mail className="w-4 h-4" />
+                              {settings.contact_email}
+                            </a>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
@@ -305,6 +315,8 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
           </div>
         </nav>
       </div>
+      {/* Command Dialog */}
+      <SearchDialog open={open} onOpenChange={setOpen} />
     </header>
   );
 }
