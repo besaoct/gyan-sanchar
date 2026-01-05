@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { MapPin, Search } from "lucide-react";
 import { MdTrendingUp } from "react-icons/md";
 import { HiOutlineAcademicCap, HiOutlineClipboardList } from "react-icons/hi";
 import { BiSupport } from "react-icons/bi";
@@ -29,7 +27,7 @@ export default function ServicesSection() {
 
 
 
-        {/* steps with animation end */}
+        {/* */}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="p-6 bg-[#044cac] text-white hover:bg-[#023b86] transition-colors">
@@ -115,69 +113,3 @@ export default function ServicesSection() {
     </section>
   );
 }
-
-//  <style jsx>{`
-//     .step-item {
-//       animation: fadeIn 0.5s ease-out forwards;
-//       opacity: 0;
-//     }
-//     @keyframes fadeIn {
-//       from {
-//         opacity: 0;
-//         transform: translateY(20px);
-//       }
-//       to {
-//         opacity: 1;
-//         transform: translateY(0);
-//       }
-//     }
-//     .step-item:nth-child(1) {
-//       animation-delay: 0.2s;
-//     }
-//     .step-item:nth-child(2) {
-//       animation-delay: 0.4s;
-//     }
-//     .step-item:nth-child(3) {
-//       animation-delay: 0.6s;
-//     }
-//     .step-item:nth-child(4) {
-//       animation-delay: 0.8s;
-//     }
-//     .step-item:nth-child(5) {
-//       animation-delay: 1s;
-//     }
-//     .step-item:nth-child(6) {
-//       animation-delay: 1.2s;
-//     }
-
-//     .step-item .step-circle {
-//       animation: tick 0.5s ease-in-out forwards;
-//       animation-play-state: paused;
-//     }
-
-//     .step-item.completed .step-circle {
-//       background-color: #22c55e; /* green-500 */
-//       border-color: #22c55e; /* green-500 */
-//       animation-play-state: running;
-//     }
-
-//     .step-item.completed .step-number {
-//       display: none;
-//     }
-
-//     .step-item.completed .step-check {
-//       display: block;
-//     }
-
-//     @keyframes tick {
-//       0% {
-//         transform: scale(1);
-//       }
-//       50% {
-//         transform: scale(1.2);
-//       }
-//       100% {
-//         transform: scale(1);
-//       }
-//     }
-//   `}</style>

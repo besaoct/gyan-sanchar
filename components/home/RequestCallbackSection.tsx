@@ -40,7 +40,7 @@ export default function RequestCallbackSection() {
                     <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">Request a Call Back</Button>
                   </div>
                   <p className="text-xs text-gray-500 mt-4 text-center">
-                    By proceeding ahead you expressly agree to the CollegeDekho terms of use and privacy policy.
+                    By proceeding ahead you expressly agree to the GyanSanchar terms of use and privacy policy.
                   </p>
                 </form>
             </Card>

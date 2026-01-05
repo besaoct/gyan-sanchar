@@ -2,55 +2,62 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Star } from "lucide-react"
+import { useEffect, useState } from "react"
+import { College, getTopColleges } from "@/lib/api/data/colleges"
+import { Skeleton } from "@/components/ui/skeleton"
+import CollegeCardWithGoogleRating from "./CollegeCardWithGoogleRating"
 
-const colleges = [
-  {
-    name: "IIT Bombay",
-    location: "Mumbai, Maharashtra",
-    ranking: "#1 in India",
-    logo: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-  },
-  {
-    name: "Delhi University",
-    location: "New Delhi, Delhi",
-    ranking: "#1 in Arts & Commerce",
-    logo: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-  },
-  {
-    name: "BITS Pilani",
-    location: "Pilani, Rajasthan",
-    ranking: "Top 5 Pvt. Engineering",
-    logo: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-  },
-    {
-    name: "VIT Vellore",
-    location: "Vellore, Tamil Nadu",
-    ranking: "Top 10 Pvt. Engineering",
-    logo: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-  }
-];
+function CollegeCardSkeleton() {
+  return (
+    <Card className="bg-white text-black p-4 rounded-lg flex flex-row w-full items-start gap-2">
+      <Skeleton className="w-12 h-12 rounded-full" />
+      <div className="w-full">
+        <Skeleton className="h-5 w-3/4 mb-2" />
+        <Skeleton className="h-4 w-1/2 mb-2" />
+        <Skeleton className="h-4 w-1/3" />
+      </div>
+    </Card>
+  )
+}
 
 export default function TopRankedCollegesSection() {
+  const [colleges, setColleges] = useState<College[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTopColleges = async () => {
+      try {
+        const response = await getTopColleges();
+        if (response.success && response.data) {
+          setColleges(response.data.slice(0, 4)); // Take first 4
+        }
+      } catch (error) {
+        console.error("Failed to fetch top colleges:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTopColleges();
+  }, []);
+
   return (
     <section className="py-12 md:py-16 bg-gradient-to-r from-orange-400 to-orange-500 text-white">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-8">
           <div className="flex-1 order-2 lg:order-1 w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-              {colleges.map((college, index) => (
-                <Card key={index} className="bg-white text-black p-4 rounded-lg flex-row w-full items-start gap-2">
-                  <img src={college.logo} alt={`${college.name} logo`} className="w-12 h-12" />
-                  <div className="w-full">
-                    <h4 className="font-semibold">{college.name}</h4>
-                    <p className="text-sm text-gray-600">{college.location}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="text-xs font-semibold">{college.ranking}</span>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+              {loading ? (
+                <>
+                  <CollegeCardSkeleton />
+                  <CollegeCardSkeleton />
+                  <CollegeCardSkeleton />
+                  <CollegeCardSkeleton />
+                </>
+              ) : (
+                colleges.map((college) => (
+                  <CollegeCardWithGoogleRating key={college.id} college={college} />
+                ))
+              )}
             </div>
           </div>
 

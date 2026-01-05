@@ -309,6 +309,7 @@ export default function MobileCollegesDropdown({
               All {selectedStream} Colleges
             </a>
           </li>
+     {  degrees?.length > 0 ?
           <li>
             <h4 className="font-bold mt-4 mb-4 underline">
               Colleges By Degrees
@@ -337,7 +338,7 @@ export default function MobileCollegesDropdown({
                 );
               })}
             </ul>
-          </li>
+          </li> : <></>}
           <li>
             <h4 className="font-bold mt-4 mb-4 underline">
               Colleges By Location

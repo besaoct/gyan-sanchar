@@ -1,8 +1,19 @@
 'use client'
 
 import { Star, ChevronDown } from "lucide-react"
+import { Indicator } from "@/lib/api/data/home";
 
-export default function TrustIndicators() {
+interface TrustIndicatorsProps {
+  indicators: Indicator[];
+}
+
+export default function TrustIndicators({ indicators }: TrustIndicatorsProps) {
+  const mainIndicator = indicators[0]; // Assuming we only use the first indicator for the rating and items
+
+  if (!mainIndicator || !mainIndicator.items || mainIndicator.items.length === 0) {
+    return null; // Don't render if no indicator data
+  }
+
   return (
     <section className="bg-orange-400 py-4">
       <div className="container mx-auto px-4 ">
@@ -12,7 +23,7 @@ export default function TrustIndicators() {
               <img src="/google-icon.webp" alt="Google icon" className="w-4 h-4" />
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-white font-semibold">4.2</span>
+              <span className="text-white font-semibold">{mainIndicator.rating}</span>
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Star key={i} className="w-4 h-4 text-white fill-current" />
@@ -35,21 +46,11 @@ export default function TrustIndicators() {
             </button>
             
             <div className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth mx-8 px-8 w-full links-container">
-              <div className="text-white font-semibold text-sm md:text-base whitespace-nowrap underline">
-              ICAI CA Counselling Dates 2025
-              </div>
-              <div className="text-white font-semibold text-sm md:text-base whitespace-nowrap underline">
-              NEET PG Result 2025 out Download Link
-              </div>
-              <div className="text-white font-semibold text-sm md:text-base whitespace-nowrap underline">
-              JEE Main 2025 Registration Open
-              </div>
-              <div className="text-white font-semibold text-sm md:text-base whitespace-nowrap underline">
-              GATE 2025 Important Dates
-              </div>
-              <div className="text-white font-semibold text-sm md:text-base whitespace-nowrap underline">
-              CAT 2025 Notification Released
-              </div>
+              {mainIndicator.items.map((item, index) => (
+                <a key={index} href={item.link} className="text-white font-semibold text-sm md:text-base whitespace-nowrap underline">
+                  {item.title}
+                </a>
+              ))}
             </div>
 
             <button 

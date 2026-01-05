@@ -2,8 +2,65 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useEffect, useState } from "react"
+import { College, getFeaturedColleges, getPopularColleges, Stream, getStreams } from "@/lib/api/data/colleges"
+import { CourseDetails, getCourses } from "@/lib/api/data/courses"
+import { Skeleton } from "@/components/ui/skeleton"
+import Image from "next/image"
+import Link from "next/link"
+
+function CollegeListItemSkeleton() {
+    return (
+        <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
+            <Skeleton className="w-12 h-12 rounded" />
+            <div className="w-full">
+                <Skeleton className="h-5 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+            </div>
+        </div>
+    )
+}
 
 export default function CollegeFinderSection() {
+    const [streams, setStreams] = useState<Stream[]>([]);
+    const [featuredColleges, setFeaturedColleges] = useState<College[]>([]);
+    const [popularColleges, setPopularColleges] = useState<College[]>([]);
+    const [courses, setCourses] = useState<CourseDetails[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [streamsRes, featuredRes, popularRes, coursesRes] = await Promise.all([
+                    getStreams(),
+                    getFeaturedColleges(),
+                    getPopularColleges(),
+                    getCourses()
+                ]);
+
+                if (streamsRes.success && streamsRes.data) {
+                    setStreams(streamsRes.data.slice(0, 8));
+                }
+                if (featuredRes.success && featuredRes.data) {
+                    setFeaturedColleges(featuredRes.data.slice(0, 2));
+                }
+                if (popularRes.success && popularRes.data) {
+                    setPopularColleges(popularRes.data.slice(0, 2));
+                }
+                if (coursesRes.success && coursesRes.data) {
+                    setCourses(coursesRes.data.slice(0, 4));
+                }
+
+            } catch (error) {
+                console.error("Failed to fetch college finder data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+
   return (
     <section className="py-12 md:py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -14,30 +71,17 @@ export default function CollegeFinderSection() {
 
         <div className="flex justify-center mb-12">
           <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-            <Badge variant="outline" className="text-xs md:text-sm">
-              ENGINEERING
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              MANAGEMENT
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              COMMERCE AND BANKING
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              MEDICAL
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              SCIENCE
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              HOTEL MANAGEMENT
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              INFORMATION TECHNOLOGY
-            </Badge>
-            <Badge variant="outline" className="text-xs md:text-sm">
-              ARTS
-            </Badge>
+            {loading ? (
+                [...Array(8)].map((_, i) => <Skeleton key={i} className="h-8 w-24" />)
+            ) : (
+                streams.map((stream) => (
+                    <Link href={`/colleges?stream=${stream.title}`} key={stream.id}>
+                        <Badge variant="outline" className="text-xs md:text-sm cursor-pointer">
+                            {stream.title.toUpperCase()}
+                        </Badge>
+                    </Link>
+                ))
+            )}
           </div>
         </div>
 
@@ -45,89 +89,97 @@ export default function CollegeFinderSection() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg md:text-xl font-semibold">Featured Colleges</h3>
-              <Button variant="link" className="text-blue-600 text-sm">
-                View All
-              </Button>
+              <Link href="/colleges?filter=featured">
+                <Button variant="link" className="text-blue-600 text-sm">
+                    View All
+                </Button>
+              </Link>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
-                <img
-                  src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-                  alt="University Building"
-                  className="w-12 h-12 rounded object-cover"
-                />
-                <div>
-                  <div className="font-medium">Pearl University</div>
-                  <div className="text-sm text-gray-600">Chandigarh University</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
-                <img
-                  src="https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-                  alt="Modern University Campus"
-                  className="w-12 h-12 rounded object-cover"
-                />
-                <div>
-                  <div className="font-medium">Bharati Vidyapeeth University</div>
-                  <div className="text-sm text-gray-600">Bharati Vidyapeeth University</div>
-                </div>
-              </div>
+                {loading ? (
+                    <>
+                        <CollegeListItemSkeleton />
+                        <CollegeListItemSkeleton />
+                    </>
+                ) : (
+                    featuredColleges.map(college => (
+                        <Link href={`/college/${college.slug}`} key={college.id} className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
+                            <Image
+                                src={college.image}
+                                alt={`${college.name} logo`}
+                                width={48}
+                                height={48}
+                                className="w-12 h-12 rounded object-cover"
+                            />
+                            <div>
+                                <div className="font-medium">{college.name}</div>
+                                <div className="text-sm text-gray-600">{college.location.city}, {college.location.state}</div>
+                            </div>
+                        </Link>
+                    ))
+                )}
             </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold">Popular Colleges</h3>
-              <Button variant="link" className="text-blue-600">
-                View All
-              </Button>
+              <Link href="/colleges?filter=popular">
+                <Button variant="link" className="text-blue-600">
+                    View All
+                </Button>
+              </Link>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
-                <img
-                  src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-                  alt="University Building"
-                  className="w-12 h-12 rounded object-cover"
-                />
-                <div>
-                  <div className="font-medium">Pearl University</div>
-                  <div className="text-sm text-gray-600">Chandigarh University</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
-                <img
-                  src="https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80"
-                  alt="Modern University Campus"
-                  className="w-12 h-12 rounded object-cover"
-                />
-                <div>
-                  <div className="font-medium">Bharati Vidyapeeth University</div>
-                  <div className="text-sm text-gray-600">Bharati Vidyapeeth University</div>
-                </div>
-              </div>
+                {loading ? (
+                    <>
+                        <CollegeListItemSkeleton />
+                        <CollegeListItemSkeleton />
+                    </>
+                ) : (
+                    popularColleges.map(college => (
+                        <Link href={`/college/${college.slug}`} key={college.id} className="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm">
+                             <Image
+                                src={college.image}
+                                alt={`${college.name} logo`}
+                                width={48}
+                                height={48}
+                                className="w-12 h-12 rounded object-cover"
+                            />
+                            <div>
+                                <div className="font-medium">{college.name}</div>
+                                <div className="text-sm text-gray-600">{college.location.city}, {college.location.state}</div>
+                            </div>
+                        </Link>
+                    ))
+                )}
             </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold">Related Courses</h3>
-              <Button variant="link" className="">
-                View All
-              </Button>
+              <Link href="/courses">
+                <Button variant="link" className="">
+                    View All
+                </Button>
+              </Link>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
-                <div className="font-medium">B.Tech</div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
-                <div className="font-medium">M.Tech</div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
-                <div className="font-medium">Bachelor of Engineering</div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
-                <div className="font-medium">Civil Engineering</div>
-              </div>
+                {loading ? (
+                    <>
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                    </>
+                ) : (
+                    courses.map(course => (
+                        <Link href={`/course/${course.slug}`} key={course.id} className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                            <div className="font-medium line-clamp-1" >{course.course_name}</div>
+                        </Link>
+                    ))
+                )}
             </div>
           </div>
         </div>

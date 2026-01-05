@@ -5,6 +5,7 @@ export const API_ENDPOINTS = {
     LOGIN: "/api/v1/auth/login",
     REGISTER: "/api/v1/auth/register",
   },
+  HOME: "/api/v1/home",
   COLLEGES: "/api/v1/colleges",
   COLLEGES_TOP: "/api/v1/colleges/top",
   COLLEGES_POPULAR: "/api/v1/colleges/popular",
