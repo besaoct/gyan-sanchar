@@ -35,7 +35,7 @@ const SearchBar = () => {
           aria-label="Open search dialog"
         >
           <div className="border border-gray-200 h-10 bg-gray-50 hover:bg-gray-100 transition-colors py-2 px-4 flex items-center rounded-md text-left">
-            <span className="text-gray-500 text-sm">
+            <span className="text-gray-500 text-sm line-clamp-1">
               Search for colleges, courses...
             </span>
           </div>

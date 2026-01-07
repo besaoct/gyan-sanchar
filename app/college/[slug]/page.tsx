@@ -182,7 +182,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     { id: "admission", label: "Admission" },
     { id: "fees", label: "Fee Structure" },
     { id: "facilities", label: "Facilities" },
-    { id: "placement", label: "Placements" },
+    { id: "placements", label: "Placements" },
     { id: "reviews", label: "Reviews" },
     { id: "gallery", label: "Gallery" },
   ];
@@ -773,7 +773,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               </div>
             )}
 
-            {activeTab === "placement" && college.placement && (
+            {activeTab === "placements" && college.placement && (
               <div className="space-y-6">
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">

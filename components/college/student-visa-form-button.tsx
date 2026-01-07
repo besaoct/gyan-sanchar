@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "../ui/checkbox";
 
+
 interface VisaData {
   id: number;
   button_text: string;
@@ -23,7 +24,7 @@ interface VisaData {
   visa_description: string[];
 }
 
-export function StudentVisaFormButton() {
+export function StudentVisaFormButton({isPageButton=false}:{ isPageButton?: boolean}) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -138,9 +139,18 @@ export function StudentVisaFormButton() {
   }
 
   return (
+
+    isPageButton ?
+         <Button className="w-full text-sm " onClick={()=> router.push("/student-va")}>
+          {visaData.button_text}
+        </Button>
+        
+        :
+
+
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full text-sm lg:hidden">
+        <Button className="w-full text-sm ">
           {visaData.button_text}
         </Button>
       </DialogTrigger>

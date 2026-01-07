@@ -372,7 +372,7 @@ export default function CollegeListingPage() {
                 </SheetTrigger>
                 <SheetContent
                   side="left"
-                  className="w-80 p-0 overflow-y-auto scrollbar-hide bg-white"
+                  className="w-full max-w-sm  p-0 overflow-y-auto scrollbar-hide bg-white"
                 >
                   <SheetTitle className="sr-only">
                     <h1>filters</h1>
@@ -388,7 +388,7 @@ export default function CollegeListingPage() {
               </Sheet>
 
               <div>
-                <StudentVisaFormButton />
+                <StudentVisaFormButton isPageButton={true} />
               </div>
             </div>
 

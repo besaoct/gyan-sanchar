@@ -137,7 +137,7 @@ export function CollegeCard({
 
       <div className="flex w-full items-stretch gap-4 pr-3 md:pr-4 lg:pr-5 pb-2 flex-row">
         <div className="w-28 self-start mb-2 md:mb-0 md:w-48 md:flex-shrink-0 mx-5">
-          <Dialog>
+          <Dialog >
             <DialogTrigger asChild>
               <div
                 onClick={stopCardNavigation}
@@ -155,7 +155,7 @@ export function CollegeCard({
                 />
               </div>
             </DialogTrigger>
-            <DialogContent className="max-w-5xl w-[80%]">
+            <DialogContent className="max-w-5xl w-[80%]"     onClick={stopCardNavigation}>
               <CollegeImageCarousel
                 onClick={stopCardNavigation}
                 images={college.gallery}
@@ -399,30 +399,32 @@ export function CollegeCard({
       <div className="w-full md:hidden px-4 max-w-sm">
         <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-primary font-medium">
           <Link
-            href={`/college/${collegeId}#placement`}
+            href={`/college/${collegeId}?tab=facilities`}
             onClick={stopCardNavigation}
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-            Placement
+     Facilities
+
           </Link>
 
           <Link
-            href={`/college/${collegeId}#admission`}
+            href={`/college/${collegeId}?tab=placements`}
             onClick={stopCardNavigation}
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-            Admission
+         Placements
+
           </Link>
 
           <Link
-            href={`/college/${collegeId}#ranking`}
+            href={`/college/${collegeId}?tab=reviews`}
             onClick={stopCardNavigation}
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-            Ranking
+         Reviews
           </Link>
         </nav>
       </div>
@@ -433,30 +435,30 @@ export function CollegeCard({
       <div className="py-2 flex flex-wrap items-center justify-between gap-4 px-4">
         <nav className="hidden md:flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-primary font-medium">
           <Link
-            href={`/college/${collegeId}#placement`}
+            href={`/college/${collegeId}?tab=facilities`}
             onClick={stopCardNavigation}
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-            Placement
+           Facilities
           </Link>
 
           <Link
-            href={`/college/${collegeId}#admission`}
+            href={`/college/${collegeId}?tab=placements`}
             onClick={stopCardNavigation}
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-            Admission
+           Placements
           </Link>
 
           <Link
-            href={`/college/${collegeId}#ranking`}
+            href={`/college/${collegeId}?tab=reviews`}
             onClick={stopCardNavigation}
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-            Ranking
+            Reviews
           </Link>
         </nav>
 

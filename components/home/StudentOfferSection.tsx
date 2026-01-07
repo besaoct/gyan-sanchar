@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { BASE_URL } from "@/lib/api/config/urls";
 import { Offer } from "@/lib/api/data/home";
 import Link from "next/link";
 
@@ -18,6 +19,17 @@ export default function StudentOfferSection({
   return (
     <section className="py-12 md:py-16 bg-gradient-to-r from-orange-400 to-orange-500">
       <div className="container mx-auto px-4">
+        {
+        (firstOffer.cover_image && firstOffer.is_active ) ? (
+            <div className="text-center">
+              <img
+                src={`${BASE_URL}/${firstOffer.cover_image}`}
+                alt={firstOffer.title}
+                className="mx-auto h-auto object-contain"
+              />
+            </div>
+          )
+        :
         <div className="flex flex-col lg:flex-row items-center justify-between text-white gap-8">
           <div className="flex-1 text-center lg:text-left">
             <h2 className="text-4xl md:text-6xl font-bold mb-4">
@@ -56,6 +68,7 @@ export default function StudentOfferSection({
             </div>
           </div>
         </div>
+        }
       </div>
     </section>
   );

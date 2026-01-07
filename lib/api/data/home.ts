@@ -16,6 +16,36 @@ export interface ApiErrorResponse {
 
 // Type Definitions for Home Data
 
+    // "hero_section": {
+    //         "id": 1,
+    //         "heading": "Right Guidance, Bright Future",
+    //         "sub_heading": "Get expert advice and personalized guidance to find the right college, building a better future for your career at a time.",
+    //         "title": "Watch our Brand Film here",
+    //         "url": "https://gyan-sanchar.vercel.app/",
+    //         "youtube_video_link": "https://www.youtube.com/"
+    //     },
+//    "mediatitle": [
+//             {
+//                 "id": 1,
+//                 "title": "Praised by the media"
+//             }
+//         ],
+
+export interface HomeHeroSection {
+    id: number;
+    heading: string;
+    sub_heading: string;
+    title: string;
+    url: string;
+    youtube_video_link: string;
+}
+
+
+export interface MediaTitle {
+    id: number;
+    title: string;
+}
+
 export interface Testimonial {
     id: number;
     student_name: string;
@@ -65,16 +95,20 @@ export interface Offer {
     id: number;
     title: string;
     link: string;
+    is_active: boolean;
     features: OfferFeature[];
     button_text: string;
     button_link: string;
+    cover_image: string;
 }
 
 export interface HomeData {
+    hero_section: HomeHeroSection;
     testimonials: Testimonial[];
     application_sections: ApplicationSection[];
     footer_media: FooterMedia[];
     media: MediaItem[];
+    media_title: MediaTitle[];
     indicators: Indicator[];
     offers: Offer[];
 }

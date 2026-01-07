@@ -140,7 +140,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <Search className="w-5 h-5" onClick={() => setOpen(true)} />
+              <Search className="min-w-5 h-5" onClick={() => setOpen(true)} />
               {isAuthenticated ? (
                 <div className="flex items-center gap-2">
                   <User2 className="w-8 h-8 bg-white text-blue-800 p-1 rounded-full" />
@@ -168,7 +168,8 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
           </div>
 
           {/* mobile nav */}
-          <div className="lg:hidden">
+          <div className="lg:hidden flex items-center gap-4">
+             <Search className="min-w-5 h-5" onClick={() => setOpen(true)} />
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Menu className="w-6 h-6" />

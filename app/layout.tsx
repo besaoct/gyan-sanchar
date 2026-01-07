@@ -17,6 +17,7 @@ import { AuthProvider } from '@/contexts/auth/AuthContext'
 // import Header from '@/components/common/Header'
 // import  Footer  from '@/components/common/Footer'
 import { Toaster } from '@/components/ui/toaster'
+import Script from 'next/script'
 
 export default function RootLayout({
   children,
@@ -36,6 +37,15 @@ export default function RootLayout({
           {/* <Footer /> */}
         </AuthProvider>
         <Analytics />
+        <div id="google_translate_element" style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}></div>
+        <Script type="text/javascript">
+          {`
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+            }
+          `}
+        </Script>
+        <Script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></Script>
       </body>
     </html>
   )

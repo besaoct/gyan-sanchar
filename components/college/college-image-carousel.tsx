@@ -48,7 +48,6 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
   }, [mainApi, thumbApi]);
 
   const onThumbClick = (index: number) => {
-
     mainApi?.scrollTo(index);
   };
 
@@ -66,7 +65,7 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
       >
-        <CarouselContent className="bg-transparent">
+        <CarouselContent className="bg-transparent"   onClick={stopCardNavigation}>
           {images.map((image, index) => (
             <CarouselItem key={index} className="bg-transparent">
               <Card className="border-none shadow-none bg-transparent">
@@ -86,7 +85,7 @@ export function CollegeImageCarousel({ images, collegeName }: CollegeImageCarous
         <CarouselNext />
       </Carousel>
       <Carousel setApi={setThumbApi} className="w-full mt-4">
-        <CarouselContent className="flex gap-2">
+        <CarouselContent className="flex gap-2"     onClick={stopCardNavigation}>
           {images.map((image, index) => (
             <CarouselItem
               key={index}

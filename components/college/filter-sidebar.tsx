@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { FilterOptions } from "@/lib/types";
 import { CollegeFilterOptions } from "@/lib/api/data/colleges";
+import StudentVisaFormButton from "./student-visa-form-button";
 
 
 interface FilterSidebarProps {
@@ -122,7 +123,7 @@ export function FilterSidebar({
       </div>
 
       {/* Search Bar */}
-      <div className="mb-4 max-w-xs lg:mt-0">
+      <div className="mb-4 max-w-sm  lg:mt-0">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
@@ -528,7 +529,7 @@ export function FilterSidebar({
         
 
 
-         
+            
 
      
       </div>
@@ -625,6 +626,10 @@ export function FilterSidebar({
           </div>
         </div>
       )}
+      <div className="mt-4">
+            <StudentVisaFormButton isPageButton={true} />
+       </div>
+
     </div>
   );
 }

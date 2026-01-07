@@ -78,7 +78,7 @@ export default function HomePage() {
             <TrustIndicators indicators={homeData.indicators} />
             <ServicesSection />
             <StudentOfferSection offers={homeData.offers} />
-            <MediaSection media={homeData.media} />
+            <MediaSection media={homeData.media} media_title={homeData.media_title} />
             <CareerGuidanceSection />
             <ApplicationSection application_sections={homeData.application_sections} />
             <TopRankedCollegesSection />
