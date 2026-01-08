@@ -11,7 +11,6 @@ import {
   ChevronUp,
   ChevronDown,
   Plus,
-  Info,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,11 +21,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { CollegeImageCarousel } from "./college-image-carousel";
 import { College } from "@/lib/api/data/colleges";
 import { useRouter } from "next/navigation";
+import { ApplyNowForm } from "@/components/common/apply-now-form";
+import { BASE_URL } from "@/lib/api/config/urls";
+interface typeType {
+  id: number;
+  name: string;
+  slug: string;
+  description_title: string;
+  description_keypoints: (string | null)[];
+}
 
 function formatFees(min: number, max: number) {
   const fmt = (n: number) =>
@@ -59,6 +67,38 @@ export function CollegeCard({
   };
   const collegeId = college.slug || college.id;
   const averagePackage = parsePackage(college.placement.averagePackage);
+  const [applyNowData, setApplyNowData] = useState<typeType | null>(null);
+  const [brochureData, setBrochureData] = useState<typeType | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        setLoading(true);
+
+        const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
+        const typesResult = await typesResponse.json();
+        if (typesResult.success && typesResult.data) {
+          const applyNow = typesResult.data.find(
+            (t: typeType) => t.slug === "apply-now"
+          );
+          const brochure = typesResult.data.find(
+            (t: typeType) => t.slug === "brochure"
+          );
+          if (brochure) setBrochureData(brochure);
+          if (applyNow) setApplyNowData(applyNow);
+        }
+      } catch (err) {
+        setError("An unexpected error occurred.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTypes();
+  }, []);
 
   return (
     <Card
@@ -82,8 +122,8 @@ export function CollegeCard({
             >
               {college.name}
               {college.verifyCollege === true && (
-                <TooltipProvider >
-                  <Tooltip >
+                <TooltipProvider>
+                  <Tooltip>
                     <TooltipTrigger asChild className="">
                       <span className="inline ">
                         <Image
@@ -94,7 +134,7 @@ export function CollegeCard({
                           alt={""}
                           className="size-4 sm:size-5 inline ml-1 "
                         />
-                           <Image
+                        <Image
                           title="Verified"
                           src={"/logo-b.png"}
                           width={100}
@@ -137,7 +177,7 @@ export function CollegeCard({
 
       <div className="flex w-full items-stretch gap-4 pr-3 md:pr-4 lg:pr-5 pb-2 flex-row">
         <div className="w-28 self-start mb-2 md:mb-0 md:w-48 md:flex-shrink-0 mx-5">
-          <Dialog >
+          <Dialog>
             <DialogTrigger asChild>
               <div
                 onClick={stopCardNavigation}
@@ -155,7 +195,10 @@ export function CollegeCard({
                 />
               </div>
             </DialogTrigger>
-            <DialogContent className="max-w-5xl w-[80%]"     onClick={stopCardNavigation}>
+            <DialogContent
+              className="max-w-5xl w-[80%]"
+              onClick={stopCardNavigation}
+            >
               <CollegeImageCarousel
                 onClick={stopCardNavigation}
                 images={college.gallery}
@@ -188,10 +231,11 @@ export function CollegeCard({
                 <Badge variant="secondary" className="text-xs md:text-xs">
                   {college.streams[0].title}
                 </Badge>
-              ):<></>
-            }
+              ) : (
+                <></>
+              )}
 
-              {(college.streams && college.streams.length > 1) ? (
+              {college.streams && college.streams.length > 1 ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -208,8 +252,9 @@ export function CollegeCard({
                       .join(", ")}
                   </TooltipContent>
                 </Tooltip>
-              ):<></>
-            }
+              ) : (
+                <></>
+              )}
 
               <span className="flex items-center gap-1">
                 <Star className="h-4 w-4 text-orange-300" />
@@ -232,7 +277,12 @@ export function CollegeCard({
               {/* Fees */}
               <span className="flex items-center gap-2">
                 <span className="font-semibold">Fees:</span>
-                <span>{formatFees(Number(college.fees.min), Number(college.fees.max))}</span>
+                <span>
+                  {formatFees(
+                    Number(college.fees.min),
+                    Number(college.fees.max)
+                  )}
+                </span>
                 <Link
                   href={`/college/${collegeId}?tab=fees`}
                   className="text-primary hover:underline"
@@ -404,8 +454,7 @@ export function CollegeCard({
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-     Facilities
-
+            Facilities
           </Link>
 
           <Link
@@ -414,8 +463,7 @@ export function CollegeCard({
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-         Placements
-
+            Placements
           </Link>
 
           <Link
@@ -424,7 +472,7 @@ export function CollegeCard({
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-         Reviews
+            Reviews
           </Link>
         </nav>
       </div>
@@ -440,7 +488,7 @@ export function CollegeCard({
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-           Facilities
+            Facilities
           </Link>
 
           <Link
@@ -449,7 +497,7 @@ export function CollegeCard({
             className="hover:underline flex items-center gap-1"
           >
             <span className="size-1 bg-gray-300 rounded-full" />
-           Placements
+            Placements
           </Link>
 
           <Link
@@ -471,17 +519,59 @@ export function CollegeCard({
             Compare
           </Button>
 
-          <Button
+          {/* <Button
             onClick={stopCardNavigation}
             variant="default"
             className="text-xs md:text-sm bg-orange-500 hover:bg-orange-500/90"
           >
             Brochure
-          </Button>
+          </Button> */}
 
-          <Button onClick={stopCardNavigation} className="text-xs md:text-sm">
+          <ApplyNowForm
+            college_ids={[Number(college.id)]}
+            formTitle="Get Brochure"
+            title={brochureData?.description_title || "Brochure"}
+            description={
+              <ul className="space-y-4 text-white/90">
+                {brochureData?.description_keypoints.map((point, index) =>
+                  point ? <li key={index}>{point}</li> : null
+                )}
+              </ul>
+            }
+            trigger={
+              <Button
+                onClick={stopCardNavigation}
+                variant="default"
+                className="text-xs md:text-sm bg-orange-500 hover:bg-orange-500/90"
+              >
+                Brochure
+              </Button>
+            }
+          />
+
+          <ApplyNowForm
+            college_ids={[Number(college.id)]}
+            title={applyNowData?.description_title || "Apply Now"}
+            description={
+              <ul className="space-y-4 text-white/90">
+                {applyNowData?.description_keypoints.map((point, index) =>
+                  point ? <li key={index}>{point}</li> : null
+                )}
+              </ul>
+            }
+            trigger={
+              <Button
+                onClick={stopCardNavigation}
+                className="text-xs md:text-sm"
+              >
+                Apply Now
+              </Button>
+            }
+          />
+
+          {/* <Button onClick={stopCardNavigation} className="text-xs md:text-sm">
             Apply Now
-          </Button>
+          </Button> */}
         </div>
       </div>
     </Card>

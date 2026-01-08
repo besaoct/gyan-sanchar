@@ -28,21 +28,25 @@ import Link from "next/link";
 interface ApplyNowFormProps {
   trigger: React.ReactNode;
   title: string;
+    formTitle?: string;
   description: React.ReactNode;
   college_ids?: number[] | null;
   course_ids?: number[] | null;
   stream?: string;
   level?: string;
+
 }
 
 export function ApplyNowForm({
   trigger,
   title,
+  formTitle,
   description,
   college_ids,
   course_ids,
   stream: propStream,
   level: propLevel,
+
 }: ApplyNowFormProps) {
   const {user} = useAuth();
   const { toast } = useToast();
@@ -172,10 +176,19 @@ export function ApplyNowForm({
     }
   };
 
+      const stopCardNavigation = (e: React.MouseEvent) => {
+      e.stopPropagation();
+    };
+  
+
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="lg:max-w-4xl sm:max-w-3xl w-full p-0 max-h-[96%] h-auto !overflow-auto">
+      <DialogContent
+
+      onClick={stopCardNavigation }
+      
+      className="lg:max-w-4xl sm:max-w-3xl w-full p-0 max-h-[96%] h-auto !overflow-auto">
         <div className="flex flex-col-reverse sm:flex-row w-full">
           <div className="sm:w-1/2 bg-primary sm:rounded-l-lg text-white p-8 flex flex-col justify-start ">
             <h2 className="text-2xl font-bold mb-4 text-left ">{title}</h2>
@@ -183,7 +196,7 @@ export function ApplyNowForm({
           </div>
           <div className="sm:w-1/2 p-8 w-full">
             <DialogHeader className="mt-4">
-              <DialogTitle className="mb-4">Apply Now</DialogTitle>
+              <DialogTitle className="mb-4">{ formTitle || "Apply Now"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
               <div className="flex flex-col gap-4">

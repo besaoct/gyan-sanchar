@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { College, getTopColleges } from "@/lib/api/data/colleges"
 import { Skeleton } from "@/components/ui/skeleton"
 import CollegeCardWithGoogleRating from "./CollegeCardWithGoogleRating"
+import Link from "next/link"
 
 function CollegeCardSkeleton() {
   return (
@@ -71,7 +72,7 @@ export default function TopRankedCollegesSection() {
             </h2>
             <p className="mb-8">Get detailed information about top colleges, their courses, fees, and admission process.</p>
             <Button className=" text-white px-6 md:px-8 py-3">
-              View All Colleges
+              <Link href="/colleges" className="w-full h-fit block">View All Colleges</Link>
             </Button>
           </div>
         </div>
