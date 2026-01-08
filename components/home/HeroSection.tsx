@@ -99,7 +99,7 @@ export default function HeroSection() {
               </p>
             </Link>
           </div>
-<div className="flex-1 relative max-w-md lg:max-w-none rounded-lg overflow-hidden cursor-pointer">
+<div className="flex-1 relative w-full lg:max-w-none rounded-lg overflow-hidden cursor-pointer">
       {!isPlaying ? (
         <>
           {/* Thumbnail */}
@@ -124,14 +124,14 @@ export default function HeroSection() {
         </>
       ) : (
         /* Embedded Player - plays inline */
-        <div className="aspect-video w-full">
+        <div className="aspect-video w-full ">
           <iframe
             src={embedUrl ||""}
             title="Embedded YouTube video"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="w-full h-full border-0"
-          />
+            className="w-full h-full border-0 aspect-video"
+          /> 
         </div>
       )}
     </div>

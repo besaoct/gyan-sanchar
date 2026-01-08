@@ -9,12 +9,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import Image from "next/image";
+import { BASE_URL } from "@/lib/api/config/urls";
 
 interface VisaData {
   id: number;
   button_text: string;
   visa_title: string;
   visa_description: string[];
+  visa_process: string;
+  image1: string;
+  image2: string;
 }
 
 export default function StudentVAPage() {
@@ -118,13 +122,17 @@ export default function StudentVAPage() {
     }
   };
 
+
+  const image_1 =  visaData?.image1 ? `${BASE_URL}/${visaData.image1}` : null;
+    const image_2 =  visaData?.image2 ? `${BASE_URL}/${visaData.image2}` : null;
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-8">
           <div className="w-full hidden lg:block lg:max-w-sm lg:w-1/4">
-            <Image src="/placeholder.jpg" alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+            <Image src={ image_1 || "/placeholder.svg"} alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
           </div>
           <div className="w-full lg:w-1/2">
             <div className="p-8 border rounded-lg h-full">
@@ -208,22 +216,36 @@ export default function StudentVAPage() {
             </div>
           </div>
           <div className="w-full hidden lg:block lg:max-w-sm lg:w-1/4">
-             <Image src="/placeholder.jpg" alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+             <Image src={ image_2 || "/placeholder.svg"}  alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
           </div>
         </div>
 
        <div className="w-full lg:hidden flex justify-center mt-8 gap-4">
-             <Image src="/placeholder.jpg" alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
-             <Image src="/placeholder.jpg" alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+             <Image src={ image_1 || "/placeholder.svg"}  alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+             <Image src={ image_2 || "/placeholder.svg"}  alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
 
           </div>
 
         {visaData && (
           <div className="mt-12 p-8 border rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">{visaData.visa_title}</h2>
+            <h2 className="text-xl font-bold mb-4">{visaData.visa_title}</h2>
             {visaData.visa_description.map((desc, index) => (
-              <p key={index} className="mb-2">{desc}</p>
+              <p key={index} className="mb-2 text-sm">{desc}</p>
             ))}
+
+            <h2 className="text-xl font-bold my-4">Process</h2>
+
+                    {visaData.visa_process? (
+                          <div className="htmlContent ">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: visaData.visa_process,
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <></>
+                        )}
           </div>
         )}
       </main>
