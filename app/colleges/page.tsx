@@ -15,6 +15,7 @@ import {
   getColleges,
   CollegeFilterOptions,
   getCollegeFilters,
+  getStreams,
 } from "@/lib/api/data/colleges";
 import type { FilterOptions } from "@/lib/types";
 import { FilterSidebar } from "@/components/college/filter-sidebar";
@@ -185,19 +186,22 @@ export default function CollegeListingPage() {
         );
         if (!hasMatchingCourse) return false;
       }
-      
+
       // Levels filter
       if (filters.levels.length > 0) {
-        const hasMatchingLevel = college.courses.some((course) =>
-          course.level && filters.levels.includes(course.level)
+        const hasMatchingLevel = college.courses.some(
+          (course) => course.level && filters.levels.includes(course.level)
         );
         if (!hasMatchingLevel) return false;
       }
-      
+
       // Degrees filter
       if (filters.degrees.length > 0) {
-        const hasMatchingDegree = college.courses.some((course) =>
-          course.degree && course.degree.title && filters.degrees.includes(course.degree.title)
+        const hasMatchingDegree = college.courses.some(
+          (course) =>
+            course.degree &&
+            course.degree.title &&
+            filters.degrees.includes(course.degree.title)
         );
         if (!hasMatchingDegree) return false;
       }
@@ -247,16 +251,6 @@ export default function CollegeListingPage() {
       return true;
     });
   }, [filters, colleges]);
-
-  // const formatFees = (min: number, max: number) => {
-  //   const formatAmount = (amount: number) => {
-  //     if (amount >= 100000) {
-  //       return `${(amount / 100000).toFixed(1)}L`;
-  //     }
-  //     return `${(amount / 1000).toFixed(0)}K`;
-  //   };
-  //   return `₹${formatAmount(min)} - ${formatAmount(max)}`;
-  // };
 
   if (loading) {
     return (
@@ -353,6 +347,7 @@ export default function CollegeListingPage() {
                 filters={filters}
                 onFiltersChange={setFilters}
                 filterOptions={filterOptions}
+                colleges={colleges}
               />
             )}
           </div>
@@ -367,7 +362,14 @@ export default function CollegeListingPage() {
                     className="w-fit bg-primary/5 border border-primary/30 text-primary"
                   >
                     <SlidersHorizontal className="h-4 w-4 text-primary" />
-                    Filters {Object.values(filters).flat().filter(Boolean).length -1 < 1 ? "" : `(${Object.values(filters).flat().filter(Boolean).length -1})` } 
+                    Filters{" "}
+                    {Object.values(filters).flat().filter(Boolean).length - 1 <
+                    1
+                      ? ""
+                      : `(${
+                          Object.values(filters).flat().filter(Boolean).length -
+                          1
+                        })`}
                   </Button>
                 </SheetTrigger>
                 <SheetContent
@@ -382,6 +384,7 @@ export default function CollegeListingPage() {
                       filters={filters}
                       onFiltersChange={setFilters}
                       filterOptions={filterOptions}
+                      colleges={colleges}
                     />
                   )}
                 </SheetContent>
@@ -404,42 +407,61 @@ export default function CollegeListingPage() {
                 </p>
               </div>
             </div>
-            {/* Stream Descriptions - Only show if streams are filtered */}
-            {filters.streams.length > 0 && (
-              <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
-                <h3 className="font-semibold text-foreground sr-only">
-                  About Selected Streams
-                </h3>
-                <div className="space-y-2">
-                  {filters.streams.map((streamName) => {
-                    // Find the first college that has this stream with description
+
+            {/* Stream Descriptions - Only show if streams are filtered AND at least one has description */}
+            {filters.streams.length > 0 &&
+              (() => {
+                // Collect all valid descriptions first
+                const validStreamInfos = filters.streams
+                  .map((streamName) => {
                     const streamInfo = colleges
                       .flatMap((c) => c.streams)
                       .find(
-                        (s): s is {id:number | string, title: string, description: string } =>
+                        (
+                          s
+                        ): s is {
+                          id: number | string;
+                          title: string;
+                          description: string;
+                        } =>
                           typeof s === "object" &&
                           s.title === streamName &&
-                          !!s.description
+                          !!s.description?.trim()
                       );
+                    return streamInfo
+                      ? { name: streamName, desc: streamInfo.description }
+                      : null;
+                  })
+                  .filter(
+                    (item): item is { name: string; desc: string } =>
+                      item !== null
+                  );
 
-                    if (!streamInfo?.description) return null;
+                // If no stream has description → don't render anything
+                if (validStreamInfos.length === 0) return null;
 
-                    return (
-                      <div key={streamName} className="flex flex-col">
-                      <div className="inline">
-                          <span className="font-medium text-foreground ">
-                          {streamName}: {" "}
-                        </span>
-                        <span className="text-sm text-muted-foreground flex-1">
-                          {streamInfo.description}
-                        </span>
-                      </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+                return (
+                  <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                    <h3 className="font-semibold text-foreground sr-only">
+                      About Selected Streams
+                    </h3>
+                    <div className="space-y-2">
+                      {validStreamInfos.map(({ name, desc }) => (
+                        <div key={name} className="flex flex-col">
+                          <div className="inline">
+                            <span className="font-medium text-foreground">
+                              {name}:{" "}
+                            </span>
+                            <span className="text-sm text-muted-foreground flex-1">
+                              {desc}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
 
             {/* College Cards */}
             <div className="flex flex-col gap-4">

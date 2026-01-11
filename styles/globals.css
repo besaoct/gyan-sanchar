@@ -293,3 +293,27 @@ td, th {
 .animate-scaleIn {
   animation: scaleIn 0.5s ease-out;
 }
+
+
+/* google translate */
+
+.goog-te-gadget-simple{
+  display: flex !important;
+  width: fit-content !important;
+}
+.goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed{
+  display: flex !important;
+  width: fit-content !important;
+}
+
+.goog-te-gadget {
+    font-size: 0 !important;           /* hide extra text/logo */
+  }
+  /* Hide all but the last instance */
+  #google_translate_element + .skiptranslate.goog-te-gadget {
+    display: none !important;
+  }
+  /* or even more aggressive */
+  .goog-te-gadget-simple {
+    margin: 0 !important;
+  }

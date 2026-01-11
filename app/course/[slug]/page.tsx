@@ -205,15 +205,18 @@ export default function CourseDetailsPage() {
                                       <h4 className="font-semibold">
                                         {subject.name}
                                       </h4>
+                                    {  subject.description?
                                       <p className="text-sm text-muted-foreground mt-1">
                                         {subject.description}
                                       </p>
+                                       : <></>}
+                                {      subject.outcome ?
                                       <p className="text-sm mt-2">
                                         <span className="font-semibold">
                                           Outcome:
                                         </span>{" "}
                                         {subject.outcome}
-                                      </p>
+                                      </p> : <></>}
                                     </div>
                                   ))}
                                 </div>

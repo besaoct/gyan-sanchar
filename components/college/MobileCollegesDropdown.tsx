@@ -57,7 +57,7 @@ export default function MobileCollegesDropdown({
           ? new Set(streams.map((s) => s.title))
           : new Set<string>()
 
-        const categories = Array.from(streamsSet).sort();
+        const categories = Array.from(streamsSet);
 
         // Degrees
         const degrees = degreeResponse.success && degreeResponse.data
@@ -152,18 +152,11 @@ export default function MobileCollegesDropdown({
     ],
   });
 
-  const createFilterLink = (
-    param1: string,
-    value1: string,
-    param2?: string,
-    value2?: string
-  ) => {
-    let url = `/colleges?${param1}=${encodeURIComponent(value1)}`;
-    if (param2 && value2) {
-      url += `&${param2}=${encodeURIComponent(value2)}`;
-    }
-    return url;
-  };
+  const createFilterLink = (param: string, value: string, extraParam?: string, extraValue?: string) => {
+    let url = `/colleges?${param}=${encodeURIComponent(value)}`
+    if (extraParam && extraValue) url += `&${extraParam}=${encodeURIComponent(extraValue)}`
+    return url
+  }
 
   const createCollegeLink = (slug: string) => `/college/${slug}`;
 
@@ -177,12 +170,13 @@ export default function MobileCollegesDropdown({
     setSelectedStream(null);
   };
 
-  const handleLinkClick = (url: string) => {
-    router.push(url);
-    if (onClose) {
-      onClose();
-    }
-  };
+  // const handleLinkClick = (url: string) => {
+  //   router.replace(url);
+  //   router.refresh()
+  //   if (onClose) {
+  //     onClose();
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -301,9 +295,10 @@ export default function MobileCollegesDropdown({
         <ul className="space-y-2">
           <li>
             <a
-              onClick={() =>
-                handleLinkClick(createFilterLink("streams", selectedStream!))
-              }
+              href={createFilterLink("streams", selectedStream!)}
+              // onClick={() =>
+              //   handleLinkClick(createFilterLink("streams", selectedStream!))
+              // }
               className="cursor-pointer"
             >
               All {selectedStream} Colleges
@@ -319,17 +314,25 @@ export default function MobileCollegesDropdown({
                 const dName = degree.title.trim();
                 return (
                   <li key={degree.id} className="line-clamp-1">
-                    <a
-                      onClick={() =>
-                        handleLinkClick(
+                    <a 
+                      href={
                           createFilterLink(
                             "streams",
                             selectedStream!,
                             "degrees",
                             dName
                           )
-                        )
                       }
+                      // onClick={() =>
+                      //   handleLinkClick(
+                      //     createFilterLink(
+                      //       "streams",
+                      //       selectedStream!,
+                      //       "degrees",
+                      //       dName
+                      //     )
+                      //   )
+                      // }
                       className="cursor-pointer inline"
                     >
                       {degree.title} colleges in india
@@ -349,16 +352,24 @@ export default function MobileCollegesDropdown({
                 return (
                   <li key={location}>
                     <a
-                      onClick={() =>
-                        handleLinkClick(
-                          createFilterLink(
+                     href={
+                            createFilterLink(
                             "streams",
                             selectedStream!,
                             "states",
                             stateName
                           )
-                        )
-                      }
+                     }
+                      // onClick={() =>
+                      //   handleLinkClick(
+                      //     createFilterLink(
+                      //       "streams",
+                      //       selectedStream!,
+                      //       "states",
+                      //       stateName
+                      //     )
+                      //   )
+                      // }
                       className="cursor-pointer"
                     >
                       {location}
@@ -376,9 +387,12 @@ export default function MobileCollegesDropdown({
               {popularColleges.map((college) => (
                 <li key={college.slug}>
                   <a
-                    onClick={() =>
-                      handleLinkClick(createCollegeLink(college.slug))
+                    href={
+                      createCollegeLink(college.slug)
                     }
+                    // onClick={() =>
+                    //   handleLinkClick(createCollegeLink(college.slug))
+                    // }
                     className="cursor-pointer"
                   >
                     {college.name}
@@ -393,9 +407,12 @@ export default function MobileCollegesDropdown({
               {topColleges.map((college) => (
                 <li key={college.slug}>
                   <a
-                    onClick={() =>
-                      handleLinkClick(createCollegeLink(college.slug))
+                    href={
+                      createCollegeLink(college.slug)
                     }
+                    // onClick={() =>
+                    //   handleLinkClick(createCollegeLink(college.slug))
+                    // }
                     className="cursor-pointer"
                   >
                     {college.name}

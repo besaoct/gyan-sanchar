@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import {
   Phone,
   Mail,
@@ -15,6 +13,7 @@ import {
   Zap,
   FileText,
   User,
+  Globe,
 } from "lucide-react";
 import { FaFacebookF, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa";
 import {
@@ -31,6 +30,8 @@ import MobileCollegesDropdown from "../college/MobileCollegesDropdown";
 import React from "react";
 import SearchDialog from "./SearchDialog";
 import { getSettingsData, Settings } from "@/lib/api/data/settings";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Header({ isSticky }: { isSticky?: boolean }) {
   const [isCollegesOpen, setIsCollegesOpen] = useState(false);
@@ -50,6 +51,8 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
     fetchSettings();
   }, []);
 
+
+
   return (
     <header
       className={`bg-[#044cac] text-white ${
@@ -59,39 +62,68 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
       <div className="container mx-auto px-4">
         {/* Top bar */}
         <div className="hidden lg:flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
-        
-              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-                <a href={`tel:${settings?.contact_phone}`} className="flex items-center gap-1">
-                  <Phone className="w-3 h-3" />
-                  {settings?.contact_phone}
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            <a
+              href={`tel:${settings?.contact_phone}`}
+              className="flex items-center gap-1"
+            >
+              <Phone className="w-3 h-3" />
+              {settings?.contact_phone}
+            </a>
+            <a
+              href={`mailto:${settings?.contact_email}`}
+              className="flex items-center gap-1"
+            >
+              <Mail className="w-3 h-3" />
+              {settings?.contact_email}
+            </a>
+             
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+          
+
+              <span className="hidden sm:block">
+                We're on your favourite socials!
+              </span>
+              <div className="flex gap-2">
+                <a
+                  href={settings?.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center"
+                >
+                  <FaFacebookF className="w-3 h-3 text-white" />
                 </a>
-                <a href={`mailto:${settings?.contact_email}`} className="flex items-center gap-1">
-                  <Mail className="w-3 h-3" />
-                  {settings?.contact_email}
+                <a
+                  href={settings?.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-5 h-5 bg-red-600 rounded flex items-center justify-center"
+                >
+                  <FaYoutube className="w-3 h-3 text-white" />
+                </a>
+                <a
+                  href={settings?.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center"
+                >
+                  <FaTwitter className="w-3 h-3 text-white" />
+                </a>
+                <a
+                  href={settings?.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center"
+                >
+                  <FaInstagram className="w-3 h-3 text-white" />
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="hidden sm:block">
-                  We're on your favourite socials!
-                </span>
-                <div className="flex gap-2">
-                  <a href={settings?.facebook} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
-                    <FaFacebookF className="w-3 h-3 text-white" />
-                  </a>
-                  <a href={settings?.youtube} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-red-600 rounded flex items-center justify-center">
-                    <FaYoutube className="w-3 h-3 text-white" />
-                  </a>
-                  <a href={settings?.twitter} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center">
-                    <FaTwitter className="w-3 h-3 text-white" />
-                  </a>
-                  <a href={settings?.instagram} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center">
-                    <FaInstagram className="w-3 h-3 text-white" />
-                  </a>
-                </div>
-              </div>
-         
+            </div>
+   
+          </div>
         </div>
-  
 
         {/* Main navigation */}
         <nav className="flex justify-between items-center py-4 h-20">
@@ -168,7 +200,7 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
 
           {/* mobile nav */}
           <div className="lg:hidden flex items-center gap-4">
-             <Search className="min-w-5 h-5" onClick={() => setOpen(true)} />
+            <Search className="min-w-5 h-5" onClick={() => setOpen(true)} />
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Menu className="w-6 h-6" />
@@ -296,11 +328,17 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                         <div>
                           <h4 className="font-semibold mb-4">Contact Info</h4>
                           <div className="space-y-2 text-sm text-gray-100">
-                            <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-2">
+                            <a
+                              href={`tel:${settings.contact_phone}`}
+                              className="flex items-center gap-2"
+                            >
                               <Phone className="w-4 h-4" />
                               {settings.contact_phone}
                             </a>
-                            <a href={`mailto:${settings.contact_email}`} className="flex items-start gap-2 break-all">
+                            <a
+                              href={`mailto:${settings.contact_email}`}
+                              className="flex items-start gap-2 break-all"
+                            >
                               <Mail className="w-4 h-4" />
                               {settings.contact_email}
                             </a>
@@ -313,6 +351,8 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
               </SheetContent>
             </Sheet>
           </div>
+
+
         </nav>
       </div>
       {/* Command Dialog */}

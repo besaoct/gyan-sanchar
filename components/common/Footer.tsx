@@ -38,6 +38,37 @@ export default function Footer() {
     fetchFooterData();
   }, []);
 
+// Load Google Translate script
+useEffect(() => {
+  // Prevent duplicate initialization
+  if (document.getElementById('google-translate-script')) return;
+    var addScript = document.createElement('script');
+    addScript.setAttribute(
+      'src',
+      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
+    );
+    document.body.appendChild(addScript);
+    ((window as any).googleTranslateElementInit) = googleTranslateElementInit;
+
+
+}, []);
+
+
+const googleTranslateElementInit = () => {
+  // Remove any existing widgets before creating new one
+      const existingGadgets = document.querySelectorAll('.goog-te-gadget');
+      existingGadgets.forEach((el) => el.remove());
+
+      new (window as any).google.translate.TranslateElement(
+      {
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,bn,te,ta,as',
+         layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
+      },
+      'google_translate_element'
+    );
+  };
+
   return (
     <footer className="bg-neutral-950 text-white py-8 md:py-12">
       <div className="container mx-auto px-4">
@@ -67,9 +98,13 @@ export default function Footer() {
                 </a>
               </div>
             )}
+          
 
             {loading ? (
-              <div className="text-center mt-8">Loading media...</div>
+          <>
+              <div className="text-center mt-8 w-64 h-6 animate-pulse bg-white/30 rounded"></div>
+              <div className="text-center mt-4 w-32 h-6 animate-pulse bg-white/30 rounded"></div>
+          </>
             ) : footerMedia.length > 0 && (
               <div className="pt-4">
                 <div className="flex flex-wrap justify-start items-center gap-4">
@@ -120,8 +155,10 @@ export default function Footer() {
             )}
           </div>
         </div>
-
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+  
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400 flex justify-center flex-col">
+                  {/* Google Translate Dropdown - original style */}
+              <div id="google_translate_element" className="mb-3 mx-auto" />
           <p>&copy; 2025 Sanchaar EduTech Pvt Ltd. All rights reserved.</p>
         </div>
       </div>

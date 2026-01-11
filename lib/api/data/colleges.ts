@@ -294,6 +294,7 @@ export const getCollegeFilters = async (): Promise<
   try {
     const response = await getColleges();
     const degreesResponse = await getDegrees();
+    const streamResponse = await getStreams();
 
     if (!response.success || !response.data) {
       return {
@@ -343,7 +344,9 @@ export const getCollegeFilters = async (): Promise<
       }
 
       // Streams
-      college.streams?.forEach((stream) => {
+      const collegeStreams : Stream []= streamResponse.success  ? streamResponse.data : [];
+
+      collegeStreams?.forEach((stream) => {
         if (typeof stream === "string") {
           streams.add(stream);
           // No description if it's just string
@@ -433,7 +436,7 @@ export const getCollegeFilters = async (): Promise<
     const filterOptions: CollegeFilterOptions = {
       states: Array.from(states).sort(),
       levels: Array.from(levels).sort(),
-      streams: Array.from(streams).sort(),
+      streams: Array.from(streams),
       instituteTypes: Array.from(instituteTypes).sort(),
       facilities: Array.from(facilities).sort(),
       exams: Array.from(exams).sort(),
