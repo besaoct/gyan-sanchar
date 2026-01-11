@@ -6,7 +6,7 @@ import Footer from "@/components/common/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-function CourseHeroSkeleton() {
+function CollegeHeroSkeleton() {
   return (
  <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
@@ -59,7 +59,7 @@ export default function Loading() {
       <>
         {/* Hero Section */}
         <div className="px-4 container py-10 w-full max-w-full">
-          <CourseHeroSkeleton />
+          <CollegeHeroSkeleton />
         </div>
 
         {/* Main Content */}

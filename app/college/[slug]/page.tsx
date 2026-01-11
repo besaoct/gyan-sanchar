@@ -50,6 +50,7 @@ import { ApplyNowForm } from "@/components/common/apply-now-form";
 // import { useGooglePlaceReviews } from "@/hooks/use-google-place-reviews";
 import GoogleReview from "@/components/common/google-review";
 import { FcGoogle } from "react-icons/fc";
+import Loading from "./loading";
 
 interface CollegeDetailPageProps {
   params: {
@@ -136,23 +137,12 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white">
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <Skeleton className="h-64 w-full rounded-lg mb-8" />
-          <div className="flex gap-8">
-            <div className="w-full">
-              <Skeleton className="h-12 w-full mb-6" />
-              <Skeleton className="h-96 w-full" />
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+
+  if (loading) {   
+     return <Loading />;
   }
+
+
 
   if (error) {
     return (
