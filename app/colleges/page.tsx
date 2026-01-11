@@ -396,15 +396,12 @@ export default function CollegeListingPage() {
             </div>
 
             {/* Results Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center mb-4 justify-between ">
               <div>
                 <h2 className="text-2xl font-bold text-foreground">
                   {filteredColleges.length} Colleges Found
                 </h2>
-                <p className="text-muted-foreground">
-                  Showing results for Engineering, Management, Agriculture & IT
-                  colleges
-                </p>
+      
               </div>
             </div>
 
@@ -441,6 +438,16 @@ export default function CollegeListingPage() {
                 if (validStreamInfos.length === 0) return null;
 
                 return (
+<>
+                 <p className="text-muted-foreground mb-4 -mt-4">
+                  Showing results for   {validStreamInfos.map(({ name, desc }, i, s) => (
+                            <span key={name} className="inline">
+                              {name}{ i !== s.length-1?", ":""}
+                            </span>
+                       
+                      ))}
+                </p>
+
                   <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
                     <h3 className="font-semibold text-foreground sr-only">
                       About Selected Streams
@@ -460,6 +467,7 @@ export default function CollegeListingPage() {
                       ))}
                     </div>
                   </div>
+                  </>
                 );
               })()}
 
