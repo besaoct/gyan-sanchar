@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { College } from "@/lib/api/data/colleges";
 import Link from "next/link";
+import { CommonFormType } from "@/lib/types";
+import { ApplyNowForm } from "../common/apply-now-form";
 
 function RatingPill({
   rating,
@@ -171,7 +173,7 @@ function RightImagePanel({ college }: { college: College }) {
 }
 
 
-export function CollegeHero({ college }: { college: College }) {
+export function CollegeHero({ college, brochureData, applyNowData }: { college: College, brochureData:CommonFormType, applyNowData:CommonFormType }) {
   const currentYear = new Date().getFullYear()
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
@@ -230,14 +232,50 @@ export function CollegeHero({ college }: { college: College }) {
           {college.short_description}
         </p>
 
+
+
         <div className="mt-8 flex flex-wrap gap-4">
-          <Button
+                   <ApplyNowForm
+                      college_ids={[Number(college.id)]}
+                      formTitle="Get Brochure"
+                      title={brochureData?.description_title || "Brochure"}
+                      description={
+                        <ul className="space-y-4 text-white/90">
+                          {brochureData?.description_keypoints.map((point, index) =>
+                            point ? <li key={index}>{point}</li> : null
+                          )}
+                        </ul>
+                      }
+                      trigger={
+                      <Button
             variant="secondary"
             className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white"
           >
             Download Brochure
           </Button>
-          <Button className="rounded-xl px-6 py-6">Shortlist</Button>
+                      }
+                    />
+{/*      <Button
+            variant="secondary"
+            className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white"
+          >
+            Download Brochure
+          </Button> */}
+                    <ApplyNowForm
+            college_ids={[Number(college.id)]}
+            title={applyNowData?.description_title || "Apply Now"}
+            description={
+              <ul className="space-y-4 text-white/90">
+                {applyNowData?.description_keypoints.map((point, index) =>
+                  point ? <li key={index}>{point}</li> : null
+                )}
+              </ul>
+            }
+            trigger={
+             <Button className="rounded-xl px-6 py-6">Shortlist</Button>
+            }
+          />
+          {/* <Button className="rounded-xl px-6 py-6">Shortlist</Button> */}
         </div>
       </section>
 

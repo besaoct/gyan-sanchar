@@ -67,6 +67,7 @@ export function CollegeCard({
   };
   const collegeId = college.slug || college.id;
   const averagePackage = parsePackage(college.placement.averagePackage);
+ 
   const [applyNowData, setApplyNowData] = useState<typeType | null>(null);
   const [brochureData, setBrochureData] = useState<typeType | null>(null);
   const [loading, setLoading] = useState(false);

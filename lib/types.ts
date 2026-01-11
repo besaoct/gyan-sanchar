@@ -1,3 +1,10 @@
+export interface CommonFormType {
+  id: number;
+  name: string;
+  slug: string;
+  description_title: string;
+  description_keypoints: (string | null)[];
+}
 
 export interface Review {
   id: string
@@ -8,6 +15,7 @@ export interface Review {
   year: number
   date: string
 }
+
 
 export interface FilterOptions {
   search: string

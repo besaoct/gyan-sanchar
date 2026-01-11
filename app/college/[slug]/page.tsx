@@ -51,6 +51,7 @@ import { ApplyNowForm } from "@/components/common/apply-now-form";
 import GoogleReview from "@/components/common/google-review";
 import { FcGoogle } from "react-icons/fc";
 import Loading from "./loading";
+import { BASE_URL } from "@/lib/api/config/urls";
 
 interface CollegeDetailPageProps {
   params: {
@@ -58,7 +59,7 @@ interface CollegeDetailPageProps {
   };
 }
 
-interface ApplyNowType {
+interface CommonFormType {
   id: number;
   name: string;
   slug: string;
@@ -72,11 +73,14 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [isStickyBarVisible, setIsStickyBarVisible] = useState(false);
-  const [applyNowData, setApplyNowData] = useState<ApplyNowType | null>(null);
+  const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
+  const [brochureData, setBrochureData] = useState<CommonFormType | null>(null);
   const [selectedReel, setSelectedReel] = useState<VideoReel | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  
 
   useEffect(() => {
     const tab = searchParams.get("tab");
@@ -102,14 +106,18 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
         }
 
         const typesResponse = await fetch(
-          "https://gitcsdemoserver.online/gyansanchar/public/api/v1/types"
+          `${BASE_URL}/api/v1/types`
         );
         const typesResult = await typesResponse.json();
         if (typesResult.success && typesResult.data) {
           const applyNow = typesResult.data.find(
-            (t: ApplyNowType) => t.slug === "apply-now"
+            (t: CommonFormType) => t.slug === "apply-now"
           );
-          setApplyNowData(applyNow);
+           const brochure = typesResult.data.find(
+            (t: CommonFormType) => t.slug === "brochure"
+          );
+          if (brochure) setBrochureData(brochure);
+          if (applyNow) setApplyNowData(applyNow);
         }
       } catch (err) {
         setError("An unexpected error occurred.");
@@ -141,8 +149,6 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   if (loading) {   
      return <Loading />;
   }
-
-
 
   if (error) {
     return (
@@ -182,7 +188,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       <Header />
       {/* Hero Section */}
       <div ref={heroRef} className="px-4 container py-10 w-full max-w-full">
-        <CollegeHero college={college} />
+        <CollegeHero college={college} brochureData={brochureData} applyNowData={applyNowData} />
       </div>
 
       {/* Main Content */}
