@@ -56,7 +56,8 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
         </div>
       </div>
 
-      <div className="relative bg-muted lg:min-w-xl overflow-hidden rounded-4xl p-2.5 rounded-bl-[202px]">
+      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 min-w-full  lg:min-w-[420px] lg:max-w-[420px] xl:min-w-[600px] xl:max-w-[600px] ">
+
         <Image
           src={course.hero_image?.replace("/storage",
             ""
@@ -64,7 +65,7 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
           width={1000}
           height={1000}
           alt={`${course.course_name} cover image`}
-          className=" object-cover sm:h-[320px] lg:h-[390px] w-full rounded-4xl rounded-bl-[202px]"
+          className=" object-cover w-full sm:h-[320px] lg:h-[390px] rounded-4xl "
           priority
         />
       </div>
@@ -73,7 +74,7 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
         <div className="pointer-events-none absolute -left-6 top-6">
           <InfoBadge title="Duration" value={`${course.basic_info.duration} Years`} />
         </div>
-        <div className="pointer-events-none absolute left-6 bottom-6">
+        <div className="pointer-events-none absolute -left-6 -bottom-6">
           <InfoBadge title="Average Salary" value={course.avg_salary} />
         </div>
         <div className="absolute -right-4 top-4 ">
@@ -89,9 +90,9 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
 
 export function CourseHero({ course }: CourseHeroProps) {
   return (
-    <div className="flex flex-col gap-12 lg:flex-row lg:items-start">
+    <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
-      <section className=" ">
+   <section className=" ">
         <div className="mb-6 flex items-center gap-3 text-muted-foreground">
           <div className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-secondary">
             <Image

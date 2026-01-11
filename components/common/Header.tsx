@@ -58,17 +58,16 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
     >
       <div className="container mx-auto px-4">
         {/* Top bar */}
-          {settings && (
         <div className="hidden lg:flex flex-col md:flex-row justify-between items-center py-2 text-sm border-b border-white/30 gap-2">
         
               <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-                <a href={`tel:${settings.contact_phone}`} className="flex items-center gap-1">
+                <a href={`tel:${settings?.contact_phone}`} className="flex items-center gap-1">
                   <Phone className="w-3 h-3" />
-                  {settings.contact_phone}
+                  {settings?.contact_phone}
                 </a>
-                <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-1">
+                <a href={`mailto:${settings?.contact_email}`} className="flex items-center gap-1">
                   <Mail className="w-3 h-3" />
-                  {settings.contact_email}
+                  {settings?.contact_email}
                 </a>
               </div>
               <div className="flex items-center gap-2">
@@ -76,23 +75,23 @@ export default function Header({ isSticky }: { isSticky?: boolean }) {
                   We're on your favourite socials!
                 </span>
                 <div className="flex gap-2">
-                  <a href={settings.facebook} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
+                  <a href={settings?.facebook} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
                     <FaFacebookF className="w-3 h-3 text-white" />
                   </a>
-                  <a href={settings.youtube} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-red-600 rounded flex items-center justify-center">
+                  <a href={settings?.youtube} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-red-600 rounded flex items-center justify-center">
                     <FaYoutube className="w-3 h-3 text-white" />
                   </a>
-                  <a href={settings.twitter} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center">
+                  <a href={settings?.twitter} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-blue-400 rounded flex items-center justify-center">
                     <FaTwitter className="w-3 h-3 text-white" />
                   </a>
-                  <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center">
+                  <a href={settings?.instagram} target="_blank" rel="noopener noreferrer" className="w-5 h-5 bg-pink-600 rounded flex items-center justify-center">
                     <FaInstagram className="w-3 h-3 text-white" />
                   </a>
                 </div>
               </div>
          
         </div>
-          )}
+  
 
         {/* Main navigation */}
         <nav className="flex justify-between items-center py-4 h-20">

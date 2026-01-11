@@ -32,23 +32,22 @@ export function CourseCard({ course }: { course: CourseDetails }) {
 
   
   return (
-    <Card className="overflow-hidden shadow-none p-0 cursor-pointer"
+    <Card className="overflow-hidden shadow-none p-0 pb-2 cursor-pointer rounded-none border-x-0 border-t-0 border-b last:border-0"
           onClick={() => router.push(`/course/${course.slug}`)}
     >
-      <CardContent className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative h-48 md:h-full">
+      <CardContent className="p-0 pb-4">
+        <div className="grid grid-cols-1 md:flex gap-4">
+          <div className="relative w-full md:min-w-[320px] md:max-w-[320px] aspect-video  ">
             <Image
               src={correctHeroImageLink || "/course/demo.jpg"}
               alt={course.course_name}
               fill
-              className="object-cover rounded-lg"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="w-auto rounded-lg"
             />
           </div>
           <div className="md:col-span-2 flex flex-col gap-3">
-            <h3 className="text-xl font-bold text-foreground">{course.course_name}</h3>
-                     <div className="flex flex-wrap gap-2">
+            <h3 className="text-xl font-bold text-foreground line-clamp-1">{course.course_name}</h3>
+            <div className="flex flex-wrap gap-2">
               {course.basic_info.mode.map((mode) => (
                 <Badge key={mode} variant="secondary">
                   {mode}
@@ -70,7 +69,7 @@ export function CourseCard({ course }: { course: CourseDetails }) {
               </div>
             </div>
             
-            <p className="text-sm text-muted-foreground line-clamp-2">{course.short_description}</p>
+            <p className="text-sm text-muted-foreground line-clamp-2 md:line-clamp-1 xl:line-clamp-2">{course.short_description}</p>
    
             <div className="flex flex-wrap gap-2 mt-auto">
               <Link href={`/course/${course.slug}`}
