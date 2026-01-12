@@ -261,7 +261,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                               {college.location.city}, {college.location.state}
                             </span>
                           </div>
-                          
+
                           {college.campusLife.studentStrength ? (
                             <div className="flex justify-between items-center">
                               <span className="text-muted-foreground">
@@ -1127,8 +1127,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
         </div>
       </div>
 
+      <div className={isStickyBarVisible ?"mb-16" :""}>
+          <Footer />
+      </div>
       <StickyBar isVisible={isStickyBarVisible} />
-      <Footer />
     </div>
   );
 }

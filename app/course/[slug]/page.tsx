@@ -325,7 +325,9 @@ export default function CourseDetailsPage() {
           <StickyBar isVisible={isStickyBarVisible} />
         </>
       )}
-      <Footer />
+         <div className={isStickyBarVisible ?"mb-16" :""}>
+             <Footer />
+         </div>
     </div>
   );
 }
