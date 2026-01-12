@@ -173,7 +173,7 @@ function RightImagePanel({ college }: { college: College }) {
 }
 
 
-export function CollegeHero({ college, brochureData, applyNowData }: { college: College, brochureData:CommonFormType, applyNowData:CommonFormType }) {
+export function CollegeHero({ college, brochureData, applyNowData }: { college: College, brochureData:CommonFormType | null, applyNowData:CommonFormType | null }) {
   const currentYear = new Date().getFullYear()
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
@@ -261,7 +261,7 @@ export function CollegeHero({ college, brochureData, applyNowData }: { college: 
           >
             Download Brochure
           </Button> */}
-                    <ApplyNowForm
+       <ApplyNowForm
             college_ids={[Number(college.id)]}
             title={applyNowData?.description_title || "Apply Now"}
             description={
