@@ -171,11 +171,11 @@
                 mb-6
                 prose-table:w-full
                 prose-li:marker:!text-primary
-                
-                
                 /* prose-ul:list-inside prose-ol:list-inside */
               
 }
+
+
 
  /* .htmlContent div:has(li)  {
   padding-left: calc(var(--spacing) * 5) !important;
@@ -238,6 +238,13 @@ td, th {
 .htmlContent div:has(> table:first-child), div:has(table) {
   @apply  !w-full overflow-x-auto;
 }
+
+.htmlContent div:where(.prose) {
+  /* your styles here */
+  max-width: none !important;
+
+}
+
 
 .htmlContent td {
   @apply w-full max-w-full;
