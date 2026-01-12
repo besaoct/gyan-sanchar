@@ -530,6 +530,7 @@ export function CollegeCard({
 
           <ApplyNowForm
             formType={"brochure"}
+            brochure_link={college.brochure_link || college.brochure_document}
             college_ids={[Number(college.id)]}
             formTitle="Get Brochure"
             streams={college.streams.map((stream) => stream.title)}
@@ -554,6 +555,7 @@ export function CollegeCard({
 
           <ApplyNowForm
             formType={"apply-now"}
+         
             college_ids={[Number(college.id)]}
             streams={college.streams.map((stream) => stream.title)}
             title={applyNowData?.description_title || "Apply Now"}

@@ -11,6 +11,7 @@ export interface CourseDetails {
   id: string | number;
   slug: string;
   syllabus_link?: string | null;
+  syllabus_document?: string | null ;
   course_name: string;
   course_type: string;
   short_description: string;

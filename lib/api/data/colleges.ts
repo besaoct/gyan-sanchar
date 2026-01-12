@@ -122,6 +122,7 @@ export interface VideoReel {
 export interface College {
   id?: string | number;
   brochure_link?: string | null;
+  brochure_document? : string |null;
   slug: string;
   name: string;
   verifyCollege?: boolean;

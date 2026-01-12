@@ -9,6 +9,10 @@ import Link from "next/link";
 import Image from "next/image";
 import type { CourseDetails } from "@/lib/api/data/courses";
 import { useRouter } from "next/navigation";
+import { ApplyNowForm } from "../common/apply-now-form";
+import { CommonFormType, FormType } from "@/lib/types";
+import { BASE_URL } from "@/lib/api/config/urls";
+import { useEffect, useState } from "react";
 
 export function CourseCard({ course }: { course: CourseDetails }) {
   const formatFees = (min: number, max: number) => {
@@ -30,6 +34,39 @@ export function CourseCard({ course }: { course: CourseDetails }) {
 
   const correctHeroImageLink = course.hero_image?.replace("/storage", "")
 
+
+    // const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
+    const [syllabusData, setSyllabusData] = useState<CommonFormType | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+  
+    useEffect(() => {
+      const fetchTypes = async () => {
+        try {
+          setLoading(true);
+  
+          const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
+          const typesResult = await typesResponse.json();
+          if (typesResult.success && typesResult.data) {
+            const applyNow = typesResult.data.find(
+              (t: CommonFormType) => t.slug === "apply-now"
+            );
+            const syllabus = typesResult.data.find(
+              (t: CommonFormType) => t.slug === "syllabus"
+            );
+            if (syllabus) setSyllabusData(syllabus);
+            // if (applyNow) setApplyNowData(applyNow);
+          }
+        } catch (err) {
+          setError("An unexpected error occurred.");
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchTypes();
+    }, []);
   
   return (
     <Card className="overflow-hidden shadow-none p-0 pb-2 cursor-pointer rounded-none border-x-0 border-t-0 border-b last:border-0"
@@ -71,16 +108,40 @@ export function CourseCard({ course }: { course: CourseDetails }) {
             
             <p className="text-sm text-muted-foreground line-clamp-2 md:line-clamp-1 xl:line-clamp-2">{course.short_description}</p>
    
-            <div className="flex flex-wrap gap-2 mt-auto">
+            <div onClick={stopCardNavigation} className="flex flex-wrap gap-2 mt-auto">
               <Link href={`/course/${course.slug}`}
                 onClick={stopCardNavigation}>
                 <Button className="bg-primary hover:bg-primary/90 text-white">
                   View Details
                 </Button>
               </Link>
-              <Button variant="outline" className="bg-transparent">
+              {/* <Button variant="outline" className="bg-transparent">
+                Download Syllabus
+              </Button> */}
+
+                        <ApplyNowForm
+                        
+                          syllabus_document={course.syllabus_document}
+                          syllabus_link={course.syllabus_link}
+                          formType="syllabus"
+                          college_ids={course.colleges.map((c)=>Number(c.id))}
+                          formTitle="Get Syllabus"
+                          stream={course.basic_info.stream.title}
+                          title={syllabusData?.description_title || "Syllabus"}
+                          description={
+                            <ul className="space-y-4 text-white/90">
+                              {syllabusData?.description_keypoints.map((point, index) =>
+                                point ? <li key={index}>{point}</li> : null
+                              )}
+                            </ul>
+                          }
+                          trigger={
+                      <Button variant="outline" className="bg-transparent">
                 Download Syllabus
               </Button>
+                          }
+                        />
+              
             </div>
           </div>
         </div>

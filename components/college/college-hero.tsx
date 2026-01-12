@@ -252,6 +252,8 @@ export function CollegeHero({
 
         <div className="mt-8 flex flex-wrap gap-4">
           <ApplyNowForm
+            brochure_link={college.brochure_link || college.brochure_document}
+            formType="brochure"
             college_ids={[Number(college.id)]}
             formTitle="Get Brochure"
             streams={college.streams.map((stream) => stream.title)}
@@ -272,13 +274,9 @@ export function CollegeHero({
               </Button>
             }
           />
-          {/*      <Button
-            variant="secondary"
-            className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white"
-          >
-            Download Brochure
-          </Button> */}
+
           <ApplyNowForm
+            formType="apply-now"
             college_ids={[Number(college.id)]}
             title={applyNowData?.description_title || "Apply Now"}
             description={
