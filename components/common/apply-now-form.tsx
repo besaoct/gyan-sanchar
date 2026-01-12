@@ -24,11 +24,13 @@ import {
 } from "@/components/ui/select";
 import { getCoursesFilters } from "@/lib/api/data/courses";
 import Link from "next/link";
+import { FormType } from "@/lib/types";
 
 interface ApplyNowFormProps {
   trigger: React.ReactNode;
+  formType?: FormType;
   title: string;
-    formTitle?: string;
+  formTitle?: string;
   description: React.ReactNode;
   college_ids?: number[] | null;
   course_ids?: number[] | null;
@@ -40,6 +42,7 @@ interface ApplyNowFormProps {
 
 export function ApplyNowForm({
   trigger,
+  formType,
   title,
   formTitle,
   description,

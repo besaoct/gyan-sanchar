@@ -130,16 +130,16 @@ export default function StudentVAPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-8">
-          <div className="w-full hidden lg:block lg:max-w-sm lg:w-1/4">
-            <Image src={ image_1 || "/placeholder.svg"} alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+        <div className="flex flex-col lg:flex-row flex-wrap mx-auto w-full justify-center items-center lg:items-stretch gap-8">
+          <div className="w-full hidden lg:block  aspect-9/16 max-w-[270px] relative">
+         {  image_1 ? <Image src={ image_1 || ""} alt="Creative image" fill priority className="w-auto"/> :<></>}
           </div>
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:flex-1">
             <div className="p-8 border rounded-lg h-full">
               <h1 className="text-2xl font-bold mb-4 text-start">Student Visa Application</h1>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+                <div className="grid grid-cols-1 xl:grid-cols-2  gap-4 w-full">
+                  <div className="">
                     <Label className="mb-2" htmlFor="name">Name</Label>
                     <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required disabled={isLoading} />
                   </div>
@@ -215,17 +215,25 @@ export default function StudentVAPage() {
               </form>
             </div>
           </div>
-          <div className="w-full hidden lg:block lg:max-w-sm lg:w-1/4">
-             <Image src={ image_2 || "/placeholder.svg"}  alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+          <div className="w-full hidden lg:block aspect-9/16 max-w-[270px] relative">
+         {  image_2 ?  <Image src={ image_2 || ""}  alt="Creative image" fill priority className="w-auto"/> : <></>}
           </div>
         </div>
 
-       <div className="w-full lg:hidden flex justify-center mt-8 gap-4">
-             <Image src={ image_1 || "/placeholder.svg"}  alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
-             <Image src={ image_2 || "/placeholder.svg"}  alt="Creative image" width={300} height={500} className="rounded-lg object-cover w-full h-full"/>
+         <div className="w-full relative lg:hidden flex justify-center mt-8 gap-4">
+      
+{      image_1 ?
+           <div className=" relative flex-1 rounded-lg aspect-9/16  ">
+              <Image src={ image_1 || "/placeholder.svg"}  alt="Creative image" fill priority className="w-auto"/>
+           </div>  : <></>}
+
+{image_2 ?
+           <div className="relative flex-1 rounded-lg aspect-9/16  ">
+             <Image src={ image_2 || "/placeholder.svg"}  alt="Creative image" fill priority className="w-auto"/>
+           </div> : <></>}
 
           </div>
-
+   
         {visaData && (
           <div className="mt-12 p-8 border rounded-lg">
             <h2 className="text-xl font-bold mb-4">{visaData.visa_title}</h2>

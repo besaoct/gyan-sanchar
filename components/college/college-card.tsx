@@ -529,8 +529,10 @@ export function CollegeCard({
           </Button> */}
 
           <ApplyNowForm
+            formType={"brochure"}
             college_ids={[Number(college.id)]}
             formTitle="Get Brochure"
+            streams={college.streams.map((stream) => stream.title)}
             title={brochureData?.description_title || "Brochure"}
             description={
               <ul className="space-y-4 text-white/90">
@@ -551,7 +553,9 @@ export function CollegeCard({
           />
 
           <ApplyNowForm
+            formType={"apply-now"}
             college_ids={[Number(college.id)]}
+            streams={college.streams.map((stream) => stream.title)}
             title={applyNowData?.description_title || "Apply Now"}
             description={
               <ul className="space-y-4 text-white/90">
