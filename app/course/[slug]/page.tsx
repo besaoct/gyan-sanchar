@@ -15,11 +15,15 @@ import {
 } from "@/components/ui/accordion";
 import { CourseHero } from "@/components/course/course-hero";
 import { cn } from "@/lib/utils";
-import { CommonAdmissionForm } from "@/components/common/common-form";
+// import { CommonAdmissionForm } from "@/components/common/common-form";
 import { StickyBar } from "@/components/course/sticky-bar";
 import { AlertCircle, ExternalLink, Phone } from "lucide-react";
 import Loading from "./loading";
 import { CourseCollegeCard } from "@/components/course/course-college-card";
+import Link from "next/link";
+import { ApplyNowForm } from "@/components/common/apply-now-form";
+import { CommonFormType } from "@/lib/types";
+import { BASE_URL } from "@/lib/api/config/urls";
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -53,6 +57,43 @@ export default function CourseDetailsPage() {
     }
   }, [slug]);
 
+  const [scheduleCounselingData, setScheduleCounselingData] = useState<CommonFormType | null>(null);
+  const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
+  const [syllabusData, setSyllabusData] = useState<CommonFormType | null>(null);
+
+    useEffect(() => {
+      const fetchTypes = async () => {
+        try {
+          setLoading(true);
+  
+          const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
+          const typesResult = await typesResponse.json();
+          if (typesResult.success && typesResult.data) {
+            const applyNow = typesResult.data.find(
+              (t: CommonFormType) => t.slug === "apply-now"
+            );
+            const syllabus = typesResult.data.find(
+              (t: CommonFormType) => t.slug === "syllabus"
+            );
+            const scheduleCounseling =  typesResult.data.find(
+              (t: CommonFormType) => t.slug === "schedule-counseling"
+            );
+            if (syllabus) setScheduleCounselingData(scheduleCounseling);
+            if (applyNow) setApplyNowData(applyNow);
+            if (syllabus) setSyllabusData(syllabus)
+          }
+        } catch (err) {
+          setError("An unexpected error occurred.");
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchTypes();
+    }, []);
+  
+
   useEffect(() => {
     const handleScroll = () => {
       if (heroRef.current) {
@@ -76,24 +117,24 @@ export default function CourseDetailsPage() {
     { id: "faqs", label: "FAQs" },
   ];
 
-
-  if (loading) {    return <Loading />;
+  if (loading) {
+    return <Loading />;
   }
-
-
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
 
-      { error ? (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-  <div className="text-center">
-    <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-    <p className="text-xl font-medium text-red-600">{error}</p>
-    <p className="mt-2 text-sm text-red-400">Something went wrong. Please try again later.</p>
-  </div>
-</div>
+      {error ? (
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <p className="text-xl font-medium text-red-600">{error}</p>
+            <p className="mt-2 text-sm text-red-400">
+              Something went wrong. Please try again later.
+            </p>
+          </div>
+        </div>
       ) : !course ? (
         <div className="min-h-screen bg-white flex items-center justify-center">
           <p>Course not found.</p>
@@ -101,8 +142,8 @@ export default function CourseDetailsPage() {
       ) : (
         <>
           {/* Hero Section */}
-          <div  ref={heroRef}  className="px-4 container py-10 w-full max-w-full">
-            <CourseHero course={course} />
+          <div ref={heroRef} className="px-4 container py-10 w-full max-w-full"> 
+          <CourseHero course={course}  applyNowData={applyNowData} syllabusData={syllabusData}/> 
           </div>
 
           {/* Main Content */}
@@ -151,7 +192,9 @@ export default function CourseDetailsPage() {
                             <span className="font-medium">
                               {highlight.title}
                             </span>
-                         {highlight.description ?  `: ${highlight.description}` : ""}
+                            {highlight.description
+                              ? `: ${highlight.description}`
+                              : ""}
                           </li>
                         ))}
                       </ul>
@@ -205,18 +248,23 @@ export default function CourseDetailsPage() {
                                       <h4 className="font-semibold">
                                         {subject.name}
                                       </h4>
-                                    {  subject.description?
-                                      <p className="text-sm text-muted-foreground mt-1">
-                                        {subject.description}
-                                      </p>
-                                       : <></>}
-                                {      subject.outcome ?
-                                      <p className="text-sm mt-2">
-                                        <span className="font-semibold">
-                                          Outcome:
-                                        </span>{" "}
-                                        {subject.outcome}
-                                      </p> : <></>}
+                                      {subject.description ? (
+                                        <p className="text-sm text-muted-foreground mt-1">
+                                          {subject.description}
+                                        </p>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {subject.outcome ? (
+                                        <p className="text-sm mt-2">
+                                          <span className="font-semibold">
+                                            Outcome:
+                                          </span>{" "}
+                                          {subject.outcome}
+                                        </p>
+                                      ) : (
+                                        <></>
+                                      )}
                                     </div>
                                   ))}
                                 </div>
@@ -251,22 +299,26 @@ export default function CourseDetailsPage() {
                 )}
 
                 {activeTab === "faqs" && (
-            <Card className="p-0 gap-2 border-0 shadow-none">
-              <CardHeader className="p-0 m-0">
-                <CardTitle className="p-0 ">FAQs</CardTitle>
-                </CardHeader>
-              <CardContent className="border-0 shadow-none p-0">
-                <Accordion type="single" collapsible className="w-full">
-                  {course.faqs.map((faq, i) => (
-                    <AccordionItem key={i} value={`item-${i}`} className="p-0">
-                      <AccordionTrigger>{faq.question}</AccordionTrigger>
-                      <AccordionContent>{faq.answer}</AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </CardContent>
-            </Card>
-          )}
+                  <Card className="p-0 gap-2 border-0 shadow-none">
+                    <CardHeader className="p-0 m-0">
+                      <CardTitle className="p-0 ">FAQs</CardTitle>
+                    </CardHeader>
+                    <CardContent className="border-0 shadow-none p-0">
+                      <Accordion type="single" collapsible className="w-full">
+                        {course.faqs.map((faq, i) => (
+                          <AccordionItem
+                            key={i}
+                            value={`item-${i}`}
+                            className="p-0"
+                          >
+                            <AccordionTrigger>{faq.question}</AccordionTrigger>
+                            <AccordionContent>{faq.answer}</AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             </div>
           </div>
@@ -280,28 +332,23 @@ export default function CourseDetailsPage() {
                   Get personalized counseling and application assistance
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
-                  <CommonAdmissionForm
-                    buttonText="Apply Now"
-                    title="Why register with us?"
-                    formTitle="Schedule your free counseling session today!"
+    
+                  <ApplyNowForm
+                    formType="schedule-counseling"
+                    college_ids={course.colleges.map((c) => Number(c.id))}
+                    course_ids={[Number(course.id)]}
+                    formTitle="Schedule Free Counseling"
+                    stream={course.basic_info.stream.title}
+                    title={
+                      scheduleCounselingData?.description_title ||
+                      "Schedule Counseling"
+                    }
                     description={
                       <ul className="space-y-4 text-white/90">
-                        <li>
-                          Get help in selecting the right course from the large
-                          selection of options available.
-                        </li>
-                        <li>
-                          Boost your preparation with extensive knowledge of
-                          syllabus & exam pattern.
-                        </li>
-                        <li>
-                          Explore your courses offered by different colleges
-                          that match your skills.
-                        </li>
-                        <li>
-                          With totally online Admission Process we help you get
-                          college admission without having to step out.
-                        </li>
+                        {scheduleCounselingData?.description_keypoints.map(
+                          (point, index) =>
+                            point ? <li key={index}>{point}</li> : null
+                        )}
                       </ul>
                     }
                     trigger={
@@ -311,13 +358,16 @@ export default function CourseDetailsPage() {
                       </Button>
                     }
                   />
-                  <Button
-                    variant="outline"
-                    className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Visit Official Website
-                  </Button>
+
+                  <Link href={"/courses"} target="_blank" className="flex">
+                    <Button
+                      variant="outline"
+                      className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Explore other courses
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -325,9 +375,9 @@ export default function CourseDetailsPage() {
           <StickyBar isVisible={isStickyBarVisible} />
         </>
       )}
-         <div className={isStickyBarVisible ?"mb-16" :""}>
-             <Footer />
-         </div>
+      <div className={isStickyBarVisible ? "mb-16" : ""}>
+        <Footer />
+      </div>
     </div>
   );
 }

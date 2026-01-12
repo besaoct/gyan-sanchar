@@ -9,6 +9,8 @@ import { BASE_URL } from "@/lib/api/config/urls";
 
 interface CourseHeroProps {
   course: CourseDetails;
+  applyNowData: CommonFormType | null;
+  syllabusData: CommonFormType | null
 }
 
 function InfoBadge({
@@ -95,39 +97,40 @@ function RightImagePanel({ course }: { course: CourseDetails }) {
   );
 }
 
-export function CourseHero({ course }: CourseHeroProps) {
-  const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
-  const [syllabusData, setSyllabusData] = useState<CommonFormType | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export function CourseHero({ course, applyNowData, syllabusData }: CourseHeroProps) {
 
-  useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        setLoading(true);
+  // const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
+  // const [syllabusData, setSyllabusData] = useState<CommonFormType | null>(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
 
-        const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
-        const typesResult = await typesResponse.json();
-        if (typesResult.success && typesResult.data) {
-          const applyNow = typesResult.data.find(
-            (t: CommonFormType) => t.slug === "apply-now"
-          );
-          const syllabus = typesResult.data.find(
-            (t: CommonFormType) => t.slug === "syllabus"
-          );
-          if (syllabus) setSyllabusData(syllabus);
-          if (applyNow) setApplyNowData(applyNow);
-        }
-      } catch (err) {
-        setError("An unexpected error occurred.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTypes = async () => {
+  //     try {
+  //       setLoading(true);
 
-    fetchTypes();
-  }, []);
+  //       const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
+  //       const typesResult = await typesResponse.json();
+  //       if (typesResult.success && typesResult.data) {
+  //         const applyNow = typesResult.data.find(
+  //           (t: CommonFormType) => t.slug === "apply-now"
+  //         );
+  //         const syllabus = typesResult.data.find(
+  //           (t: CommonFormType) => t.slug === "syllabus"
+  //         );
+  //         if (syllabus) setSyllabusData(syllabus);
+  //         if (applyNow) setApplyNowData(applyNow);
+  //       }
+  //     } catch (err) {
+  //       setError("An unexpected error occurred.");
+  //       console.error(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchTypes();
+  // }, []);
 
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
@@ -206,8 +209,6 @@ export function CourseHero({ course }: CourseHeroProps) {
           />
 
           <ApplyNowForm
-            // syllabus_document={course.syllabus_document}
-            // syllabus_link={course.syllabus_link}
             formType="apply-now"
             college_ids={course.colleges.map((c) => Number(c.id))}
             course_ids={[Number(course.id)]}

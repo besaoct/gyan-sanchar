@@ -60,7 +60,7 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user} = useAuth();
 
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
 
@@ -396,12 +396,16 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
             </Button>
           </form>
         </Form>
+            {isAuthenticated && user && user.email ? (
+                  <></>
+                ) : (
               <div className="mt-2 text-center text-sm">
                Already registered?{" "}
             <Link href="/login" className="underline">
               Login
             </Link>
           </div>
+                )}
       </DialogContent>
     </Dialog>
   );

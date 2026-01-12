@@ -24,6 +24,7 @@ import {
 import { getCoursesFilters } from "@/lib/api/data/courses";
 import Link from "next/link";
 import { BASE_URL } from "@/lib/api/config/urls";
+import { useAuth } from "@/contexts/auth/AuthContext";
 
 interface CommonRegistrationFormProps {
   title: string;
@@ -43,11 +44,11 @@ export function CommonAdmissionForm({
   buttonText = "Register",
 }: CommonRegistrationFormProps) {
   const { toast } = useToast();
-
-  const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [email, setEmail] = useState("");
+  const { isAuthenticated, user} = useAuth();
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [dob, setDob] = useState("");
+  const [mobile, setMobile] = useState("");
   const [stream, setStream] = useState("");
   const [level, setLevel] = useState("");
   const [interestedOnlineDegree, setInterestedOnlineDegree] = useState(false);
@@ -280,12 +281,17 @@ export function CommonAdmissionForm({
                   {isLoading ? "Submitting..." : buttonText}
                 </Button>
               </form>
+                  {isAuthenticated && user && user.email ? (
+                  <></>
+                ) : (
                       <div className="mt-2 text-center text-sm">
                Already registered?{" "}
             <Link href="/login" className="underline">
               Login
             </Link>
+
           </div>
+                )}
               <p className="text-xs text-muted-foreground mt-4">
                 By proceeding ahead you expressly agree to the GyanSanchar Terms
                 & Conditions and Privacy Policy

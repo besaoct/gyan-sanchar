@@ -75,6 +75,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const [isStickyBarVisible, setIsStickyBarVisible] = useState(false);
   const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
   const [brochureData, setBrochureData] = useState<CommonFormType | null>(null);
+  const [scheduleCounselingData, setScheduleCounselingData] = useState<CommonFormType | null>(null);
   const [selectedReel, setSelectedReel] = useState<VideoReel | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -112,8 +113,12 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
           const brochure = typesResult.data.find(
             (t: CommonFormType) => t.slug === "brochure"
           );
+         const scheduleCounseling = typesResult.data.find(
+            (t: CommonFormType) => t.slug === "schedule-counseling"
+          );
           if (brochure) setBrochureData(brochure);
           if (applyNow) setApplyNowData(applyNow);
+          if (scheduleCounseling) setScheduleCounselingData(scheduleCounseling);
         }
       } catch (err) {
         setError("An unexpected error occurred.");
@@ -1111,17 +1116,45 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
               Get personalized counseling and application assistance
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button className="bg-orange-500 hover:bg-orange-600  text-white">
+                   <ApplyNowForm
+                    formType="schedule-counseling"
+                    college_ids={[Number(college.id)]}
+                    course_ids={college.courses.map((c)=>Number(c.id))}
+                    formTitle="Schedule Free Counseling"
+                    streams={college.streams.map((s)=>s.title)}
+                    title={
+                      scheduleCounselingData?.description_title ||
+                      "Schedule Counseling"
+                    }
+                    description={
+                      <ul className="space-y-4 text-white/90">
+                        {scheduleCounselingData?.description_keypoints.map(
+                          (point, index) =>
+                            point ? <li key={index}>{point}</li> : null
+                        )}
+                      </ul>
+                    }
+                    trigger={
+                      <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                        <Phone className="h-4 w-4 mr-2" />
+                        Schedule Counseling
+                      </Button>
+                    }
+                  />
+              {/* <Button className="bg-orange-500 hover:bg-orange-600  text-white">
                 <Phone className="h-4 w-4 mr-2" />
                 Schedule Counseling
-              </Button>
-              <Button
-                variant="outline"
-                className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
-              >
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Visit Official Website
-              </Button>
+              </Button> */}
+
+                  <Link href={"/colleges"} target="_blank" className="flex">
+                    <Button
+                      variant="outline"
+                      className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                       Explore other colleges
+                    </Button>
+                  </Link>
             </div>
           </div>
         </div>

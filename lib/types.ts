@@ -6,7 +6,7 @@ export interface CommonFormType {
   description_keypoints: (string | null)[];
 }
 
-export type FormType = "brochure" | "syllabus" | "apply-now" | "callback" | "check-eligibility" | "registration" | "check-eligibility" ;
+export type FormType = "brochure" | "syllabus" | "apply-now" | "callback" | "check-eligibility" | "registration" | "check-eligibility" | "schedule-counseling";
 
 export interface Review {
   id: string

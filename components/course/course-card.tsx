@@ -48,9 +48,9 @@ export function CourseCard({ course }: { course: CourseDetails }) {
           const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
           const typesResult = await typesResponse.json();
           if (typesResult.success && typesResult.data) {
-            const applyNow = typesResult.data.find(
-              (t: CommonFormType) => t.slug === "apply-now"
-            );
+            // const applyNow = typesResult.data.find(
+            //   (t: CommonFormType) => t.slug === "apply-now"
+            // );
             const syllabus = typesResult.data.find(
               (t: CommonFormType) => t.slug === "syllabus"
             );
@@ -120,7 +120,6 @@ export function CourseCard({ course }: { course: CourseDetails }) {
               </Button> */}
 
                         <ApplyNowForm
-                        
                           syllabus_document={course.syllabus_document}
                           syllabus_link={course.syllabus_link}
                           formType="syllabus"

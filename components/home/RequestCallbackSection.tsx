@@ -13,13 +13,15 @@ import {
 import { getCollegeFilters } from "@/lib/api/data/colleges"
 import { useToast } from "@/hooks/use-toast"
 import { useEffect, useState } from "react"
+import { useAuth } from "@/contexts/auth/AuthContext"
+import { BASE_URL } from "@/lib/api/config/urls"
 
 export default function RequestCallbackSection() {
   const { toast } = useToast()
-
-  const [name, setName] = useState("")
+  const { user} = useAuth();
+  const [name, setName] = useState(user?.name || "")
   const [mobile, setMobile] = useState("")
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState(user?.email || "")
   const [stream, setStream] = useState("")
   const [streamsOptions, setStreamsOptions] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -52,7 +54,7 @@ export default function RequestCallbackSection() {
 
     try {
       const response = await fetch(
-        "https://gitcsdemoserver.online/gyansanchar/public/api/v1/auth/register",
+        `${BASE_URL}/api/v1/auth/register`,
         {
           method: "POST",
           headers: {
