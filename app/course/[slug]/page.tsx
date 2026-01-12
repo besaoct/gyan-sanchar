@@ -151,7 +151,7 @@ export default function CourseDetailsPage() {
                             <span className="font-medium">
                               {highlight.title}
                             </span>
-                            : {highlight.description}
+                         {highlight.description ?  `: ${highlight.description}` : ""}
                           </li>
                         ))}
                       </ul>

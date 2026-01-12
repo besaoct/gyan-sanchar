@@ -159,7 +159,6 @@
 
 .htmlContent{
   @apply prose prose-sm max-w-none prose-headings:!text-base
-
                 prose-p:leading-relaxed 
                 prose-p:m-0
                 prose-headings:m-0
@@ -172,7 +171,7 @@
                 mb-6
                 prose-table:w-full
                 prose-li:marker:!text-primary
-               
+                
                 
                 /* prose-ul:list-inside prose-ol:list-inside */
               
