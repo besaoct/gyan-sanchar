@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth/AuthContext";
-import { getCollegeFilters, Stream } from "@/lib/api/data/colleges";
+import { getCollegeFilters } from "@/lib/api/data/colleges";
 import {
   Select,
   SelectContent,
@@ -25,6 +25,7 @@ import {
 import { getCoursesFilters } from "@/lib/api/data/courses";
 import Link from "next/link";
 import { FormType } from "@/lib/types";
+import { BASE_URL } from "@/lib/api/config/urls";
 
 interface ApplyNowFormProps {
   trigger: React.ReactNode;
@@ -59,8 +60,6 @@ export function ApplyNowForm({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [levelsOptions, setLevelsOptions] = useState<string[]>([]);
   const [streamsOptions, setStreamsOptions] = useState<string[]>([]);
-
-
 
   useEffect(() => {
     const loadFilters = async () => {
@@ -119,7 +118,7 @@ export function ApplyNowForm({
       phone: formData.phone,
       interested_online_degree: formData.interested_online_degree,
       enable_whatsapp_updates: formData.enable_whatsapp_updates,
-      type: "registration",
+      type: formType || "registration",
       dob: formData.date_of_birth,
       stream: finalStream,
       level: finalLevel,
@@ -127,7 +126,7 @@ export function ApplyNowForm({
 
     try {
       // Step 1: Register User
-      const regResponse = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/auth/register", {
+      const regResponse = await fetch(`${BASE_URL}/api/v1/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(registrationData),
@@ -150,7 +149,7 @@ export function ApplyNowForm({
         course_ids: course_ids || null,
       };
 
-      const appResponse = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/applications", {
+      const appResponse = await fetch(`${BASE_URL}/api/v1/applications`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(applicationData),
@@ -163,8 +162,8 @@ export function ApplyNowForm({
 
       toast({ 
         title: "Application Submitted!", description: "Thank you! We will get back to you soon." ,
-  
       });
+
       setIsDialogOpen(false);
       setFormData({
         full_name: "", email: "", phone: "", date_of_birth: "", address: "",

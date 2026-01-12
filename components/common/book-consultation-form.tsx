@@ -37,6 +37,7 @@ import {
 import { getCoursesFilters } from "@/lib/api/data/courses";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import Link from "next/link";
+import { BASE_URL } from "@/lib/api/config/urls";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -120,7 +121,7 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
 
     try {
       // Step 1: Register user (silently)
-      const regResponse = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/auth/register", {
+      const regResponse = await fetch(`${BASE_URL}/api/v1/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(registrationData),
@@ -143,7 +144,7 @@ export function BookConsultationForm({ trigger }: BookConsultationFormProps) {
         message: values.message || "",
       };
 
-      const bookingResponse = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/live-consultation", {
+      const bookingResponse = await fetch(`${BASE_URL}/api/v1/live-consultation`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(consultationData)

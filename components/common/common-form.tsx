@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { getCoursesFilters } from "@/lib/api/data/courses";
 import Link from "next/link";
+import { BASE_URL } from "@/lib/api/config/urls";
 
 interface CommonRegistrationFormProps {
   title: string;
@@ -94,7 +95,7 @@ export function CommonAdmissionForm({
 
     try {
       const response = await fetch(
-        "https://gitcsdemoserver.online/gyansanchar/public/api/v1/auth/register",
+       `${BASE_URL}/api/v1/auth/register`,
         {
           method: "POST",
           headers: {
