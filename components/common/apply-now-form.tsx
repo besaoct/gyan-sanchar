@@ -240,8 +240,8 @@ export function ApplyNowForm({
 
   // console.log(formType)
 
-  const b_link = brochure_link || brochure_document ;
-  const s_link = syllabus_document || syllabus_link;
+  const b_link = brochure_link || brochure_document;
+  const s_link = syllabus_link || syllabus_document;
 
 
   return (
