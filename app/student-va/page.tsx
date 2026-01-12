@@ -48,7 +48,9 @@ export default function StudentVAPage() {
   useEffect(() => {
     const fetchVisaData = async () => {
       try {
-        const response = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/visa-button");
+        const response = await fetch(
+          "https://gitcsdemoserver.online/gyansanchar/public/api/v1/visa-button"
+        );
         const data = await response.json();
         if (data.success) {
           setVisaData(data.data);
@@ -65,35 +67,39 @@ export default function StudentVAPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    const universityCourse = course && university 
-      ? `${course.trim()} - ${university.trim()}` 
-      : course || university || "";
+    const universityCourse =
+      course && university
+        ? `${course.trim()} - ${university.trim()}`
+        : course || university || "";
 
     try {
-      const response = await fetch("https://gitcsdemoserver.online/gyansanchar/public/api/v1/visa-form-store", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          name,
-          phone,
-          email,
-          father_name: fatherName,
-          mother_name: motherName,
-          dob,
-          passport_number: passportNumber,
-          passport_validity: passportValidity,
-          study_country: studyCountry,
-          full_address: fullAddress,
-          parents_accompany: parentsAccompany ? "Yes" : "No",
-          university_course: universityCourse,
-          travel_date: travelDate,
-          sponsor_type: sponsorType,
-          emergency_contact: emergencyContact,
-        }),
-      });
+      const response = await fetch(
+        "https://gitcsdemoserver.online/gyansanchar/public/api/v1/visa-form-store",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            phone,
+            email,
+            father_name: fatherName,
+            mother_name: motherName,
+            dob,
+            passport_number: passportNumber,
+            passport_validity: passportValidity,
+            study_country: studyCountry,
+            full_address: fullAddress,
+            parents_accompany: parentsAccompany ? "Yes" : "No",
+            university_course: universityCourse,
+            travel_date: travelDate,
+            sponsor_type: sponsorType,
+            emergency_contact: emergencyContact,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -102,8 +108,8 @@ export default function StudentVAPage() {
           title: "Form Submitted!",
           description: "Your student visa application has been submitted.",
           style: {
-            color: "white"
-          }
+            color: "white",
+          },
         });
       } else {
         throw new Error(result.message || "An unknown error occurred.");
@@ -111,20 +117,20 @@ export default function StudentVAPage() {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "Failed to submit form. Please try again.",
+        description:
+          error.message || "Failed to submit form. Please try again.",
         variant: "destructive",
-           style: {
-            color: "white"
-          }
+        style: {
+          color: "white",
+        },
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-
-  const image_1 =  visaData?.image1 ? `${BASE_URL}/${visaData.image1}` : null;
-    const image_2 =  visaData?.image2 ? `${BASE_URL}/${visaData.image2}` : null;
+  const image_1 = visaData?.image1 ? `${BASE_URL}/${visaData.image1}` : null;
+  const image_2 = visaData?.image2 ? `${BASE_URL}/${visaData.image2}` : null;
 
   return (
     <div className="min-h-screen bg-white">
@@ -132,128 +138,303 @@ export default function StudentVAPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row flex-wrap mx-auto w-full justify-center items-center lg:items-stretch gap-8">
           <div className="w-full hidden lg:block  aspect-9/16 max-w-[270px] relative">
-         {  image_1 ? <Image src={ image_1 || ""} alt="Creative image" fill priority className="w-auto"/> :<></>}
+            {image_1 ? (
+              <Image
+                src={image_1 || ""}
+                alt="Creative image"
+                fill
+                priority
+                className="w-auto"
+              />
+            ) : (
+              <></>
+            )}
           </div>
           <div className="w-full lg:flex-1">
             <div className="p-8 border rounded-lg h-full">
-              <h1 className="text-2xl font-bold mb-4 text-start">Student Visa Application</h1>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+              <h1 className="text-2xl font-bold mb-4 text-start">
+                Student Visa Application
+              </h1>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 w-full"
+              >
                 <div className="grid grid-cols-1 xl:grid-cols-2  gap-4 w-full">
                   <div className="">
-                    <Label className="mb-2" htmlFor="name">Name</Label>
-                    <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="name">
+                      Name
+                    </Label>
+                    <Input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="phone">Phone</Label>
-                    <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="phone">
+                      Phone
+                    </Label>
+                    <Input
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="email">
+                      Email
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="fatherName">Father&apos;s Name</Label>
-                    <Input id="fatherName" value={fatherName} onChange={(e) => setFatherName(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="fatherName">
+                      Father&apos;s Name
+                    </Label>
+                    <Input
+                      id="fatherName"
+                      value={fatherName}
+                      onChange={(e) => setFatherName(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="motherName">Mother&apos;s Name</Label>
-                    <Input id="motherName" value={motherName} onChange={(e) => setMotherName(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="motherName">
+                      Mother&apos;s Name
+                    </Label>
+                    <Input
+                      id="motherName"
+                      value={motherName}
+                      onChange={(e) => setMotherName(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="dob">Date of Birth</Label>
-                    <Input id="dob" type="date" value={dob} onChange={(e) => setDob(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="dob">
+                      Date of Birth
+                    </Label>
+                    <Input
+                      id="dob"
+                      type="date"
+                      value={dob}
+                      onChange={(e) => setDob(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="passportNumber">Passport Number</Label>
-                    <Input id="passportNumber" value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="passportNumber">
+                      Passport Number
+                    </Label>
+                    <Input
+                      id="passportNumber"
+                      value={passportNumber}
+                      onChange={(e) => setPassportNumber(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="passportValidity">Passport Validity</Label>
-                    <Input id="passportValidity" type="date" value={passportValidity} onChange={(e) => setPassportValidity(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="passportValidity">
+                      Passport Validity
+                    </Label>
+                    <Input
+                      id="passportValidity"
+                      type="date"
+                      value={passportValidity}
+                      onChange={(e) => setPassportValidity(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="studyCountry">Study Country</Label>
-                    <Input id="studyCountry" value={studyCountry} onChange={(e) => setStudyCountry(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="studyCountry">
+                      Study Country
+                    </Label>
+                    <Input
+                      id="studyCountry"
+                      value={studyCountry}
+                      onChange={(e) => setStudyCountry(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="fullAddress">Full Address</Label>
-                    <Input id="fullAddress" value={fullAddress} onChange={(e) => setFullAddress(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="fullAddress">
+                      Full Address
+                    </Label>
+                    <Input
+                      id="fullAddress"
+                      value={fullAddress}
+                      onChange={(e) => setFullAddress(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="course">Course</Label>
-                    <Input id="course" value={course} onChange={(e) => setCourse(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="course">
+                      Course
+                    </Label>
+                    <Input
+                      id="course"
+                      value={course}
+                      onChange={(e) => setCourse(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="university">University</Label>
-                    <Input id="university" value={university} onChange={(e) => setUniversity(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="university">
+                      University
+                    </Label>
+                    <Input
+                      id="university"
+                      value={university}
+                      onChange={(e) => setUniversity(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="travelDate">Travel Date</Label>
-                    <Input id="travelDate" type="date" value={travelDate} onChange={(e) => setTravelDate(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="travelDate">
+                      Travel Date
+                    </Label>
+                    <Input
+                      id="travelDate"
+                      type="date"
+                      value={travelDate}
+                      onChange={(e) => setTravelDate(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="sponsorType">Sponsor Type</Label>
-                    <Input id="sponsorType" value={sponsorType} onChange={(e) => setSponsorType(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="sponsorType">
+                      Sponsor Type
+                    </Label>
+                    <Input
+                      id="sponsorType"
+                      value={sponsorType}
+                      onChange={(e) => setSponsorType(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div>
-                    <Label className="mb-2" htmlFor="emergencyContact">Emergency Contact</Label>
-                    <Input id="emergencyContact" value={emergencyContact} onChange={(e) => setEmergencyContact(e.target.value)} required disabled={isLoading} />
+                    <Label className="mb-2" htmlFor="emergencyContact">
+                      Emergency Contact
+                    </Label>
+                    <Input
+                      id="emergencyContact"
+                      value={emergencyContact}
+                      onChange={(e) => setEmergencyContact(e.target.value)}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                 </div>
                 <div className="flex items-start space-x-2 mt-2">
                   <Checkbox
                     id="parentsAccompany"
                     checked={parentsAccompany}
-                    onCheckedChange={(checked) => setParentsAccompany(!!checked)}
+                    onCheckedChange={(checked) =>
+                      setParentsAccompany(!!checked)
+                    }
                     disabled={isLoading}
                   />
-                  <Label htmlFor="parentsAccompany">Are parents accompanying?</Label>
+                  <Label htmlFor="parentsAccompany">
+                    Are parents accompanying?
+                  </Label>
                 </div>
-                <Button type="submit" className="w-full mt-4" disabled={isLoading}>
+                <Button
+                  type="submit"
+                  className="w-full mt-4"
+                  disabled={isLoading}
+                >
                   {isLoading ? "Submitting..." : "Submit Application"}
                 </Button>
               </form>
             </div>
           </div>
           <div className="w-full hidden lg:block aspect-9/16 max-w-[270px] relative">
-         {  image_2 ?  <Image src={ image_2 || ""}  alt="Creative image" fill priority className="w-auto"/> : <></>}
+            {image_2 ? (
+              <Image
+                src={image_2 || ""}
+                alt="Creative image"
+                fill
+                priority
+                className="w-auto"
+              />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
 
-         <div className="w-full relative lg:hidden flex justify-center mt-8 gap-4">
-      
-{      image_1 ?
-           <div className=" relative flex-1 rounded-lg aspect-9/16  ">
-              <Image src={ image_1 || "/placeholder.svg"}  alt="Creative image" fill priority className="w-auto"/>
-           </div>  : <></>}
+        <div className="w-full relative lg:hidden flex justify-center mt-8 gap-4">
+          {image_1 ? (
+            <div className=" relative flex-1 rounded-lg aspect-9/16  ">
+              <Image
+                src={image_1 || "/placeholder.svg"}
+                alt="Creative image"
+                fill
+                priority
+                className="w-auto"
+              />
+            </div>
+          ) : (
+            <></>
+          )}
 
-{image_2 ?
-           <div className="relative flex-1 rounded-lg aspect-9/16  ">
-             <Image src={ image_2 || "/placeholder.svg"}  alt="Creative image" fill priority className="w-auto"/>
-           </div> : <></>}
+          {image_2 ? (
+            <div className="relative flex-1 rounded-lg aspect-9/16  ">
+              <Image
+                src={image_2 || "/placeholder.svg"}
+                alt="Creative image"
+                fill
+                priority
+                className="w-auto"
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
 
-          </div>
-   
         {visaData && (
           <div className="mt-12 p-8 border rounded-lg">
             <h2 className="text-xl font-bold mb-4">{visaData.visa_title}</h2>
             {visaData.visa_description.map((desc, index) => (
-              <p key={index} className="mb-2 text-sm">{desc}</p>
+              <p key={index} className="mb-2 text-sm">
+                {desc}
+              </p>
             ))}
 
             <h2 className="text-xl font-bold my-4">Process</h2>
 
-                    {visaData.visa_process? (
-                          <div className="htmlContent ">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: visaData.visa_process,
-                              }}
-                            />
-                          </div>
-                        ) : (
-                          <></>
-                        )}
+            {visaData.visa_process ? (
+              <div className="htmlContent ">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: visaData.visa_process,
+                  }}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         )}
       </main>
