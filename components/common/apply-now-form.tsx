@@ -231,14 +231,6 @@ export function ApplyNowForm({
     e.stopPropagation();
   };
 
-  // if(formType==="brochure" &&  isAuthenticated) {
-
-  //   router.push("/colleges")
-
-  //   return <></>;
-  // }
-
-  // console.log(formType)
 
   const b_link = brochure_link || brochure_document;
   const s_link = syllabus_link || syllabus_document;
