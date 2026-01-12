@@ -60,7 +60,10 @@ function LocationAndGallery({
             />
           ))}
         </div>
-        <Link href="?tab=gallery#gallery" className="text-primary font-medium hover:underline">
+        <Link
+          href="?tab=gallery#gallery"
+          className="text-primary font-medium hover:underline"
+        >
           Gallery
         </Link>
       </div>
@@ -97,15 +100,18 @@ function RightImagePanel({ college }: { college: College }) {
   return (
     <div className="relative mx-auto sm:mx-4 2xl:mx-0">
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
-        {college.nirf_ranking.rank !==null ? (
+        {college.nirf_ranking.rank !== null ? (
           <div className="border-r p-2 px-4">
             <div className="text-xs text-muted-foreground">NIRF Rank</div>
             <div className="text-lg font-semibold">
-          {`${college.nirf_ranking.rank == 0 ? 'N/A': `#${college.nirf_ranking.rank}`}`}
+              {`${
+                college.nirf_ranking.rank == 0
+                  ? "N/A"
+                  : `#${college.nirf_ranking.rank}`
+              }`}
             </div>
           </div>
-        ) 
-        : (
+        ) : (
           <></>
         )}
         <div className="border-r p-2 px-4">
@@ -143,7 +149,11 @@ function RightImagePanel({ college }: { college: College }) {
           <div className="pointer-events-none absolute -left-6 top-6">
             <InfoBadge
               title="NIRF Rank"
-              value={`${college.nirf_ranking.rank==0 ? 'N/A': `#${college.nirf_ranking.rank}`}`}
+              value={`${
+                college.nirf_ranking.rank == 0
+                  ? "N/A"
+                  : `#${college.nirf_ranking.rank}`
+              }`}
             />
           </div>
         ) : (
@@ -172,9 +182,16 @@ function RightImagePanel({ college }: { college: College }) {
   );
 }
 
-
-export function CollegeHero({ college, brochureData, applyNowData }: { college: College, brochureData:CommonFormType | null, applyNowData:CommonFormType | null }) {
-  const currentYear = new Date().getFullYear()
+export function CollegeHero({
+  college,
+  brochureData,
+  applyNowData,
+}: {
+  college: College;
+  brochureData: CommonFormType | null;
+  applyNowData: CommonFormType | null;
+}) {
+  const currentYear = new Date().getFullYear();
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
@@ -217,7 +234,8 @@ export function CollegeHero({ college, brochureData, applyNowData }: { college: 
         </div>
 
         <h1 className="text-balance text-xl font-bold leading-tight text-primary md:text-3xl">
-          {college.name} - Admission {currentYear}, Fees, Courses, Placement, Ranking
+          {college.name} - Admission {currentYear}, Fees, Courses, Placement,
+          Ranking
         </h1>
 
         <div className="mt-6 flex flex-wrap items-start gap-4">
@@ -232,36 +250,35 @@ export function CollegeHero({ college, brochureData, applyNowData }: { college: 
           {college.short_description}
         </p>
 
-
-
         <div className="mt-8 flex flex-wrap gap-4">
-                   <ApplyNowForm
-                      college_ids={[Number(college.id)]}
-                      formTitle="Get Brochure"
-                      title={brochureData?.description_title || "Brochure"}
-                      description={
-                        <ul className="space-y-4 text-white/90">
-                          {brochureData?.description_keypoints.map((point, index) =>
-                            point ? <li key={index}>{point}</li> : null
-                          )}
-                        </ul>
-                      }
-                      trigger={
-                      <Button
-            variant="secondary"
-            className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white"
-          >
-            Download Brochure
-          </Button>
-                      }
-                    />
-{/*      <Button
+          <ApplyNowForm
+            college_ids={[Number(college.id)]}
+            formTitle="Get Brochure"
+            streams={college.streams.map((stream) => stream.title)}
+            title={brochureData?.description_title || "Brochure"}
+            description={
+              <ul className="space-y-4 text-white/90">
+                {brochureData?.description_keypoints.map((point, index) =>
+                  point ? <li key={index}>{point}</li> : null
+                )}
+              </ul>
+            }
+            trigger={
+              <Button
+                variant="secondary"
+                className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white"
+              >
+                Download Brochure
+              </Button>
+            }
+          />
+          {/*      <Button
             variant="secondary"
             className="rounded-xl px-5 py-6 bg-orange-500 hover:bg-orange-500/90 text-white"
           >
             Download Brochure
           </Button> */}
-       <ApplyNowForm
+          <ApplyNowForm
             college_ids={[Number(college.id)]}
             title={applyNowData?.description_title || "Apply Now"}
             description={
@@ -272,7 +289,7 @@ export function CollegeHero({ college, brochureData, applyNowData }: { college: 
               </ul>
             }
             trigger={
-             <Button className="rounded-xl px-6 py-6">Shortlist</Button>
+              <Button className="rounded-xl px-6 py-6">Shortlist</Button>
             }
           />
           {/* <Button className="rounded-xl px-6 py-6">Shortlist</Button> */}

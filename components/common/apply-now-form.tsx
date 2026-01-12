@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth/AuthContext";
-import { getCollegeFilters } from "@/lib/api/data/colleges";
+import { getCollegeFilters, Stream } from "@/lib/api/data/colleges";
 import {
   Select,
   SelectContent,
@@ -32,6 +32,7 @@ interface ApplyNowFormProps {
   description: React.ReactNode;
   college_ids?: number[] | null;
   course_ids?: number[] | null;
+  streams?: string[]
   stream?: string;
   level?: string;
 
@@ -44,16 +45,19 @@ export function ApplyNowForm({
   description,
   college_ids,
   course_ids,
+  streams,
   stream: propStream,
   level: propLevel,
 
 }: ApplyNowFormProps) {
   const {user} = useAuth();
-  const { toast } = useToast();
+  const { toast } = useToast(); 
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [levelsOptions, setLevelsOptions] = useState<string[]>([]);
   const [streamsOptions, setStreamsOptions] = useState<string[]>([]);
+
+
 
   useEffect(() => {
     const loadFilters = async () => {
@@ -62,7 +66,7 @@ export function ApplyNowForm({
         const resCourse = await getCoursesFilters();
 
         if (resCollege.success && resCollege.data) {
-          setStreamsOptions(resCollege.data.streams || []);
+          setStreamsOptions( (streams && streams.length>0) ? streams : resCollege.data.streams || []);
         }
         if (resCourse.success && resCourse.data) {
           setLevelsOptions(resCourse.data.levels || []);

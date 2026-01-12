@@ -44,7 +44,7 @@ import { cn } from "@/lib/utils";
 import { StickyBar } from "@/components/college/sticky-bar";
 import VideoReelCard from "@/components/college/video-reel-card";
 import VideoDialogPlayer from "@/components/college/VideoDialogPlayer";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { ReviewForm } from "@/components/college/review-form";
 import { ApplyNowForm } from "@/components/common/apply-now-form";
 // import { useGooglePlaceReviews } from "@/hooks/use-google-place-reviews";
@@ -80,8 +80,6 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  
-
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab) {
@@ -105,15 +103,13 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
           setError(response.message || "Failed to fetch college data.");
         }
 
-        const typesResponse = await fetch(
-          `${BASE_URL}/api/v1/types`
-        );
+        const typesResponse = await fetch(`${BASE_URL}/api/v1/types`);
         const typesResult = await typesResponse.json();
         if (typesResult.success && typesResult.data) {
           const applyNow = typesResult.data.find(
             (t: CommonFormType) => t.slug === "apply-now"
           );
-           const brochure = typesResult.data.find(
+          const brochure = typesResult.data.find(
             (t: CommonFormType) => t.slug === "brochure"
           );
           if (brochure) setBrochureData(brochure);
@@ -145,9 +141,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     };
   }, []);
 
-
-  if (loading) {   
-     return <Loading />;
+  if (loading) {
+    return <Loading />;
   }
 
   if (error) {
@@ -188,7 +183,11 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
       <Header />
       {/* Hero Section */}
       <div ref={heroRef} className="px-4 container py-10 w-full max-w-full">
-        <CollegeHero college={college} brochureData={brochureData} applyNowData={applyNowData} />
+        <CollegeHero
+          college={college}
+          brochureData={brochureData}
+          applyNowData={applyNowData}
+        />
       </div>
 
       {/* Main Content */}
@@ -262,22 +261,32 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                               {college.location.city}, {college.location.state}
                             </span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">
-                              Student Strength:
-                            </span>
-                            <span className="font-medium">
-                              {college.campusLife.studentStrength}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">
-                              Faculty Ratio:
-                            </span>
-                            <span className="font-medium">
-                              {college.campusLife.facultyRatio}
-                            </span>
-                          </div>
+                          
+                          {college.campusLife.studentStrength ? (
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">
+                                Student Strength:
+                              </span>
+                              <span className="font-medium">
+                                {college.campusLife.studentStrength}
+                              </span>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+
+                          {college.campusLife.facultyRatio ? (
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">
+                                Faculty Ratio:
+                              </span>
+                              <span className="font-medium">
+                                {college.campusLife.facultyRatio}
+                              </span>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
                           <div className="flex justify-between items-center">
                             <span className="text-muted-foreground">
                               Campus Size:
@@ -323,24 +332,27 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         {college.visionMission}
                       </p>
                     </div>
-                   { (college.notableAlumni?.length>0) && (college.notableAlumni[0].name !==null)  ? (
-                    <div className="mt-6">
-                      <h4 className="font-semibold mb-3">Notable Alumni</h4>
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        {college.notableAlumni.map((alumnus: any, index) => (
-                          <div
-                            key={index}
-                            className="p-3 border rounded-lg bg-[#044cac]/5"
-                          >
-                            <div className="font-medium">{alumnus.name}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {alumnus.achievement}
+                    {college.notableAlumni?.length > 0 &&
+                    college.notableAlumni[0].name !== null ? (
+                      <div className="mt-6">
+                        <h4 className="font-semibold mb-3">Notable Alumni</h4>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          {college.notableAlumni.map((alumnus: any, index) => (
+                            <div
+                              key={index}
+                              className="p-3 border rounded-lg bg-[#044cac]/5"
+                            >
+                              <div className="font-medium">{alumnus.name}</div>
+                              <div className="text-sm text-muted-foreground">
+                                {alumnus.achievement}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    ) : (<></>)}
+                    ) : (
+                      <></>
+                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -527,24 +539,30 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </>
                         )}
                       </div>
-                    {college.admissionProcess.importantDates ? (
-                      <div>
-                        <h4 className="font-semibold mb-3">Important Dates</h4>
-                        <div className="text-sm text-muted-foreground">
-                          {college.admissionProcess.importantDates?.map(
-                            (date, index) => (
-                              <div
-                                key={index}
-                                className="flex justify-between items-center border-b pb-2 mb-2"
-                              >
-                                <span>{date.event}</span>
-                                <span className="font-medium">{date.date}</span>
-                              </div>
-                            )
-                          )}
+                      {college.admissionProcess.importantDates ? (
+                        <div>
+                          <h4 className="font-semibold mb-3">
+                            Important Dates
+                          </h4>
+                          <div className="text-sm text-muted-foreground">
+                            {college.admissionProcess.importantDates?.map(
+                              (date, index) => (
+                                <div
+                                  key={index}
+                                  className="flex justify-between items-center border-b pb-2 mb-2"
+                                >
+                                  <span>{date.event}</span>
+                                  <span className="font-medium">
+                                    {date.date}
+                                  </span>
+                                </div>
+                              )
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ) : (<></>)}
+                      ) : (
+                        <></>
+                      )}
                       <div className="text-center">
                         {applyNowData && college.id && (
                           <ApplyNowForm
@@ -620,57 +638,64 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </div>
                         ))}
                       </div>
-               {
-                college.additionalFees? (
-                         <div>
-                        <h4 className="font-semibold mb-3">Additional Fees</h4>
-                        <div className="text-sm text-muted-foreground">
-                           {
-                            college.additionalFees.hostel ? (
-                                   <div className="flex justify-between items-center border-b pb-2 mb-2">
-                            <span>Hostel Fees (Annual):</span>
-                            <span className="font-medium">
-                              {college.additionalFees.hostel}
-                            </span>
-                          </div>
-                            ):<></>
-                           }
-                            {college.additionalFees.mess ? (
-      <div className="flex justify-between items-center border-b pb-2">
-                            <span>Mess Fees (Annual):</span>
-                            <span className="font-medium">
-                              {college.additionalFees.mess}
-                            </span>
-                          </div>
-                            ):<></>
-                              }
-                        </div>
-                      </div>
-                ):<></>
-               }
-
-               {college.scholarships && college.scholarships.length > 0 && (college.scholarships[0].name !==null)  ? (
-                      <div>
-                        <h4 className="font-semibold mb-3">Scholarships</h4>
-                        <div className="grid gap-4">
-                          {college.scholarships.map(
-                            (scholarship: any, index) => (
-                              <div
-                                key={index}
-                                className="p-3 border rounded-lg bg-[#044cac]/5"
-                              >
-                                <div className="font-medium">
-                                  {scholarship.name}
-                                </div>
-                                <div className="text-sm text-muted-foreground">
-                                  {scholarship.description}
-                                </div>
+                      {college.additionalFees ? (
+                        <div>
+                          <h4 className="font-semibold mb-3">
+                            Additional Fees
+                          </h4>
+                          <div className="text-sm text-muted-foreground">
+                            {college.additionalFees.hostel ? (
+                              <div className="flex justify-between items-center border-b pb-2 mb-2">
+                                <span>Hostel Fees (Annual):</span>
+                                <span className="font-medium">
+                                  {college.additionalFees.hostel}
+                                </span>
                               </div>
-                            )
-                          )}
+                            ) : (
+                              <></>
+                            )}
+                            {college.additionalFees.mess ? (
+                              <div className="flex justify-between items-center border-b pb-2">
+                                <span>Mess Fees (Annual):</span>
+                                <span className="font-medium">
+                                  {college.additionalFees.mess}
+                                </span>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                ) : (<></>)}
+                      ) : (
+                        <></>
+                      )}
+
+                      {college.scholarships &&
+                      college.scholarships.length > 0 &&
+                      college.scholarships[0].name !== null ? (
+                        <div>
+                          <h4 className="font-semibold mb-3">Scholarships</h4>
+                          <div className="grid gap-4">
+                            {college.scholarships.map(
+                              (scholarship: any, index) => (
+                                <div
+                                  key={index}
+                                  className="p-3 border rounded-lg bg-[#044cac]/5"
+                                >
+                                  <div className="font-medium">
+                                    {scholarship.name}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {scholarship.description}
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
                       <div className="text-center">
                         <Button
                           variant="outline"
@@ -969,7 +994,10 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           >
                             <div className="relative h-64 w-full overflow-hidden rounded-lg">
                               <Image
-                                src={image?.replace('storage','') || "/placeholder.svg"}
+                                src={
+                                  image?.replace("storage", "") ||
+                                  "/placeholder.svg"
+                                }
                                 alt={`${college.name} campus ${index + 1}`}
                                 fill
                                 className="object-cover"
