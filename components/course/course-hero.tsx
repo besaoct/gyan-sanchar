@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CourseDetails } from "@/lib/api/data/courses";
 import { ApplyNowForm } from "../common/apply-now-form";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { CommonFormType } from "@/lib/types";
-import { BASE_URL } from "@/lib/api/config/urls";
+// import { BASE_URL } from "@/lib/api/config/urls";
 
 interface CourseHeroProps {
   course: CourseDetails;
@@ -135,8 +135,8 @@ export function CourseHero({ course, applyNowData, syllabusData }: CourseHeroPro
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
-      <section className=" ">
-        <div className="mb-6 flex items-center gap-3 text-muted-foreground">
+      <section className="w-full ">
+        <div className="mb-6 flex items-center gap-3 text-muted-foreground w-full">
           <div className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-secondary">
             <Image
               src="/icons/course-p.png"

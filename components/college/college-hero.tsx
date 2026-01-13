@@ -133,13 +133,12 @@ function RightImagePanel({ college }: { college: College }) {
         </div>
       </div>
 
-      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 min-w-full  lg:min-w-[420px] lg:max-w-[420px] xl:min-w-[600px] xl:max-w-[600px] ">
+      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 min-w-full h-full lg:min-w-[512px]lg:max-w-[512px] xl:min-w-[640px] xl:max-w-[640px] lg:h-[420px] aspect-video ">
         <Image
           src={college.image || "/college/single.avif"}
-          width={1000}
-          height={1000}
+          fill
           alt={`${college.name} campus building`}
-          className=" object-cover w-full sm:h-[320px] lg:h-[390px] rounded-4xl "
+          className="w-auto rounded-4xl "
           priority
         />
       </div>
@@ -195,8 +194,8 @@ export function CollegeHero({
   return (
     <div className="flex flex-col gap-12 lg:flex-row-reverse lg:items-start">
       {/* Left column */}
-      <section className=" ">
-        <div className="mb-6 flex items-center gap-3 text-muted-foreground">
+      <section className=" w-full">
+        <div className="mb-6 flex items-center gap-3 text-muted-foreground w-full">
           <div className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-secondary">
             <Image
               src="/college/cplaceholder.svg"
