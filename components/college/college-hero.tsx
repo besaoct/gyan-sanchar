@@ -97,21 +97,40 @@ function InfoBadge({
 }
 
 function RightImagePanel({ college }: { college: College }) {
+
+  const ranking = college.rankings?.find(r => Number(r.rank) > 0 && r.ranking_body!= null ) ?? null;
+  const accreditation = college.accreditation.length > 0 ? college.accreditation[0] : null;
+
   return (
     <div className="relative mx-auto sm:mx-4 2xl:mx-0">
       <div className="sm:hidden w-full flex whitespace-nowrap overflow-x-auto border mb-12 scrollbar-hide scroll-smooth">
-        {college.nirf_ranking.rank !== null ? (
+        {college.nirf_ranking.rank !== null && college.nirf_ranking.rank !== 0 ? (
           <div className="border-r p-2 px-4">
             <div className="text-xs text-muted-foreground">NIRF Rank</div>
             <div className="text-lg font-semibold">
               {`${
-                college.nirf_ranking.rank == 0
+                college.nirf_ranking.rank === 0
                   ? "N/A"
                   : `#${college.nirf_ranking.rank}`
               }`}
             </div>
           </div>
-        ) : (
+        ) : ranking ?
+         <div className="border-r p-2 px-4"> 
+            <div className="text-xs text-muted-foreground">{ranking.ranking_body}</div>
+            <div className="text-lg font-semibold">
+             #{ranking.rank}
+            </div>
+          </div>
+        : accreditation ?
+         <div className="border-r p-2 px-4"> 
+            <div className="text-xs text-muted-foreground">Accreditation</div>
+            <div className="text-lg font-semibold">
+             {accreditation}
+            </div>
+          </div>
+        :
+        (
           <></>
         )}
         <div className="border-r p-2 px-4">
@@ -144,7 +163,7 @@ function RightImagePanel({ college }: { college: College }) {
       </div>
 
       <div className="hidden sm:block">
-        {college.nirf_ranking.rank !== null ? (
+        {college.nirf_ranking.rank !== null && college.nirf_ranking.rank !== 0 ? (
           <div className="pointer-events-none absolute -left-6 top-6">
             <InfoBadge
               title="NIRF Rank"
@@ -155,7 +174,21 @@ function RightImagePanel({ college }: { college: College }) {
               }`}
             />
           </div>
-        ) : (
+        ) : ranking ?
+         <div className="pointer-events-none absolute -left-6 top-6">
+            <InfoBadge
+              title= {ranking.ranking_body}
+              value={`#${ranking.rank}`}
+            />
+          </div>
+          : accreditation?
+               <div className="pointer-events-none absolute -left-6 top-6">
+            <InfoBadge
+              title= {"Accreditation"}
+              value={accreditation}
+            />
+          </div>
+        :  (
           <></>
         )}
         <div className="pointer-events-none absolute -left-6 -bottom-6">
