@@ -234,20 +234,20 @@ td, th {
 
 }
 
-
 .htmlContent div:has(> table:first-child), div:has(table) {
   @apply  !w-full overflow-x-auto;
 }
+
+
+/* .htmlContent td {
+  @apply w-full max-w-full;
+} */
+
 
 .htmlContent div:where(.prose) {
   /* your styles here */
   max-width: none !important;
 
-}
-
-
-.htmlContent td {
-  @apply w-full max-w-full;
 }
 
 /* .htmlContent ul, ul>li{

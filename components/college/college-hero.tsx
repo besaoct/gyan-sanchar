@@ -152,7 +152,7 @@ function RightImagePanel({ college }: { college: College }) {
         </div>
       </div>
 
-      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 min-w-full h-full lg:min-w-[512px]lg:max-w-[512px] xl:min-w-[640px] xl:max-w-[640px] lg:h-[420px] aspect-video ">
+      <div className="relative bg-muted overflow-hidden rounded-4xl p-2.5 min-w-full h-full lg:min-w-[512px] lg:max-w-[512px] xl:min-w-[640px] xl:max-w-[640px] lg:h-[420px] aspect-video ">
         <Image
           src={college.image || "/college/single.avif"}
           fill
