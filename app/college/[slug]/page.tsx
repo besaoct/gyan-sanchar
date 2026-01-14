@@ -41,6 +41,7 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { CollegeHero } from "@/components/college/college-hero";
 import { cn } from "@/lib/utils";
+// import { downloadHtmlContent, downloadHtmlContentAsPdf } from "@/lib/download-utils";
 import { StickyBar } from "@/components/college/sticky-bar";
 import VideoReelCard from "@/components/college/video-reel-card";
 import VideoDialogPlayer from "@/components/college/VideoDialogPlayer";
@@ -80,6 +81,12 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+
+const handleDownload = () => {
+  // downloadHtmlContent("fees", "fees-structure.html");
+  // downloadHtmlContentAsPdf("fees", "fees-structure.pdf")
+};
 
   useEffect(() => {
     const tab = searchParams.get("tab");
@@ -602,16 +609,21 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
             )}
 
             {activeTab === "fees" && (
-              <div className="space-y-6" id="fees">
+              <div className="space-y-6" >
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">
-                    <CardTitle className="flex items-center gap-2">
-                      <IndianRupee className="h-5 w-5 text-[#044cac]" />
-                      Fee Structure
+                    <CardTitle className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <IndianRupee className="h-5 w-5 text-[#044cac]" />
+                        Fee Structure
+                      </div>
+                      {/* <Button variant="outline" size="icon" onClick={handleDownload}>
+                        <Download className="h-4 w-4" />
+                      </Button> */}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <div className="htmlContent">
+                    <div className="htmlContent" id="fees"> 
                       {college.feesStructure ? (
                         <div
                           dangerouslySetInnerHTML={{
