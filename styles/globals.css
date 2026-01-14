@@ -169,7 +169,7 @@
                 prose-th:px-2 prose-td:px-2
                 prose-th:py-1 prose-td:py-1
                 mb-6
-                prose-table:w-full
+                prose-table:w-fit
                 prose-li:marker:!text-primary
                 /* prose-ul:list-inside prose-ol:list-inside */
               
@@ -229,13 +229,17 @@ td, th {
 
 }
 
-.htmlContent table, thead, tbody, tfoot, tr {
+.htmlContent thead, tbody, tfoot, tr {
   @apply  !w-full max-w-full overflow-x-auto;
 
 }
 
 .htmlContent div:has(> table:first-child), div:has(table) {
   @apply  !w-full overflow-x-auto;
+}
+
+.htmlContent table{
+  @apply w-fit!
 }
 
 
