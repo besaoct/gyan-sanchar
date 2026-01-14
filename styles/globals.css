@@ -220,7 +220,7 @@ td, th {
 
 /* html content customizations */
 .htmlContent > table, td, tr, th, tbody, thead, tfoot, h2, h1, h3, h4, h5, h6, p, li {
-    font-family: '__Poppins_e36b36', '__Poppins_Fallback_e36b36';
+    font-family: '__Poppins_e36b36', '__Poppins_Fallback_e36b36' !important;
     font-style: normal;
     scrollbar-width: none !important;
    -ms-overflow-style: none !important;
