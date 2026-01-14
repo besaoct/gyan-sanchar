@@ -239,10 +239,10 @@ td, th {
 }
 
 .htmlContent table{
-  @apply w-fit!
+  @apply w-fit!  /*make it w-full for table to take full width*/
 }
 
-
+/* uncomment this to when table is of full width */
 /* .htmlContent td {
   @apply w-full max-w-full;
 } */
