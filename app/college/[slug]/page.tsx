@@ -701,7 +701,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       ) : (
                         <></>
                       )}
-                      <div className="text-center">
+                      {/* <div className="text-center">
                         <Button
                           variant="outline"
                           className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
@@ -709,7 +709,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           <Download className="h-4 w-4 mr-2" />
                           Download Fee Details
                         </Button>
-                      </div>
+                      </div> */}
                     </div>
                   </CardContent>
                 </Card>
