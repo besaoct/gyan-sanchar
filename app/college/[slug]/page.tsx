@@ -45,6 +45,7 @@ import { cn } from "@/lib/utils";
 import { StickyBar } from "@/components/college/sticky-bar";
 import VideoReelCard from "@/components/college/video-reel-card";
 import VideoDialogPlayer from "@/components/college/VideoDialogPlayer";
+import VirtualTourPlayer from "@/components/college/VirtualTourPlayer";
 
 import { ReviewForm } from "@/components/college/review-form";
 import { ApplyNowForm } from "@/components/common/apply-now-form";
@@ -76,17 +77,18 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const [isStickyBarVisible, setIsStickyBarVisible] = useState(false);
   const [applyNowData, setApplyNowData] = useState<CommonFormType | null>(null);
   const [brochureData, setBrochureData] = useState<CommonFormType | null>(null);
-  const [scheduleCounselingData, setScheduleCounselingData] = useState<CommonFormType | null>(null);
+  const [scheduleCounselingData, setScheduleCounselingData] =
+    useState<CommonFormType | null>(null);
   const [selectedReel, setSelectedReel] = useState<VideoReel | null>(null);
+  const [isVirtualTourOpen, setIsVirtualTourOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
 
-
-const handleDownload = () => {
-  // downloadHtmlContent("fees", "fees-structure.html");
-  // downloadHtmlContentAsPdf("fees", "fees-structure.pdf")
-};
+  const handleDownload = () => {
+    // downloadHtmlContent("fees", "fees-structure.html");
+    // downloadHtmlContentAsPdf("fees", "fees-structure.pdf")
+  };
 
   useEffect(() => {
     const tab = searchParams.get("tab");
@@ -115,13 +117,13 @@ const handleDownload = () => {
         const typesResult = await typesResponse.json();
         if (typesResult.success && typesResult.data) {
           const applyNow = typesResult.data.find(
-            (t: CommonFormType) => t.slug === "apply-now"
+            (t: CommonFormType) => t.slug === "apply-now",
           );
           const brochure = typesResult.data.find(
-            (t: CommonFormType) => t.slug === "brochure"
+            (t: CommonFormType) => t.slug === "brochure",
           );
-         const scheduleCounseling = typesResult.data.find(
-            (t: CommonFormType) => t.slug === "schedule-counseling"
+          const scheduleCounseling = typesResult.data.find(
+            (t: CommonFormType) => t.slug === "schedule-counseling",
           );
           if (brochure) setBrochureData(brochure);
           if (applyNow) setApplyNowData(applyNow);
@@ -216,7 +218,7 @@ const handleDownload = () => {
                       "whitespace-nowrap py-4 font-medium last:pr-4",
                       tab.id === activeTab
                         ? "border-b-2 border-primary font-semibold text-primary"
-                        : "text-black"
+                        : "text-black",
                     )}
                     aria-current={tab.id === activeTab ? "page" : undefined}
                   >
@@ -251,7 +253,7 @@ const handleDownload = () => {
                     </div>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="font-semibold mb-3">Key Information</h4>
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Key Information</h4>
                         <div className="space-y-3 text-sm">
                           <div className="flex justify-between items-center">
                             <span className="text-muted-foreground">
@@ -310,7 +312,7 @@ const handleDownload = () => {
                         </div>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-3">
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Accreditation & Affiliations
                         </h4>
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -324,7 +326,7 @@ const handleDownload = () => {
                             </Badge>
                           ))}
                         </div>
-                        <h4 className="font-semibold mb-3">Campus Life</h4>
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Campus Life</h4>
                         <div className="flex flex-wrap gap-2">
                           {college.campusLife.clubs?.map((club) => (
                             <Badge
@@ -339,7 +341,7 @@ const handleDownload = () => {
                       </div>
                     </div>
                     <div className="mt-6">
-                      <h4 className="font-semibold mb-3">Vision & Mission</h4>
+                            <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Vision & Mission</h4>
                       <p className="text-muted-foreground">
                         {college.visionMission}
                       </p>
@@ -347,7 +349,7 @@ const handleDownload = () => {
                     {college.notableAlumni?.length > 0 &&
                     college.notableAlumni[0].name !== null ? (
                       <div className="mt-6">
-                        <h4 className="font-semibold mb-3">Notable Alumni</h4>
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Notable Alumni</h4>
                         <div className="grid sm:grid-cols-2 gap-4">
                           {college.notableAlumni.map((alumnus: any, index) => (
                             <div
@@ -454,7 +456,7 @@ const handleDownload = () => {
                                       (point, index) =>
                                         point ? (
                                           <li key={index}>{point}</li>
-                                        ) : null
+                                        ) : null,
                                     )}
                                   </ul>
                                 }
@@ -470,146 +472,152 @@ const handleDownload = () => {
               </div>
             )}
 
-            {activeTab === "eligibility-process" && college.admissionProcess && (
-              <div className="space-y-6" id="eligibility-process">
-                <Card className="border-none shadow-none p-0">
-                  <CardHeader className="p-0">
-                    <CardTitle className="flex items-center gap-2">
-                      <BookOpen className="h-5 w-5 text-[#044cac]" />
-                      Eligibility &  Process
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold mb-3">Entrance Exams</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {college.admissionProcess.exams?.map((exam) => (
-                            <Badge
-                              key={exam}
-                              variant="secondary"
-                              className="bg-[#044cac]/20 text-[#044cac]"
-                            >
-                              {exam}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-3">
-                          Admission Criteria
-                        </h4>
-
-                        <div className="htmlContent">
-                          {college.admissionProcess.criteria ? (
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: college.admissionProcess.criteria,
-                              }}
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold sr-only">
-                          Application Process
-                        </h4>
-
-                        {college.admissionProcess.application_process ? (
-                          <div className="htmlContent mt-4">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html:
-                                  college.admissionProcess.application_process,
-                              }}
-                            />
-                          </div>
-                        ) : (
-                          <>
-                            <ol className="list-disc list-inside text-sm text-muted-foreground space-y-2">
-                              <li>
-                                Register on the official {college.name} website.
-                              </li>
-                              <li>
-                                Fill out the application form with accurate
-                                details.
-                              </li>
-                              <li>
-                                Upload required documents (transcripts, ID
-                                proof, etc.).
-                              </li>
-                              <li>
-                                Pay the application fee of ₹
-                                {college.admissionProcess.applicationFee}.
-                              </li>
-                              <li>
-                                Attend counseling or interviews as per schedule.
-                              </li>
-                            </ol>
-                          </>
-                        )}
-                      </div>
-                      {college.admissionProcess.importantDates ? (
+            {activeTab === "eligibility-process" &&
+              college.admissionProcess && (
+                <div className="space-y-6" id="eligibility-process">
+                  <Card className="border-none shadow-none p-0">
+                    <CardHeader className="p-0">
+                      <CardTitle className="flex items-center gap-2">
+                        <BookOpen className="h-5 w-5 text-[#044cac]" />
+                        Eligibility & Process
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      <div className="space-y-6">
                         <div>
-                          <h4 className="font-semibold mb-3">
-                            Important Dates
+                         <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Entrance Exams</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {college.admissionProcess.exams?.map((exam) => (
+                              <Badge
+                                key={exam}
+                                variant="secondary"
+                                className="bg-[#044cac]/20 text-[#044cac]"
+                              >
+                                {exam}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                            Admission Criteria
                           </h4>
-                          <div className="text-sm text-muted-foreground">
-                            {college.admissionProcess.importantDates?.map(
-                              (date, index) => (
-                                <div
-                                  key={index}
-                                  className="flex justify-between items-center border-b pb-2 mb-2"
-                                >
-                                  <span>{date.event}</span>
-                                  <span className="font-medium">
-                                    {date.date}
-                                  </span>
-                                </div>
-                              )
+
+                          <div className="htmlContent">
+                            {college.admissionProcess.criteria ? (
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: college.admissionProcess.criteria,
+                                }}
+                              />
+                            ) : (
+                              <></>
                             )}
                           </div>
                         </div>
-                      ) : (
-                        <></>
-                      )}
-                      <div className="text-center">
-                        {applyNowData && college.id && (
-                          <ApplyNowForm
-                            college_ids={[Number(college.id)]}
-                            course_ids={null} // No specific course for general admission
-                            stream={college.streams?.[0]?.title}
-                            title={applyNowData.description_title}
-                            description={
-                              <ul className="space-y-4 text-white/90">
-                                {applyNowData.description_keypoints.map(
-                                  (point, index) =>
-                                    point ? <li key={index}>{point}</li> : null
-                                )}
-                              </ul>
-                            }
-                            trigger={
-                              <Button
-                                variant="outline"
-                                className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
-                              >
-                                <Mail className="h-4 w-4 mr-2" />
-                                Apply Now
-                              </Button>
-                            }
-                          />
+                        <div>
+                          <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                            Application Process
+                          </h4>
+
+                          {college.admissionProcess.application_process ? (
+                            <div className="htmlContent mt-4">
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    college.admissionProcess
+                                      .application_process,
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <>
+                              <ol className="list-disc list-inside text-sm text-muted-foreground space-y-2">
+                                <li>
+                                  Register on the official {college.name}{" "}
+                                  website.
+                                </li>
+                                <li>
+                                  Fill out the application form with accurate
+                                  details.
+                                </li>
+                                <li>
+                                  Upload required documents (transcripts, ID
+                                  proof, etc.).
+                                </li>
+                                <li>
+                                  Pay the application fee of ₹
+                                  {college.admissionProcess.applicationFee}.
+                                </li>
+                                <li>
+                                  Attend counseling or interviews as per
+                                  schedule.
+                                </li>
+                              </ol>
+                            </>
+                          )}
+                        </div>
+                        {college.admissionProcess.importantDates ? (
+                          <div>
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                              Important Dates
+                            </h4>
+                            <div className="text-sm text-muted-foreground">
+                              {college.admissionProcess.importantDates?.map(
+                                (date, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex justify-between items-center border-b pb-2 mb-2"
+                                  >
+                                    <span>{date.event}</span>
+                                    <span className="font-medium">
+                                      {date.date}
+                                    </span>
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <></>
                         )}
+                        <div className="text-center">
+                          {applyNowData && college.id && (
+                            <ApplyNowForm
+                              college_ids={[Number(college.id)]}
+                              course_ids={null} // No specific course for general admission
+                              stream={college.streams?.[0]?.title}
+                              title={applyNowData.description_title}
+                              description={
+                                <ul className="space-y-4 text-white/90">
+                                  {applyNowData.description_keypoints.map(
+                                    (point, index) =>
+                                      point ? (
+                                        <li key={index}>{point}</li>
+                                      ) : null,
+                                  )}
+                                </ul>
+                              }
+                              trigger={
+                                <Button
+                                  variant="outline"
+                                  className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
+                                >
+                                  <Mail className="h-4 w-4 mr-2" />
+                                  Apply Now
+                                </Button>
+                              }
+                            />
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
 
             {activeTab === "fees" && (
-              <div className="space-y-6" >
+              <div className="space-y-6">
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">
                     <CardTitle className="flex items-center justify-between">
@@ -623,7 +631,7 @@ const handleDownload = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <div className="htmlContent" id="fees"> 
+                    <div className="htmlContent" id="fees">
                       {college.feesStructure ? (
                         <div
                           dangerouslySetInnerHTML={{
@@ -657,7 +665,7 @@ const handleDownload = () => {
                       </div>
                       {college.additionalFees ? (
                         <div>
-                          <h4 className="font-semibold mb-3">
+                                <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                             Additional Fees
                           </h4>
                           <div className="text-sm text-muted-foreground">
@@ -691,7 +699,7 @@ const handleDownload = () => {
                       college.scholarships.length > 0 &&
                       college.scholarships[0].name !== null ? (
                         <div>
-                          <h4 className="font-semibold mb-3">Scholarships</h4>
+                                <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Scholarships</h4>
                           <div className="grid gap-4">
                             {college.scholarships.map(
                               (scholarship: any, index) => (
@@ -706,7 +714,7 @@ const handleDownload = () => {
                                     {scholarship.description}
                                   </div>
                                 </div>
-                              )
+                              ),
                             )}
                           </div>
                         </div>
@@ -751,7 +759,7 @@ const handleDownload = () => {
                     </div>
                     <div className="space-y-6">
                       <div>
-                        <h4 className="font-semibold mb-3">
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Hostel Facilities
                         </h4>
                         <div className="flex gap-4 mb-3">
@@ -787,7 +795,7 @@ const handleDownload = () => {
                         {/* </p> */}
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-3">
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Campus Highlights
                         </h4>
                         {/* <p className="text-sm text-muted-foreground"> */}
@@ -855,7 +863,7 @@ const handleDownload = () => {
                     </div>
                     <div className="space-y-6">
                       <div>
-                        <h4 className="font-semibold mb-3">Top Recruiters</h4>
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Top Recruiters</h4>
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
                           {college.placement.topRecruiters?.map((recruiter) => (
                             <div
@@ -868,7 +876,7 @@ const handleDownload = () => {
                         </div>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-3">
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Placement Process
                         </h4>
                         {/* <p className="text-sm text-muted-foreground"> */}
@@ -886,7 +894,7 @@ const handleDownload = () => {
                         {/* </p> */}
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-3">
+                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Notable Placement Highlights
                         </h4>
                         <div className="grid gap-4">
@@ -900,7 +908,7 @@ const handleDownload = () => {
                                   {highlight}
                                 </div>
                               </div>
-                            )
+                            ),
                           )}
                         </div>
                       </div>
@@ -1027,18 +1035,33 @@ const handleDownload = () => {
                       <CarouselNext className="mr-8" />
                     </Carousel>
                     <div className="mt-6">
-                      <h4 className="font-semibold mb-3">Virtual Tour</h4>
+                            <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Virtual Tour</h4>
                       <p className="text-sm text-muted-foreground mb-4">
                         Explore the campus through our interactive virtual tour,
                         showcasing key facilities and student life.
                       </p>
                       <div className="text-start">
-                        <Button
-                          variant="outline"
-                          className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
+                        <Dialog
+                          open={isVirtualTourOpen}
+                          onOpenChange={setIsVirtualTourOpen}
                         >
-                          Take Virtual Tour
-                        </Button>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
+                              disabled={!college.virtual_tour}
+                            >
+                              Take Virtual Tour
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-7xl w-full h-auto mx-auto  max-h-[96%] p-0 border-none ">
+                            {college.virtual_tour && (
+                              <VirtualTourPlayer
+                                videoUrl={college.virtual_tour}
+                              />
+                            )}
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
                   </CardContent>
@@ -1128,52 +1151,52 @@ const handleDownload = () => {
               Get personalized counseling and application assistance
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-                   <ApplyNowForm
-                    formType="schedule-counseling"
-                    college_ids={[Number(college.id)]}
-                    course_ids={college.courses.map((c)=>Number(c.id))}
-                    formTitle="Schedule Free Counseling"
-                    streams={college.streams.map((s)=>s.title)}
-                    title={
-                      scheduleCounselingData?.description_title ||
-                      "Schedule Counseling"
-                    }
-                    description={
-                      <ul className="space-y-4 text-white/90">
-                        {scheduleCounselingData?.description_keypoints.map(
-                          (point, index) =>
-                            point ? <li key={index}>{point}</li> : null
-                        )}
-                      </ul>
-                    }
-                    trigger={
-                      <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                        <Phone className="h-4 w-4 mr-2" />
-                        Schedule Counseling
-                      </Button>
-                    }
-                  />
+              <ApplyNowForm
+                formType="schedule-counseling"
+                college_ids={[Number(college.id)]}
+                course_ids={college.courses.map((c) => Number(c.id))}
+                formTitle="Schedule Free Counseling"
+                streams={college.streams.map((s) => s.title)}
+                title={
+                  scheduleCounselingData?.description_title ||
+                  "Schedule Counseling"
+                }
+                description={
+                  <ul className="space-y-4 text-white/90">
+                    {scheduleCounselingData?.description_keypoints.map(
+                      (point, index) =>
+                        point ? <li key={index}>{point}</li> : null,
+                    )}
+                  </ul>
+                }
+                trigger={
+                  <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                    <Phone className="h-4 w-4 mr-2" />
+                    Schedule Counseling
+                  </Button>
+                }
+              />
               {/* <Button className="bg-orange-500 hover:bg-orange-600  text-white">
                 <Phone className="h-4 w-4 mr-2" />
                 Schedule Counseling
               </Button> */}
 
-                  <Link href={"/colleges"} target="_blank" className="flex">
-                    <Button
-                      variant="outline"
-                      className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                       Explore other colleges
-                    </Button>
-                  </Link>
+              <Link href={"/colleges"} target="_blank" className="flex">
+                <Button
+                  variant="outline"
+                  className="bg-transparent border-white text-white hover:bg-white hover:text-[#044cac]"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Explore other colleges
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      <div className={isStickyBarVisible ?"mb-16" :""}>
-          <Footer />
+      <div className={isStickyBarVisible ? "mb-16" : ""}>
+        <Footer />
       </div>
       <StickyBar isVisible={isStickyBarVisible} />
     </div>
