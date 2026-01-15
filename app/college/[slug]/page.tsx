@@ -182,7 +182,7 @@ const handleDownload = () => {
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "courses", label: "Courses" },
-    { id: "admission", label: "Admission" },
+    { id: "eligibility-process", label: "Eligibility & process" },
     { id: "fees", label: "Fee Structure" },
     { id: "facilities", label: "Facilities" },
     { id: "placements", label: "Placements" },
@@ -470,13 +470,13 @@ const handleDownload = () => {
               </div>
             )}
 
-            {activeTab === "admission" && college.admissionProcess && (
-              <div className="space-y-6" id="admission">
+            {activeTab === "eligibility-process" && college.admissionProcess && (
+              <div className="space-y-6" id="eligibility-process">
                 <Card className="border-none shadow-none p-0">
                   <CardHeader className="p-0">
                     <CardTitle className="flex items-center gap-2">
                       <BookOpen className="h-5 w-5 text-[#044cac]" />
-                      Admission Process
+                      Eligibility &  Process
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
@@ -513,7 +513,7 @@ const handleDownload = () => {
                         </div>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-3">
+                        <h4 className="font-semibold sr-only">
                           Application Process
                         </h4>
 
