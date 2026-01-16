@@ -123,7 +123,8 @@ export interface College {
   id?: string | number;
   brochure_link?: string | null;
   brochure_document? : string |null;
-  virtual_tour?: string | null;
+  virtual_video?: string | null;
+  virtual_video_link?: string | null;
   slug: string;
   name: string;
   verifyCollege?: boolean;

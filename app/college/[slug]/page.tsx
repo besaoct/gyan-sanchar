@@ -192,6 +192,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     { id: "gallery", label: "Gallery" },
   ];
 
+
+  const virtual_tour  =  college.virtual_video || college.virtual_video_link
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -1049,15 +1052,15 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             <Button
                               variant="outline"
                               className="bg-transparent border-[#044cac] text-[#044cac] hover:bg-[#044cac] hover:text-white"
-                              disabled={!college.virtual_tour}
+                              disabled={!virtual_tour}
                             >
                               Take Virtual Tour
                             </Button>
                           </DialogTrigger>
                           <DialogContent className="max-w-7xl w-full h-auto mx-auto  max-h-[96%] p-0 border-none ">
-                            {college.virtual_tour && (
+                            {virtual_tour && (
                               <VirtualTourPlayer
-                                videoUrl={college.virtual_tour}
+                                videoUrl={virtual_tour}
                               />
                             )}
                           </DialogContent>
