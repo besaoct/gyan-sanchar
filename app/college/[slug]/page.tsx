@@ -633,7 +633,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       </Button> */}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="p-0">
+                  <CardContent className="p-0 overflow-hidden">
                     <div className="htmlContent" id="fees">
                       {college.feesStructure ? (
                         <div
@@ -655,7 +655,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           Total Course Fees
                         </div>
                       </div>
-                      <div className="grid gap-4">
+                      {/* <div className="grid gap-4">
                         {college.courses.map((course) => (
                           <div
                             key={course.id}
@@ -665,7 +665,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             <span className="font-semibold">{course.fees}</span>
                           </div>
                         ))}
-                      </div>
+                      </div> */}
                       {college.additionalFees ? (
                         <div>
                                 <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">

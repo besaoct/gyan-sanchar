@@ -232,17 +232,30 @@ td, th {
 .htmlContent thead, tbody, tfoot, tr {
   @apply  !w-full max-w-full overflow-x-auto;
 
+
 }
+
 
 .htmlContent div:has(> table:first-child), div:has(table) {
   @apply  !w-full overflow-x-auto;
 }
 
 .htmlContent table{
-  @apply w-fit!  /*make it w-full for table to take full width*/
+  @apply w-auto! border-0!
 }
 
-/* uncomment this to when table is of full width */
+.htmlContent  div.block {
+   border: 0px solid transparent !important;
+   padding: 0 !important;
+
+}
+
+.htmlContent td {
+  @apply w-fit max-w-fit;
+}
+
+
+/* uncomment this to make full width table*/
 /* .htmlContent td {
   @apply w-full max-w-full;
 } */
