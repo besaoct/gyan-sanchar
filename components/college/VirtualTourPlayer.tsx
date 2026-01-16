@@ -21,7 +21,7 @@ export default function VirtualTourPlayer({ videoUrl }: VirtualTourPlayerProps) 
   const youTubeId = getYouTubeId(videoUrl);
 
   return (
-    <div className="relative w-full h-[96%]">
+    <div className="relative w-[96%] h-[96%] mx-auto">
       {youTubeId ? (
         <LiteYouTubeEmbed
           id={youTubeId}
