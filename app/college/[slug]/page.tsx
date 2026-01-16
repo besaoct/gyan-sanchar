@@ -1057,7 +1057,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                               Take Virtual Tour
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-7xl w-full bg-transparent h-auto mx-auto  max-h-[96%] p-0 border-none ">
+                          <DialogContent showCloseButton={false} className="max-w-[96%] w-full md:min-w-3xl lg:min-w-5xl bg-transparent h-auto mx-auto  max-h-[96%] p-0 border-none shadow-none ">
                             {virtual_tour && (
                               <VirtualTourPlayer
                                 videoUrl={virtual_tour}
