@@ -397,7 +397,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             </h4>
                             <Badge
                               variant="outline"
-                              className="bg-[#044cac]/10 text-[#044cac]"
+                              className="bg-orange-500/10 text-orange-500"
                             >
                               {course.duration} y
                             </Badge>
