@@ -193,7 +193,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   ];
 
 
-  const virtual_tour  =  college.virtual_video || college.virtual_video_link
+  const virtual_tour  = college.virtual_video_link ||  college.virtual_video 
 
   return (
     <div className="min-h-screen bg-white">
