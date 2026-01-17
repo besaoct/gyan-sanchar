@@ -121,18 +121,18 @@ const googleTranslateElementInit = () => {
             
             <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
-            <div className="space-y-2 text-sm">
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Colleges</div>
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Courses</div>
+            <div className="flex flex-col gap-2 text-sm">
+              <Link href={"/colleges"} className="text-gray-400 hover:text-white cursor-pointer transition-colors">Colleges</Link>
+              <Link href={"/courses"} className="text-gray-400 hover:text-white cursor-pointer transition-colors">Courses</Link>
             </div>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Support</h4>
-            <div className="space-y-2 text-sm">
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Help Center</div>
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Contact Us</div>
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Privacy Policy</div>
-              <div className="text-gray-400 hover:text-white cursor-pointer transition-colors">Terms of Service</div>
+            <div className="gap-2 text-sm flex flex-col">
+              <Link href={"/help-center"} className="text-gray-400 hover:text-white cursor-pointer transition-colors">Help Center</Link>
+              <Link href={"/contact-us"} className="text-gray-400 hover:text-white cursor-pointer transition-colors">Contact Us</Link>
+              <Link href={"/privacy-policy"} className="text-gray-400 hover:text-white cursor-pointer transition-colors">Privacy Policy</Link>
+              <Link href={"/terms-of-services"} className="text-gray-400 hover:text-white cursor-pointer transition-colors">Terms of Service</Link>
             </div>
           </div>
           <div>
@@ -159,7 +159,7 @@ const googleTranslateElementInit = () => {
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400 flex justify-center flex-col">
                   {/* Google Translate Dropdown - original style */}
               <div id="google_translate_element" className="mb-3 mx-auto" />
-          <p>&copy; 2025 Sanchaar EduTech Pvt Ltd. All rights reserved.</p>
+          <p>&copy; {(new Date()).getFullYear()} Sanchaar EduTech Pvt Ltd. All rights reserved.</p>
         </div>
       </div>
     </footer>
