@@ -57,7 +57,7 @@ export default function StudentOfferSection({
                     <div className="text-sm">{feature.subtitle}</div>
                   </div>
                 ))}
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <Link href={firstOffer.button_link} className="block ">
                     <Button className="bg-white text-orange-500 hover:bg-gray-100 text-sm h-auto">
                       {firstOffer.button_text}
