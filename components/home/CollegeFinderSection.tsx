@@ -75,7 +75,7 @@ export default function CollegeFinderSection() {
                 [...Array(8)].map((_, i) => <Skeleton key={i} className="h-8 w-24" />)
             ) : (
                 streams.map((stream) => (
-                    <Link href={`/colleges?stream=${stream.title}`} key={stream.id}>
+                    <Link href={`/colleges?streams=${stream.title}`} key={stream.id}>
                         <Badge variant="outline" className="text-xs md:text-sm cursor-pointer">
                             {stream.title.toUpperCase()}
                         </Badge>
