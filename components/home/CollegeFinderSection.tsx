@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useEffect, useState } from "react"
-import { College, getFeaturedColleges, getPopularColleges, Stream, getStreams } from "@/lib/api/data/colleges"
+import { College, getColleges, getFeaturedColleges, getPopularColleges, Stream, getStreams } from "@/lib/api/data/colleges"
 import { CourseDetails, getCourses } from "@/lib/api/data/courses"
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from "next/image"
@@ -23,32 +23,55 @@ function CollegeListItemSkeleton() {
 
 export default function CollegeFinderSection() {
     const [streams, setStreams] = useState<Stream[]>([]);
+    const [allColleges, setAllColleges] = useState<College[]>([]);
+    const [allCourses, setAllCourses] = useState<CourseDetails[]>([]);
+
+    // State for the currently displayed data
     const [featuredColleges, setFeaturedColleges] = useState<College[]>([]);
     const [popularColleges, setPopularColleges] = useState<College[]>([]);
     const [courses, setCourses] = useState<CourseDetails[]>([]);
+
+    // State to hold the initial, unfiltered data
+    const [initialFeaturedColleges, setInitialFeaturedColleges] = useState<College[]>([]);
+    const [initialPopularColleges, setInitialPopularColleges] = useState<College[]>([]);
+    const [initialCourses, setInitialCourses] = useState<CourseDetails[]>([]);
+
+    const [hoveredStream, setHoveredStream] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [streamsRes, featuredRes, popularRes, coursesRes] = await Promise.all([
+                const [streamsRes, featuredRes, popularRes, coursesRes, collegesRes] = await Promise.all([
                     getStreams(),
                     getFeaturedColleges(),
                     getPopularColleges(),
-                    getCourses()
+                    getCourses(),
+                    getColleges()
                 ]);
 
                 if (streamsRes.success && streamsRes.data) {
                     setStreams(streamsRes.data.slice(0, 8));
                 }
                 if (featuredRes.success && featuredRes.data) {
-                    setFeaturedColleges(featuredRes.data.slice(0, 2));
+                    const featured = featuredRes.data.slice(0, 2);
+                    setFeaturedColleges(featured);
+                    setInitialFeaturedColleges(featured);
                 }
                 if (popularRes.success && popularRes.data) {
-                    setPopularColleges(popularRes.data.slice(0, 2));
+                    const popular = popularRes.data.slice(0, 2);
+                    setPopularColleges(popular);
+                    setInitialPopularColleges(popular);
                 }
                 if (coursesRes.success && coursesRes.data) {
-                    setCourses(coursesRes.data.slice(0, 4));
+                    const courseData = coursesRes.data
+                    setAllCourses(courseData);
+                    const initial = courseData.slice(0, 4)
+                    setCourses(initial);
+                    setInitialCourses(initial);
+                }
+                if (collegesRes.success && collegesRes.data) {
+                    setAllColleges(collegesRes.data);
                 }
 
             } catch (error) {
@@ -60,9 +83,48 @@ export default function CollegeFinderSection() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (!hoveredStream) {
+            // Reset to initial state when no stream is hovered
+            setFeaturedColleges(initialFeaturedColleges);
+            setPopularColleges(initialPopularColleges);
+            setCourses(initialCourses);
+            return;
+        }
+
+        // Filter colleges by hovered stream
+        const filtered = allColleges.filter(college =>
+            college.streams?.some((s: any) =>
+                typeof s === 'string'
+                    ? s.toLowerCase() === hoveredStream.toLowerCase()
+                    : s.title.toLowerCase() === hoveredStream.toLowerCase()
+            )
+        );
+
+        // Update featured and popular lists from the filtered colleges
+        const newFeatured = filtered
+            .sort((a, b) => b.rating - a.rating) // Example sorting
+            .slice(0, 2);
+
+        const newPopular = filtered
+            .sort((a, b) => (b.reviews || 0) - (a.reviews || 0)) // Example sorting
+            .slice(0, 2);
+
+        // Filter courses by hovered stream
+        const streamCourses = allCourses.filter(course =>
+            course.basic_info.stream?.title.toLowerCase() === hoveredStream.toLowerCase()
+        ).slice(0, 4);
+
+
+        setFeaturedColleges(newFeatured);
+        setPopularColleges(newPopular);
+        setCourses(streamCourses.length > 0 ? streamCourses : initialCourses); // Fallback to initial if no courses found
+
+    }, [hoveredStream, allColleges, allCourses, initialFeaturedColleges, initialPopularColleges, initialCourses]);
+
 
   return (
-    <section className="py-12 md:py-16 bg-gray-50">
+    <section className="py-12 md:py-16 bg-gray-50" onMouseLeave={() => setHoveredStream(null)}>
       <div className="container mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">Find The Perfect College For You</h2>
         <p className="text-center text-gray-600 mb-12">
@@ -76,7 +138,11 @@ export default function CollegeFinderSection() {
             ) : (
                 streams.map((stream) => (
                     <Link href={`/colleges?streams=${stream.title}`} key={stream.id}>
-                        <Badge variant="outline" className="text-xs md:text-sm cursor-pointer">
+                        <Badge
+                            variant={hoveredStream === stream.title ? "default" : "outline"}
+                            className="text-xs md:text-sm cursor-pointer"
+                            onMouseEnter={() => setHoveredStream(stream.title)}
+                        >
                             {stream.title.toUpperCase()}
                         </Badge>
                     </Link>
@@ -88,8 +154,10 @@ export default function CollegeFinderSection() {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg md:text-xl font-semibold">Featured Colleges</h3>
-              <Link href="/colleges?filter=featured">
+              <h3 className="text-lg md:text-xl font-semibold">
+                {hoveredStream ? `Featured in ${hoveredStream}`: 'Featured Colleges'}
+                </h3>
+              <Link href={hoveredStream ? `/colleges?streams=${hoveredStream}&filter=featured` : "/colleges?filter=featured"}>
                 <Button variant="link" className="text-blue-600 text-sm">
                     View All
                 </Button>
@@ -118,13 +186,16 @@ export default function CollegeFinderSection() {
                         </Link>
                     ))
                 )}
+                 {featuredColleges.length === 0 && !loading && <p className="text-gray-500 text-sm">No featured colleges found for this stream.</p>}
             </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold">Popular Colleges</h3>
-              <Link href="/colleges?filter=popular">
+            <h3 className="text-lg md:text-xl font-semibold">
+                {hoveredStream ? `Popular in ${hoveredStream}`: 'Popular Colleges'}
+                </h3>
+              <Link href={hoveredStream ? `/colleges?streams=${hoveredStream}&filter=popular` : "/colleges?filter=popular"}>
                 <Button variant="link" className="text-blue-600">
                     View All
                 </Button>
@@ -153,13 +224,16 @@ export default function CollegeFinderSection() {
                         </Link>
                     ))
                 )}
+                 {popularColleges.length === 0 && !loading && <p className="text-gray-500 text-sm">No popular colleges found for this stream.</p>}
             </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold">Related Courses</h3>
-              <Link href="/courses">
+            <h3 className="text-lg md:text-xl font-semibold">
+                {hoveredStream ? `Courses in ${hoveredStream}`: 'Related Courses'}
+                </h3>
+              <Link href={hoveredStream ? `/courses?streams=${hoveredStream}` : "/courses"}>
                 <Button variant="link" className="">
                     View All
                 </Button>
@@ -180,6 +254,7 @@ export default function CollegeFinderSection() {
                         </Link>
                     ))
                 )}
+                {courses.length === 0 && !loading && <p className="text-gray-500 text-sm">No courses found for this stream.</p>}
             </div>
           </div>
         </div>
