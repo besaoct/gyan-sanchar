@@ -67,7 +67,7 @@ export function CollegeCard({
   };
   const collegeId = college.slug || college.id;
   const averagePackage = parsePackage(college.placement.averagePackage);
- 
+
   const [applyNowData, setApplyNowData] = useState<typeType | null>(null);
   const [brochureData, setBrochureData] = useState<typeType | null>(null);
   const [loading, setLoading] = useState(false);
@@ -82,10 +82,10 @@ export function CollegeCard({
         const typesResult = await typesResponse.json();
         if (typesResult.success && typesResult.data) {
           const applyNow = typesResult.data.find(
-            (t: typeType) => t.slug === "apply-now"
+            (t: typeType) => t.slug === "apply-now",
           );
           const brochure = typesResult.data.find(
-            (t: typeType) => t.slug === "brochure"
+            (t: typeType) => t.slug === "brochure",
           );
           if (brochure) setBrochureData(brochure);
           if (applyNow) setApplyNowData(applyNow);
@@ -106,7 +106,7 @@ export function CollegeCard({
       className={cn(
         "w-full bg-card py-3 gap-2 cursor-pointer",
         "hover:shadow-sm shadow-xs transition-shadow duration-300",
-        className
+        className,
       )}
       onClick={() => router.push(`/college/${collegeId}`)}
     >
@@ -197,7 +197,7 @@ export function CollegeCard({
               </div>
             </DialogTrigger>
             <DialogContent
-              className="max-w-5xl w-[80%]"
+              className="max-w-5xl w-[92%] sm:w-[85%] md:w-[80%] lg:w-[75%] max-h-[96vh] p-6 overflow-y-auto"
               onClick={stopCardNavigation}
             >
               <CollegeImageCarousel
@@ -206,6 +206,16 @@ export function CollegeCard({
                 collegeName={college.name}
               />
             </DialogContent>
+            {/* <DialogContent
+              className="max-w-5xl w-[80%] max-h-[96%] overflow-hidden"
+              onClick={stopCardNavigation}
+            >
+              <CollegeImageCarousel
+                onClick={stopCardNavigation}
+                images={college.gallery}
+                collegeName={college.name}
+              />
+            </DialogContent> */}
           </Dialog>
         </div>
 
@@ -281,7 +291,7 @@ export function CollegeCard({
                 <span>
                   {formatFees(
                     Number(college.fees.min),
-                    Number(college.fees.max)
+                    Number(college.fees.max),
                   )}
                 </span>
                 <Link
@@ -341,7 +351,7 @@ export function CollegeCard({
             <div
               className={cn(
                 "text-pretty text-xs text-muted-foreground md:text-sm",
-                descOpen ? "" : "line-clamp-1"
+                descOpen ? "" : "line-clamp-1",
               )}
             >
               {college.short_description || "No description available."}
@@ -369,7 +379,7 @@ export function CollegeCard({
           <div
             className={cn(
               "text-pretty text-xs text-muted-foreground md:text-sm",
-              descOpen ? "" : "line-clamp-1"
+              descOpen ? "" : "line-clamp-1",
             )}
           >
             {college.short_description || "No description available."}
@@ -539,7 +549,7 @@ export function CollegeCard({
             description={
               <ul className="space-y-4 text-white/90">
                 {brochureData?.description_keypoints.map((point, index) =>
-                  point ? <li key={index}>{point}</li> : null
+                  point ? <li key={index}>{point}</li> : null,
                 )}
               </ul>
             }
@@ -556,14 +566,13 @@ export function CollegeCard({
 
           <ApplyNowForm
             formType={"apply-now"}
-         
             college_ids={[Number(college.id)]}
             streams={college.streams.map((stream) => stream.title)}
             title={applyNowData?.description_title || "Apply Now"}
             description={
               <ul className="space-y-4 text-white/90">
                 {applyNowData?.description_keypoints.map((point, index) =>
-                  point ? <li key={index}>{point}</li> : null
+                  point ? <li key={index}>{point}</li> : null,
                 )}
               </ul>
             }
