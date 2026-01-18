@@ -231,7 +231,7 @@ export function CollegeSelection({
                             className="flex items-center space-x-2"
                           >
                             <Checkbox id={`type-${type}`} 
-                            className="min-w-4"
+                            className="min-w-4 max-w-4"
                             checked={selectedTypes.includes(type)}
                             onCheckedChange={() => handleCheckboxChange("types", type)}
                             />
@@ -378,7 +378,7 @@ export function CollegeSelection({
                   }`}
                 >
                   {isSelected(college.id) && (
-                    <Check className="min-w-3 h-3 text-white" />
+                    <Check className="min-w-3 max-w-3 h-3 text-white" />
                   )}
                 </div>
               </div>

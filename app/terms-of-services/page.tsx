@@ -1,8 +1,12 @@
+import Footer from "@/components/common/Footer";
+import Header from "@/components/common/Header";
 import Link from "next/link";
 
 const TermsOfServicesPage = () => {
   return (
-<div className="max-w-5xl mx-auto w-full">
+        <div className="min-h-screen bg-white">
+       <Header />
+      <div className="max-w-5xl mx-auto w-full">
       <div className="container mx-auto px-4 py-8 ">
       <h1 className="mb-6 text-3xl font-bold">Terms of Services Policy</h1>
       <p className="mb-4 text-gray-600">Last Updated: 17th January 2026</p>
@@ -271,6 +275,8 @@ const TermsOfServicesPage = () => {
         </Link>
       </p>
     </div>
+</div>
+<Footer/>
 </div>
   );
 };
