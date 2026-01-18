@@ -15,7 +15,6 @@ import {
   getColleges,
   CollegeFilterOptions,
   getCollegeFilters,
-  getStreams,
 } from "@/lib/api/data/colleges";
 import type { FilterOptions } from "@/lib/types";
 import { FilterSidebar } from "@/components/college/filter-sidebar";
@@ -30,6 +29,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FilterSidebarSkeleton } from "@/components/college/filter-sidebar-skeleton";
 import StudentVisaFormButton from "@/components/college/student-visa-form-button";
 
+const ITEMS_PER_PAGE = 12;
+
 export default function CollegeListingPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -40,6 +41,10 @@ export default function CollegeListingPage() {
   const [error, setError] = useState<string | null>(null);
   const [filterOptions, setFilterOptions] =
     useState<CollegeFilterOptions | null>(null);
+
+    // ── Pagination state ────────────────────────────────────────
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   // Initialize filters from URL on mount
   const initialFilters: FilterOptions = {
@@ -64,6 +69,12 @@ export default function CollegeListingPage() {
   };
 
   const [filters, setFilters] = useState<FilterOptions>(initialFilters);
+
+    // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]); // <--- important!
+
 
   // Sync filters to URL whenever they change
   useEffect(() => {
@@ -182,7 +193,7 @@ export default function CollegeListingPage() {
       // Course filter
       if (filters.courses.length > 0) {
         const hasMatchingCourse = college.courses.some((course) =>
-          filters.courses.includes(course.name)
+          filters.courses.includes(course.name),
         );
         if (!hasMatchingCourse) return false;
       }
@@ -190,7 +201,7 @@ export default function CollegeListingPage() {
       // Levels filter
       if (filters.levels.length > 0) {
         const hasMatchingLevel = college.courses.some(
-          (course) => course.level && filters.levels.includes(course.level)
+          (course) => course.level && filters.levels.includes(course.level),
         );
         if (!hasMatchingLevel) return false;
       }
@@ -201,7 +212,7 @@ export default function CollegeListingPage() {
           (course) =>
             course.degree &&
             course.degree.title &&
-            filters.degrees.includes(course.degree.title)
+            filters.degrees.includes(course.degree.title),
         );
         if (!hasMatchingDegree) return false;
       }
@@ -243,7 +254,7 @@ export default function CollegeListingPage() {
         filters.exams.length > 0 &&
         college.admissionProcess?.exams &&
         !filters.exams.some((exam) =>
-          college.admissionProcess.exams?.includes(exam)
+          college.admissionProcess.exams?.includes(exam),
         )
       )
         return false;
@@ -251,6 +262,21 @@ export default function CollegeListingPage() {
       return true;
     });
   }, [filters, colleges]);
+
+
+  // ── Pagination logic ───────────────────────────────────────────────
+  const totalItems = filteredColleges.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentColleges = filteredColleges.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   if (loading) {
     return (
@@ -401,7 +427,6 @@ export default function CollegeListingPage() {
                 <h2 className="text-2xl font-bold text-foreground">
                   {filteredColleges.length} Colleges Found
                 </h2>
-      
               </div>
             </div>
 
@@ -415,7 +440,7 @@ export default function CollegeListingPage() {
                       .flatMap((c) => c.streams)
                       .find(
                         (
-                          s
+                          s,
                         ): s is {
                           id: number | string;
                           title: string;
@@ -423,7 +448,7 @@ export default function CollegeListingPage() {
                         } =>
                           typeof s === "object" &&
                           s.title === streamName &&
-                          !!s.description?.trim()
+                          !!s.description?.trim(),
                       );
                     return streamInfo
                       ? { name: streamName, desc: streamInfo.description }
@@ -431,54 +456,108 @@ export default function CollegeListingPage() {
                   })
                   .filter(
                     (item): item is { name: string; desc: string } =>
-                      item !== null
+                      item !== null,
                   );
 
                 // If no stream has description → don't render anything
                 if (validStreamInfos.length === 0) return null;
 
                 return (
-<>
-                 <p className="text-muted-foreground mb-4 -mt-4">
-                  Showing results for   {validStreamInfos.map(({ name, desc }, i, s) => (
-                            <span key={name} className="inline">
-                              {name}{ i !== s.length-1?", ":""}
-                            </span>
-                       
+                  <>
+                    <p className="text-muted-foreground mb-4 -mt-4">
+                      Showing results for{" "}
+                      {validStreamInfos.map(({ name,desc }, i, s) => (
+                        <span key={name} className="inline">
+                          {name}
+                          {i !== s.length - 1 ? ", " : ""}
+                        </span>
                       ))}
-                </p>
+                    </p>
 
-                  <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
-                    <h3 className="font-semibold text-foreground sr-only">
-                      About Selected Streams
-                    </h3>
-                    <div className="space-y-2">
-                      {validStreamInfos.map(({ name, desc }) => (
-                        <div key={name} className="flex flex-col">
-                          <div className="inline">
-                            <span className="font-medium text-foreground">
-                              {name}:{" "}
-                            </span>
-                            <span className="text-sm text-muted-foreground flex-1">
-                              {desc}
-                            </span>
+                    <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                      <h3 className="font-semibold text-foreground sr-only">
+                        About Selected Streams
+                      </h3>
+                      <div className="space-y-2">
+                        {validStreamInfos.map(({ name, desc }) => (
+                          <div key={name} className="flex flex-col">
+                            <div className="inline">
+                              <span className="font-medium text-foreground">
+                                {name}:{" "}
+                              </span>
+                              <span className="text-sm text-muted-foreground flex-1">
+                                {desc}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
                   </>
                 );
               })()}
 
-            {/* College Cards */}
+{/* Paginated College Cards */}
             <div className="flex flex-col gap-4">
-              {filteredColleges.map((college) => (
+              {currentColleges.map((college) => (
                 <CollegeCard key={college.id} college={college} />
               ))}
             </div>
 
             {filteredColleges.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🎓</div>
+                <h3 className="text-xl font-semibold mb-2">No colleges found</h3>
+                <p className="text-muted-foreground">
+                  Try adjusting your filters to see more results
+                </p>
+              </div>
+            )}
+
+            {/* ── Pagination Controls ──────────────────────────────────────── */}
+            {totalPages > 1 && (
+              <div className="mt-10 flex flex-wrap justify-center items-center gap-2 sm:gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={page === currentPage ? "default" : "outline"}
+                    size="sm"
+                    className="min-w-[2.5rem]"
+                    onClick={() => goToPage(page)}
+                  >
+                    {page}
+                  </Button>
+                ))}
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
+
+
+            {/* College Cards */}
+            {/* <div className="flex flex-col gap-4">
+              {filteredColleges.map((college) => (
+                <CollegeCard key={college.id} college={college} />
+              ))}
+            </div> */}
+
+            {/* {filteredColleges.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">🎓</div>
                 <h3 className="text-xl font-semibold mb-2">
@@ -488,7 +567,7 @@ export default function CollegeListingPage() {
                   Try adjusting your filters to see more results
                 </p>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
