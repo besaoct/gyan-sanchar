@@ -385,6 +385,13 @@ export function CollegeSelection({
             ))
           )}
         </div>
+     <div>
+         {
+         allColleges.length > 10 ?
+             <div className="text-sm mt-3 text-muted-foreground">  Search or filter colleges for different results </div>
+          :""
+        }
+     </div>
       </div>
     </div>
   );
