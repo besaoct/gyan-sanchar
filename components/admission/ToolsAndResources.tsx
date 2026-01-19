@@ -15,13 +15,13 @@ const tools = [
     title: "Admission Counselling",
     description: "Get expert guidance from our admission counsellors to help you choose the right college.",
     icon: <MessageSquare className="h-8 w-8 text-primary" />,
-    link: "/counselling",
+    link: "/admission/counselling",
   },
   {
     title: "FAQs",
     description: "Find answers to all your admission-related queries in our frequently asked questions section.",
     icon: <HelpCircle className="h-8 w-8 text-primary" />,
-    link: "/faqs",
+    link: "/admission/faqs",
   },
 ];
 
