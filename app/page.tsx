@@ -21,6 +21,9 @@ import StudentOfferSectionSkeleton from "@/components/home/skeletons/StudentOffe
 import MediaSectionSkeleton from "@/components/home/skeletons/MediaSectionSkeleton";
 import ApplicationSectionSkeleton from "@/components/home/skeletons/ApplicationSectionSkeleton";
 import TestimonialsSectionSkeleton from "@/components/home/skeletons/TestimonialsSectionSkeleton";
+import ServicesSectionSkeleton from "@/components/home/skeletons/ServicesSectionSkeleton";
+import CareerGuidanceSectionSkeleton from "@/components/home/skeletons/CareerGuidanceSectionSkeleton";
+import RequestCallbackSectionSkeleton from "@/components/home/skeletons/RequestCallbackSectionSkeleton";
 
 export default function HomePage() {
   const [homeData, setHomeData] = useState<HomeData | null>(null);
@@ -62,29 +65,29 @@ export default function HomePage() {
       {loading ? (
         <>
           <TrustIndicatorsSkeleton />
-          <ServicesSection />
+          <ServicesSectionSkeleton />
           <StudentOfferSectionSkeleton />
           <MediaSectionSkeleton />
-          <CareerGuidanceSection />
+          <CareerGuidanceSectionSkeleton />
           <ApplicationSectionSkeleton />
           <TopRankedCollegesSection />
           <CollegeFinderSection />
           <TestimonialsSectionSkeleton />
-          <RequestCallbackSection />
+          <RequestCallbackSectionSkeleton />
         </>
       ) : (
         homeData ? (
           <>
             <TrustIndicators indicators={homeData.indicators} />
-            <ServicesSection />
+            <ServicesSection courier_cards={homeData.courier_cards} />
             <StudentOfferSection offers={homeData.offers} />
             <MediaSection media={homeData.media} media_title={homeData.media_title} />
-            <CareerGuidanceSection />
+            <CareerGuidanceSection recommendations={homeData.recommendations} />
             <ApplicationSection application_sections={homeData.application_sections} />
             <TopRankedCollegesSection />
             <CollegeFinderSection />
             <TestimonialsSection testimonials={homeData.testimonials} />
-            <RequestCallbackSection />
+            <RequestCallbackSection form_sections={homeData.form_sections} />
           </>
         ): <></>
       )}

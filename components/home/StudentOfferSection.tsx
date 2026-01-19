@@ -10,6 +10,7 @@ interface StudentOfferSectionProps {
 export default function StudentOfferSection({
   offers,
 }: StudentOfferSectionProps) {
+  
   if (!offers || offers.length === 0) {
     return null;
   }

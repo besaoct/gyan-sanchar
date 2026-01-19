@@ -38,7 +38,7 @@ export function CourseCollegeCard({ college }: { college: College }) {
             <div className="flex items-center gap-3 p-4  rounded-lg border border-green-200 bg-green-100 transition-colors">
               <IndianRupee className="w-5 h-5 text-green-700" />
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Fees</p>
+                <p className="text-sm font-medium text-gray-600">Fees</p>
                 <p className="text-lg font-bold text-green-700">{college.fees}</p>
               </div>
             </div>

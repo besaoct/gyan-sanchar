@@ -14,22 +14,6 @@ export interface ApiErrorResponse {
     errors?: Record<string, string[]>;
 }
 
-// Type Definitions for Home Data
-
-    // "hero_section": {
-    //         "id": 1,
-    //         "heading": "Right Guidance, Bright Future",
-    //         "sub_heading": "Get expert advice and personalized guidance to find the right college, building a better future for your career at a time.",
-    //         "title": "Watch our Brand Film here",
-    //         "url": "https://gyan-sanchar.vercel.app/",
-    //         "youtube_video_link": "https://www.youtube.com/"
-    //     },
-//    "mediatitle": [
-//             {
-//                 "id": 1,
-//                 "title": "Praised by the media"
-//             }
-//         ],
 
 export interface HomeHeroSection {
     id: number;
@@ -91,6 +75,25 @@ export interface OfferFeature {
     subtitle: string;
 }
 
+export interface FormSection{
+    id:number,
+    heading:string
+    sub_heading:string,
+    description: string
+}
+
+export interface Recommendations{
+              id: number
+                title: string
+                description:string
+                button_text: string
+                button_link: string
+}
+export interface HomeCard {
+    title: string,
+    description: string,
+    icon_image:string
+} 
 export interface Offer {
     id: number;
     title: string;
@@ -111,6 +114,9 @@ export interface HomeData {
     media_title: MediaTitle[];
     indicators: Indicator[];
     offers: Offer[];
+    recommendations: Recommendations[],
+    courier_cards: HomeCard[],
+    form_sections: FormSection[]
 }
 
 const homeApi = axios.create({

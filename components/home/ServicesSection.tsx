@@ -6,11 +6,20 @@ import { MdTrendingUp } from "react-icons/md";
 import { HiOutlineAcademicCap, HiOutlineClipboardList } from "react-icons/hi";
 import { BiSupport } from "react-icons/bi";
 import SearchBar from "./SearchBar";
+import { HomeCard } from "@/lib/api/data/home";
 
-export default function ServicesSection() {
+export default function ServicesSection({courier_cards}:{courier_cards: HomeCard[]}) {
+
+
+  if (!courier_cards|| courier_cards.length === 0) {
+    return null;
+  }
+
+
 
   return (
     <section className="py-12 md:py-16 bg-gray-50">
+   
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
@@ -27,9 +36,29 @@ export default function ServicesSection() {
 
 
 
-        {/* */}
-
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+         
+        {courier_cards.map((card)=>
+         <Card className="p-6 bg-[#044cac] text-white hover:bg-[#023b86] transition-colors">
+            <CardContent className="p-0">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="font-semibold mb-2">{card.title}</h3>
+                  <p className="text-sm opacity-90">
+                    {card.description}
+                  </p>
+                </div>
+                <div className="w-16 h-10 px-2 bg-white/20 rounded-lg flex items-center justify-center">
+                   <img src={card.icon_image} alt="" className="min-w-6 max-w-6 max-h-6 min-h-6" />
+                  {/* <MdTrendingUp className="w-6 h-6" /> */}
+                </div>
+              </div>
+            </CardContent>
+          </Card> )
+
+        }
+
+{/*          
           <Card className="p-6 bg-[#044cac] text-white hover:bg-[#023b86] transition-colors">
             <CardContent className="p-0">
               <div className="flex items-start justify-between mb-4">
@@ -95,7 +124,8 @@ export default function ServicesSection() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
+        
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">

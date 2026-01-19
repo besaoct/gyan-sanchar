@@ -15,8 +15,9 @@ import { useToast } from "@/hooks/use-toast"
 import { useEffect, useState } from "react"
 import { useAuth } from "@/contexts/auth/AuthContext"
 import { BASE_URL } from "@/lib/api/config/urls"
+import { FormSection } from "@/lib/api/data/home"
 
-export default function RequestCallbackSection() {
+export default function RequestCallbackSection({form_sections}:{form_sections:FormSection[]}) {
   const { toast } = useToast()
   const { user} = useAuth();
   const [name, setName] = useState(user?.name || "")
@@ -95,17 +96,22 @@ export default function RequestCallbackSection() {
     }
   }
 
+
+
+  const formSection = form_sections[0]
+
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold mb-4">Personalised Guidance.</h2>
+            <h2 className="text-3xl font-bold mb-4">{formSection.heading || "Personalised Guidance."}</h2>
             <h2 className="text-3xl font-bold mb-4 text-orange-500">
-              Trusted Experts.
+          { formSection.sub_heading ||   "Trusted Experts."}
             </h2>
             <p className="text-gray-600 mb-6">
-              Get in touch with our expert counsellors
+           { formSection.description ||  "Get in touch with our expert counsellors"}
             </p>
           </div>
           <div>
