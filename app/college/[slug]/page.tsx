@@ -468,9 +468,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                                 <span className="font-semibold">
                                   Specializations:
                                 </span>
-                          
+
                                 {(() => {
-                                  const ITEM_LIMIT=4
+                                  const ITEM_LIMIT = 4;
                                   const items = course.special_courses;
                                   const displayItems =
                                     showAll || items.length <= ITEM_LIMIT
@@ -501,7 +501,8 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                                             </>
                                           ) : (
                                             <>
-                                              Show more (+{items.length - ITEM_LIMIT}){" "}
+                                              Show more (+
+                                              {items.length - ITEM_LIMIT}){" "}
                                               <ChevronDown className="h-3.5 w-3.5" />
                                             </>
                                           )}
