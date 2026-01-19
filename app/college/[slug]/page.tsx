@@ -23,6 +23,8 @@ import {
   Briefcase,
   Award as AwardIcon,
   IndianRupee,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import {
   Carousel,
@@ -84,6 +86,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
   const heroRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [showAll, setShowAll] = useState(false);
 
   const handleDownload = () => {
     // downloadHtmlContent("fees", "fees-structure.html");
@@ -192,8 +195,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
     { id: "gallery", label: "Gallery" },
   ];
 
-
-  const virtual_tour  = college.virtual_video_link ||  college.virtual_video 
+  const virtual_tour = college.virtual_video_link || college.virtual_video;
 
   return (
     <div className="min-h-screen bg-white">
@@ -256,7 +258,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </div>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Key Information</h4>
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                          Key Information
+                        </h4>
                         <div className="space-y-3 text-sm">
                           <div className="flex justify-between items-center">
                             <span className="text-muted-foreground">
@@ -315,7 +319,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         </div>
                       </div>
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Accreditation & Affiliations
                         </h4>
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -329,7 +333,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             </Badge>
                           ))}
                         </div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Campus Life</h4>
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                          Campus Life
+                        </h4>
                         <div className="flex flex-wrap gap-2">
                           {college.campusLife.clubs?.map((club) => (
                             <Badge
@@ -344,7 +350,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       </div>
                     </div>
                     <div className="mt-6">
-                            <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Vision & Mission</h4>
+                      <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        Vision & Mission
+                      </h4>
                       <p className="text-muted-foreground">
                         {college.visionMission}
                       </p>
@@ -352,7 +360,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     {college.notableAlumni?.length > 0 &&
                     college.notableAlumni[0].name !== null ? (
                       <div className="mt-6">
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Notable Alumni</h4>
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                          Notable Alumni
+                        </h4>
                         <div className="grid sm:grid-cols-2 gap-4">
                           {college.notableAlumni.map((alumnus: any, index) => (
                             <div
@@ -397,7 +407,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                             </h4>
                             <Badge
                               variant="outline"
-                              className="bg-orange-500/10 text-orange-500"
+                              className="bg-orange-300/10 border-orange-500/50 text-orange-500 "
                             >
                               {course.duration} y
                             </Badge>
@@ -426,6 +436,21 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                               </div>
                             </div>
                           </div>
+
+                          {course.fee_info && course.fee_info.length > 0 ? (
+                            <div className="mt-3 text-sm text-muted-foreground">
+                              <span className="font-semibold">Fee info: </span>{" "}
+                              {course.fee_info.map((item, index) => (
+                                <span key={`${index}-${item}`}>
+                                  {index > 0 && ", "}
+                                  {item.fee_heading} - {item.fee_text?.trim()}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+
                           <div className="mt-3 text-sm text-muted-foreground">
                             <span className="font-semibold">
                               Program Highlights:
@@ -436,6 +461,61 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                                   .map((h) => h.title)
                                   .join(", ")}
                           </div>
+                          {course.special_courses &&
+                          course.special_courses.length > 0 ? (
+                            <div className="mt-3 text-sm text-muted-foreground">
+                              <div className="flex items-center flex-wrap gap-2 mb-1.5">
+                                <span className="font-semibold">
+                                  Specializations:
+                                </span>
+                          
+                                {(() => {
+                                  const ITEM_LIMIT=4
+                                  const items = course.special_courses;
+                                  const displayItems =
+                                    showAll || items.length <= ITEM_LIMIT
+                                      ? items
+                                      : items.slice(0, ITEM_LIMIT);
+                                  return (
+                                    <>
+                                      {displayItems.map((item, index) => (
+                                        <Badge
+                                          key={`${index}-${item}`}
+                                          variant="outline"
+                                          className="bg-orange-300/10 border-orange-500/50 text-orange-500"
+                                        >
+                                          {item}
+                                        </Badge>
+                                      ))}
+
+                                      {items.length > ITEM_LIMIT && (
+                                        <button
+                                          type="button"
+                                          onClick={() => setShowAll(!showAll)}
+                                          className="text-xs text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1 transition-colors"
+                                        >
+                                          {showAll ? (
+                                            <>
+                                              Show less{" "}
+                                              <ChevronUp className="h-3.5 w-3.5" />
+                                            </>
+                                          ) : (
+                                            <>
+                                              Show more (+{items.length - ITEM_LIMIT}){" "}
+                                              <ChevronDown className="h-3.5 w-3.5" />
+                                            </>
+                                          )}
+                                        </button>
+                                      )}
+                                    </>
+                                  );
+                                })()}
+                              </div>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+
                           <div className="mt-6 text-right flex gap-2 flex-wrap justify-end">
                             <Button
                               onClick={() =>
@@ -488,7 +568,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     <CardContent className="p-0">
                       <div className="space-y-6">
                         <div>
-                         <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Entrance Exams</h4>
+                          <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                            Entrance Exams
+                          </h4>
                           <div className="flex flex-wrap gap-2">
                             {college.admissionProcess.exams?.map((exam) => (
                               <Badge
@@ -502,7 +584,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                           </div>
                         </div>
                         <div>
-                <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                          <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                             Admission Criteria
                           </h4>
 
@@ -562,7 +644,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         </div>
                         {college.admissionProcess.importantDates ? (
                           <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                            <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                               Important Dates
                             </h4>
                             <div className="text-sm text-muted-foreground">
@@ -668,7 +750,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       </div> */}
                       {college.additionalFees ? (
                         <div>
-                                <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                          <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                             Additional Fees
                           </h4>
                           <div className="text-sm text-muted-foreground">
@@ -702,7 +784,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       college.scholarships.length > 0 &&
                       college.scholarships[0].name !== null ? (
                         <div>
-                                <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Scholarships</h4>
+                          <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                            Scholarships
+                          </h4>
                           <div className="grid gap-4">
                             {college.scholarships.map(
                               (scholarship: any, index) => (
@@ -762,7 +846,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </div>
                     <div className="space-y-6">
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Hostel Facilities
                         </h4>
                         <div className="flex gap-4 mb-3">
@@ -798,7 +882,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         {/* </p> */}
                       </div>
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Campus Highlights
                         </h4>
                         {/* <p className="text-sm text-muted-foreground"> */}
@@ -866,7 +950,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                     </div>
                     <div className="space-y-6">
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Top Recruiters</h4>
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                          Top Recruiters
+                        </h4>
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
                           {college.placement.topRecruiters?.map((recruiter) => (
                             <div
@@ -879,7 +965,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         </div>
                       </div>
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Placement Process
                         </h4>
                         {/* <p className="text-sm text-muted-foreground"> */}
@@ -897,7 +983,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                         {/* </p> */}
                       </div>
                       <div>
-                              <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
                           Notable Placement Highlights
                         </h4>
                         <div className="grid gap-4">
@@ -1038,7 +1124,9 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                       <CarouselNext className="mr-8" />
                     </Carousel>
                     <div className="mt-6">
-                            <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">Virtual Tour</h4>
+                      <h4 className="font-semibold mb-3 underline text-primary decoration-orange-500 w-fit">
+                        Virtual Tour
+                      </h4>
                       <p className="text-sm text-muted-foreground mb-4">
                         Explore the campus through our interactive virtual tour,
                         showcasing key facilities and student life.
@@ -1057,11 +1145,12 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                               Take Virtual Tour
                             </Button>
                           </DialogTrigger>
-                          <DialogContent showCloseButton={false} className="max-w-[96%] w-full md:min-w-3xl lg:min-w-5xl bg-transparent h-auto mx-auto  max-h-[96%] p-0 border-none shadow-none ">
+                          <DialogContent
+                            showCloseButton={false}
+                            className="max-w-[96%] w-full md:min-w-3xl lg:min-w-5xl bg-transparent h-auto mx-auto  max-h-[96%] p-0 border-none shadow-none "
+                          >
                             {virtual_tour && (
-                              <VirtualTourPlayer
-                                videoUrl={virtual_tour}
-                              />
+                              <VirtualTourPlayer videoUrl={virtual_tour} />
                             )}
                           </DialogContent>
                         </Dialog>

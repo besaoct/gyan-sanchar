@@ -56,6 +56,14 @@ export interface CollegeCourse {
     id ?: string | number;
     title ?: string;
   }
+
+   fee_info: {
+    fee_heading: string | null
+    fee_text: string | null
+  }[];
+
+   special_courses: string[] | null
+
 }
 
 export interface Hostel {
@@ -125,6 +133,7 @@ export interface College {
   brochure_document? : string |null;
   virtual_video?: string | null;
   virtual_video_link?: string | null;
+
   slug: string;
   name: string;
   verifyCollege?: boolean;
