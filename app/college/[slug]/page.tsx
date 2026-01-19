@@ -1267,10 +1267,7 @@ export default function CollegeDetailPage({ params }: CollegeDetailPageProps) {
                   </Button>
                 }
               />
-              {/* <Button className="bg-orange-500 hover:bg-orange-600  text-white">
-                <Phone className="h-4 w-4 mr-2" />
-                Schedule Counseling
-              </Button> */}
+
 
               <Link href={"/colleges"} target="_blank" className="flex">
                 <Button

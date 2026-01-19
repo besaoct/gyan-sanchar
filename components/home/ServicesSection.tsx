@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MdTrendingUp } from "react-icons/md";
-import { HiOutlineAcademicCap, HiOutlineClipboardList } from "react-icons/hi";
-import { BiSupport } from "react-icons/bi";
+// import { MdTrendingUp } from "react-icons/md";
+// import { HiOutlineAcademicCap, HiOutlineClipboardList } from "react-icons/hi";
+// import { BiSupport } from "react-icons/bi";
 import SearchBar from "./SearchBar";
 import { HomeCard } from "@/lib/api/data/home";
+import { Text } from "lucide-react";
 
 export default function ServicesSection({courier_cards}:{courier_cards: HomeCard[]}) {
 
@@ -49,8 +50,9 @@ export default function ServicesSection({courier_cards}:{courier_cards: HomeCard
                   </p>
                 </div>
                 <div className="w-16 h-10 px-2 bg-white/20 rounded-lg flex items-center justify-center">
-                   <img src={card.icon_image} alt="" className="min-w-6 max-w-6 max-h-6 min-h-6" />
-                  {/* <MdTrendingUp className="w-6 h-6" /> */}
+             {card.icon_image ?   
+              <img src={card.icon_image} alt="" className="min-w-6 max-w-6 max-h-6 min-h-6" /> :
+                <Text className="w-6 h-6" /> }
                 </div>
               </div>
             </CardContent>
