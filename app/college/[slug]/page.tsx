@@ -6,9 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Star,
-  MapPin,
-  Calendar,
-  Award,
+
   Phone,
   Mail,
   Share2,
