@@ -62,7 +62,7 @@ const googleTranslateElementInit = () => {
       new (window as any).google.translate.TranslateElement(
       {
         pageLanguage: 'en',
-        includedLanguages: 'en,hi,bn,te,ta,as',
+        includedLanguages: 'as,en,hi,bn,mni-Mtei,kha,lus,ne,brx',
          layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
       },
       'google_translate_element'

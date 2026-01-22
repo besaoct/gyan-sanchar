@@ -4,7 +4,7 @@ import '@/styles/globals.css'
 import { Poppins } from 'next/font/google'
 import { AuthProvider } from '@/contexts/auth/AuthContext'
 import { Toaster } from '@/components/ui/toaster'
-import GoogleTranslate from '@/components/common/GoogleTranslate'
+
 
 const font = Poppins({
   subsets: ['latin'],
