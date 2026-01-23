@@ -25,9 +25,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     article = response.data;
   } catch (error) {
     console.error("Failed to fetch article:", error);
+      notFound();
+
     // You could render an error component here, or re-throw
     // to let Next.js's error boundary handle it.
-    throw new Error("Failed to load article data.");
+    // throw new Error("Failed to load article data.");
   }
 
 
